@@ -3,6 +3,9 @@ from fliprBack.config import DbEngine_config
 from fliprBack import create_db_engine, create_db_sessionFactory
 from fliprBack.api import *
 
+from dotenv import load_dotenv
+load_dotenv()
+
 engine = create_db_engine(DbEngine_config)
 SQLSession = create_db_sessionFactory(engine)
 

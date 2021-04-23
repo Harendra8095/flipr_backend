@@ -1,0 +1,9 @@
+FROM python:3.6-alpine
+LABEL maintainer="Vishnu"
+RUN apk update && apk add ca-certificates && apk add libpq postgresql-client
+WORKDIR /app
+ADD . /app
+COPY ./matchupdater /app
+RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache
+#RUN chmod +x launch.sh
+CMD ["python", "-u" ,"main.py"]
