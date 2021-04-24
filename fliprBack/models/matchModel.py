@@ -39,9 +39,6 @@ class Livescore(Base):
     __tablename__ = "livescore"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    ball = Column(Integer)
+    ball = Column(Float)
     points = Column(Integer)
     playermatch_id = Column(Integer, ForeignKey('playermatch.id'))
-
-    # Relationships
-    userteam = relationship('Userteam', back_populates='livescore')

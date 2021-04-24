@@ -47,5 +47,4 @@ class Userteam(Base):
     credit_bal = Column(Integer)
 
     # Relationships
-    livescore = relationship('Livescore', back_populates='userteam')
     playermatch = relationship('Playermatch', back_populates='userteam')
