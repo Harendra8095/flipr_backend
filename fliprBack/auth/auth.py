@@ -11,24 +11,17 @@ load_dotenv()
 
 
 def validate_token(token):
-    '''
-    Return bollean 
-    true -> valid token.... 
-    false -> Invalid token....
-    takes dict as input having field "token"
-    '''
     try:
         from server import SQLSession
         session = SQLSession()
         conn = session.connection()
         try:
             d = jwt.decode(token, os.environ.get('SECRET_KEY'))
-            usr = d['email']
-            user_ = session.query(User).filter_by(email=usr).first()
+            usr = d['username']
+            user_ = session.query(User).filter_by(username=usr).first()
         except Exception as e:
             session.close()
             conn.close()
-
         session.close()
         conn.close()
         if not user_:
@@ -43,14 +36,14 @@ def get_token(data):
     from server import SQLSession
     session = SQLSession()
     connection = session.connection()
-    user = session.query(User).filter_by(email=data['email']).first()
-    print("IN GET Token:: ", user)
+    user = session.query(User).filter_by(username=data['username']).first()
+    print("IN GET Token:: ", user.username)
     session.close()
     connection.close()
     if not user:
         return Constants.NoUser
     else:
         if user.check_password(data.get('password')):
-            return jwt.encode({'email': user.email, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=Token_Validity)}, os.environ.get('SECRET_KEY')).decode('UTF-8')
+            return jwt.encode({'username': user.username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=Token_Validity)}, os.environ.get('SECRET_KEY')).decode('UTF-8')
         else:
             return Constants.InvalidCredential
