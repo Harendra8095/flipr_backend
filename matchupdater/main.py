@@ -3,10 +3,12 @@ import datetime
 import time
 import redis
 import os
+from dotenv import load_dotenv
 from matchupdater.models import *
 from matchupdater import create_db_engine, create_db_sessionFactory
 from matchupdater.config import DbEngine_config
 
+load_dotenv()
 
 engine = create_db_engine(DbEngine_config)
 SQLSession = create_db_sessionFactory(engine)
