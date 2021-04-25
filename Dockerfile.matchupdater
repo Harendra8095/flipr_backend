@@ -3,7 +3,7 @@ LABEL maintainer="Vishnu"
 RUN apt update && apt install -y ca-certificates && apt install -y libpq-dev postgresql-client
 WORKDIR /app
 ADD . /app
-COPY ./matchupdater /app
+COPY ./matchupdater/ /app
 RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache
 #RUN chmod +x launch.sh
 CMD ["python", "-u" ,"main.py"]

@@ -1,15 +1,17 @@
-version: "3.3"
+version: "3"
 
 services:
   redis:
-    container_name: backend_redis
+    # container_name: backend_redis
+    # network_mode: bridge
     image: redis
     restart: always
     ports:
       - 6380:6379
 
   postgres:
-    container_name: backend_postgres
+    # container_name: backend_postgres
+    # network_mode: bridge
     image: postgres:alpine
     environment:
       - POSTGRES_DB=flipr
@@ -24,12 +26,24 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.matchupdater
+    depends_on: 
+      - postgres
+      - redis
+      - fliprback
+    # network_mode: bridge
     restart: always
 
   fliprback:
     build:
       context: .
       dockerfile: Dockerfile
+    # network_mode: bridge
+    depends_on: 
+      - postgres
+      - redis
+    links: 
+      - 'postgres:postgres'
+      - 'redis:redis'
     restart: always
     ports:
       - 5000:5000

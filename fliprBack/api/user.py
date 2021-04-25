@@ -11,8 +11,7 @@ import redis
 import json
 import os
 
-redis_client = redis.from_url(os.environ.get('REDIS_URL'))
-
+redis_client = redis.Redis(host='redis', port=6379, db=0)
 userBP = Blueprint('userApi', __name__)
 
 

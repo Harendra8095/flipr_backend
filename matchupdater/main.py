@@ -4,16 +4,17 @@ import time
 import redis
 import os
 from dotenv import load_dotenv
+load_dotenv()
 from matchupdater.models import *
 from matchupdater import create_db_engine, create_db_sessionFactory
 from matchupdater.config import DbEngine_config
 
-load_dotenv()
+
 
 engine = create_db_engine(DbEngine_config)
 SQLSession = create_db_sessionFactory(engine)
 print(os.environ.get('REDIS_URL'))
-redis_client = redis.from_url(os.environ.get('REDIS_URL'))
+redis_client = redis.Redis(host='redis', port=6379, db=0)
 redis_client.mset({
     "caught":   25,
     "bowled":	33,
@@ -63,7 +64,7 @@ def livematch(curr_date):
     session.commit()
     session.close()
     connection.close()
-    event = open('../dummy_data/{}.json'.format(match_id),)
+    event = open('./dummy_data/{}.json'.format(match_id),)
     data = json.load(event)
     time.sleep(5)
     for i in range(2):
@@ -125,6 +126,7 @@ def livematch(curr_date):
 
 if __name__ == "__main__":
     i = 1
+    time.sleep(60)
     while True:
         session = SQLSession()
         connection = session.connection()
