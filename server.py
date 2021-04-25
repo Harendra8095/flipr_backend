@@ -20,7 +20,7 @@ def clearlivetable():
     session.commit()
     session.close()
 
-clearlivetable()
+# clearlivetable()
 # creaatteTables(engine)
 # popule_dummy()
 
