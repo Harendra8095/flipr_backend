@@ -1,3 +1,4 @@
+from fliprBack.models.matchModel import Scorehistory
 from flask import request, Blueprint
 from flask.globals import session
 from fliprBack.constants import *
@@ -156,21 +157,26 @@ def scoreboard():
         from server import SQLSession
         session = SQLSession()
         connection = session.connection()
-        last_ball = get(match_id)
-        all_player = session.query(Livescore).filter_by(ball=last_ball).join(
-            Livescore.playermatch).filter_by(match_id=match_id).all()
         my_team = session.query(Userteam).join(Userteam.playermatch).filter(
             Userteam.user_id == usr_.id).filter(Playermatch.match_id == match_id).all()
+        p_list = []
         if my_team == None:
             return make_response("No Team created for this match", HTTPStatus.BadRequest)
-        p_list = []
         for i in my_team:
             p_name = i.playermatch.player.playername
             p_list.append(p_name)
+        last_ball = get(match_id)
+        print(last_ball)
         score = 0
         payload = {
             "team": {}
         }
+        if last_ball:
+            all_player = session.query(Livescore).filter_by(ball=last_ball).join(
+                Livescore.playermatch).filter_by(match_id=match_id).all()
+        else:
+            all_player = session.query(Scorehistory).join(
+                Scorehistory.playermatch).filter_by(match_id=match_id).all()
         for i in all_player:
             p_name = i.playermatch.player.playername
             if p_name in p_list:
@@ -179,6 +185,8 @@ def scoreboard():
         payload = {
             "total_score": score
         }
+        session.close()
+        connection.close()
         return make_response("Success", status_code=HTTPStatus.Success, payload=payload)
     else:
         if usr_ == Constants.InvalidToken:

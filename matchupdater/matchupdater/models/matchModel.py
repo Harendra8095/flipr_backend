@@ -47,6 +47,18 @@ class Livescore(Base):
     playermatch = relationship('Playermatch', back_populates='livescore')
 
 
+class Scorehistory(Base):
+    """ storing match history """
+    __tablename__ = "scorehistory"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    points = Column(Integer)
+    playermatch_id = Column(Integer, ForeignKey('playermatch.id'))
+
+    # Relationships
+    playermatch = relationship('Playermatch', back_populates='scorehistory')
+
+
 class Day(Base):
     """ Stroing available date """
     __tablename__ = "day"

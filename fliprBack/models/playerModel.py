@@ -33,3 +33,4 @@ class Playermatch(Base):
     player = relationship('Player', back_populates='playermatch')
     userteam = relationship('Userteam', back_populates='playermatch')
     livescore = relationship('Livescore', back_populates='playermatch')
+    scorehistory = relationship('Scorehistory', back_populates='playermatch')

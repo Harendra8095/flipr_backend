@@ -61,9 +61,9 @@ def livematch(curr_date):
     session.commit()
     session.close()
     connection.close()
-    event = open('../dummy_data/335982.json',)
+    event = open('../dummy_data/{}.json'.format(match_id),)
     data = json.load(event)
-    time.sleep(4)
+    time.sleep(5)
     for i in range(2):
         if i:
             inning = '2nd innings'
@@ -95,7 +95,7 @@ def livematch(curr_date):
                     liv_score = Livescore(
                         ball=next_ball,
                         points=add_p,
-                        playermatch_id=match_id
+                        playermatch_id=i.playermatch.id
                     )
                     session.add(liv_score)
                 session.commit()
@@ -103,9 +103,17 @@ def livematch(curr_date):
                 connection.close()
                 # Update last ball
                 redis_client.set(match_id, float(next_ball))
-                time.sleep(4)
+                time.sleep(5)
     session = SQLSession()
     connection = session.connection()
+    prev_score = session.query(Livescore).filter_by(ball=last_ball).join(
+        Livescore.playermatch).filter_by(match_id=match_id).all()
+    for i in prev_score:
+        score_histroy = Scorehistory(
+            points=i.points,
+            playermatch_id=i.playermatch.id
+        )
+        session.add(score_histroy)
     today_ma = session.query(Match).filter_by(start_date=curr_date).first()
     today_ma.match_status = 'Finished'
     session.commit()
@@ -121,4 +129,4 @@ if __name__ == "__main__":
         cur_date = session.query(Day).filter_by(id=i).first().avail_date
         livematch(cur_date)
         i += 1
-        time.sleep(1000000)
+        time.sleep(7200)

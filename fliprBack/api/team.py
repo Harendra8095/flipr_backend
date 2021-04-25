@@ -43,16 +43,15 @@ def matches():
         return make_response("success", HTTPStatus.Success, payload)
 
 
-@teamBP.route('/playerlist', methods=['POST'])
+@teamBP.route('/playerlist', methods=['GET'])
 def playerlist():
     auth_token = request.headers.get('auth-token')
     if not auth_token:
         return make_response("No 'auth-token' in header", HTTPStatus.NoToken)
     valid_token, usr_ = validate_token(auth_token)
-    data = request.json
-    required_parameters = ['match_id']
-    if (set(required_parameters)-data.keys()):
-        return make_response("Missing Input.", HTTPStatus.BadRequest)
+    match_id = request.args.get('match_id', None, type=int)
+    if match_id == None:
+        return make_response("Query parameter 'match_id' missing.", HTTPStatus.BadRequest)
     if not valid_token:
         if usr_ == Constants.InvalidToken:
             return make_response("Invalid token", HTTPStatus.InvalidToken)
@@ -61,7 +60,6 @@ def playerlist():
         else:
             return make_response("User not verified", HTTPStatus.UnAuthorised)
     else:
-        match_id = data['match_id']
         from server import SQLSession
         session = SQLSession()
         connection = session.connection()
@@ -120,13 +118,18 @@ def addtoteam():
             session.close()
             connection.close()
             return make_response("No such player for this match.", HTTPStatus.BadRequest)
+        credit_spent += p_m_id.player.credit_value
+        if credit_spent > 100:
+            session.close()
+            connection.close()
+            return make_response("Credit Spent exceeded.", HTTPStatus.BadRequest)
         userteam = Userteam(
             user_id=usr_.id,
             playermatch_id=p_m_id.id,
             credit_bal=p_m_id.player.credit_value
         )
         payload = {
-            "credit_spent": credit_spent+p_m_id.player.credit_value,
+            "credit_spent": credit_spent,
             "team_size": team_size+1,
         }
         session.add(userteam)

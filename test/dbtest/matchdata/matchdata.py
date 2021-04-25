@@ -7,8 +7,9 @@ def generate_match_data():
     from server import SQLSession
     from fliprBack.models import Match, Playermatch, Player, Day
     session = SQLSession()
-    for i in range(5):
-        path = './dummy_data/33598{}.json'.format(i+2)
+    for i in range(231):
+        path = './dummy_data/{}.json'.format(i+1)
+        print(path)
         f = open(path,)
         data = json.load(f)
         match_info = {}
@@ -16,15 +17,19 @@ def generate_match_data():
             if key == 'dates':
                 match_info['start_date'] = data['info'][key][0]
             elif key == 'outcome':
-                winner = data['info'][key]['winner']
-                match_info['winner'] = winner
                 try:
-                    by_runs = data['info'][key]['by']['runs']
-                    match_info['win_by_runs'] = by_runs
-                    match_info['win_by_wicket'] = None
+                    winner = data['info'][key]['winner']
+                    match_info['winner'] = winner
+                    try:
+                        by_runs = data['info'][key]['by']['runs']
+                        match_info['win_by_runs'] = by_runs
+                        match_info['win_by_wicket'] = None
+                    except:
+                        by_wickets = data['info'][key]['by']['wickets']
+                        match_info['win_by_wicket'] = by_wickets
+                        match_info['win_by_runs'] = None
                 except:
-                    by_wickets = data['info'][key]['by']['wickets']
-                    match_info['win_by_wicket'] = by_wickets
+                    match_info['win_by_wicket'] = None
                     match_info['win_by_runs'] = None
             elif key == 'player_of_match':
                 match_info['player_of_match'] = data['info'][key][0]
