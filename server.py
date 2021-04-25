@@ -1,5 +1,6 @@
 from flask import Flask
 from dotenv import load_dotenv
+from sqlalchemy.orm import session
 load_dotenv()
 from fliprBack.config import DbEngine_config
 from fliprBack import create_db_engine, create_db_sessionFactory
@@ -13,6 +14,13 @@ from test.dbtest import populate_dummy
 engine = create_db_engine(DbEngine_config)
 SQLSession = create_db_sessionFactory(engine)
 
+def clearlivetable():
+    session = SQLSession()
+    session.query(Livescore).delete()
+    session.commit()
+    session.close()
+
+clearlivetable()
 # creaatteTables(engine)
 # popule_dummy()
 
