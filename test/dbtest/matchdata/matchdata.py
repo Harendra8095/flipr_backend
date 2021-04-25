@@ -1,10 +1,11 @@
 import json
+import os
 import random
 
 
 def generate_match_data():
     from server import SQLSession
-    from fliprBack.models import Match, Playermatch, Player
+    from fliprBack.models import Match, Playermatch, Player, Day
     session = SQLSession()
     for i in range(5):
         path = './dummy_data/33598{}.json'.format(i+2)
@@ -64,9 +65,15 @@ def generate_match_data():
             umpires2=umpires2,
             venue=match_info['venue']
         )
+        dates = Day(
+            avail_date=match_info['start_date']
+        )
         session.add(match_)
+        session.add(dates)
         session.commit()
         m_id = session.query(Match).order_by(Match.id.desc()).first().id
+        new_path = './dummy_data/{}.json'.format(m_id)
+        os.rename(path, new_path)
         # print(match_info)
 
         player_set = set()

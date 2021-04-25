@@ -1,4 +1,5 @@
 from flask import request, Blueprint
+from flask.globals import session
 from fliprBack.constants import *
 from fliprBack.config import tzone
 from fliprBack.auth import validate_token, get_token
@@ -98,3 +99,40 @@ def login():
             "auth-token": token
         }
         return make_response(msg="Token success", status_code=HTTPStatus.Success, payload=res)
+
+
+@userBP.route('/myteam', methods=['GET'])
+def myteam():
+    auth_token = request.headers.get('auth-token')
+    if not auth_token:
+        return make_response("No 'auth-token' in header", HTTPStatus.NoToken)
+    valid_token, usr_ = validate_token(auth_token)
+    if valid_token:
+        match_id = request.args.get('match_id', None, type=int)
+        if match_id == None:
+            return make_response("Query parameter 'match_id' missing.", HTTPStatus.BadRequest)
+        from server import SQLSession
+        session = SQLSession()
+        connection = session.connection()
+        my_team = session.query(Userteam).join(Userteam.playermatch).filter(
+            Userteam.user_id == usr_.id).filter(Playermatch.match_id == match_id).all()
+        payload = {
+            "team": {}
+        }
+        credit_spent = 0
+        for i in my_team:
+            p_name = i.playermatch.player.playername
+            p_credit = i.playermatch.player.credit_value
+            payload['team'][p_name] = p_credit
+            credit_spent += p_credit
+        payload['credit_spent'] = credit_spent
+        session.close()
+        connection.close()
+        return make_response("Detail of the user Team", status_code=HTTPStatus.Success, payload=payload)
+    else:
+        if usr_ == Constants.InvalidToken:
+            return make_response("Invalid token", HTTPStatus.InvalidToken)
+        elif usr_ == Constants.TokenExpired:
+            return make_response("Token expired.", HTTPStatus.InvalidToken)
+        else:
+            return make_response("User not verified", HTTPStatus.UnAuthorised)

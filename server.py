@@ -22,6 +22,7 @@ def get():
 
 
 app.register_blueprint(userBP, url_prefix='/user')
+app.register_blueprint(teamBP, url_prefix='/team')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
