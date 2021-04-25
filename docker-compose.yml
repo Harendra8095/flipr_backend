@@ -1,20 +1,6 @@
 version: "3.3"
 
 services:
-  matchupdater:
-    build:
-      context: .
-      dockerfile: Dockerfile.matchupdater
-    restart: always
-
-  fliprback:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    ports:
-      - 5000:5000
-
   redis:
     container_name: backend_redis
     image: redis
@@ -33,3 +19,17 @@ services:
       - ./data/postgres:/var/lib/postgresql/data
     ports:
       - 5433:5432
+
+  matchupdater:
+    build:
+      context: .
+      dockerfile: Dockerfile.matchupdater
+    restart: always
+
+  fliprback:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 5000:5000
