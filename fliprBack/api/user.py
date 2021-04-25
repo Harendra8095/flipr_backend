@@ -123,15 +123,21 @@ def myteam():
         my_team = session.query(Userteam).join(Userteam.playermatch).filter(
             Userteam.user_id == usr_.id).filter(Playermatch.match_id == match_id).all()
         payload = {
-            "team": {}
+            "team": []
         }
         credit_spent = 0
         for i in my_team:
             p_name = i.playermatch.player.playername
             p_credit = i.playermatch.player.credit_value
-            payload['team'][p_name] = p_credit
+            payload['team'].append(
+                {
+                    "id": i.playermatch.player_id,
+                    "playername": p_name,
+                    "credit_value": p_credit,
+                }
+            )
             credit_spent += p_credit
-        payload['credit_spent'] = credit_spent
+        payload["credit_spent"] = credit_spent
         session.close()
         connection.close()
         return make_response("Detail of the user Team", status_code=HTTPStatus.Success, payload=payload)
