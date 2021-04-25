@@ -13,8 +13,8 @@ from test.dbtest import populate_dummy
 engine = create_db_engine(DbEngine_config)
 SQLSession = create_db_sessionFactory(engine)
 
-createTables(engine)
-populate_dummy()
+# creaatteTables(engine)
+# popule_dummy()
 
 
 app = Flask(__name__)
