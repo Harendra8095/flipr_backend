@@ -6,6 +6,11 @@ from fliprBack.auth import validate_token, get_token
 from fliprBack.response import make_response, HTTPStatus
 from fliprBack.models import *
 import datetime
+import redis
+import json
+import os
+
+redis_client = redis.from_url(os.environ.get('REDIS_URL'))
 
 userBP = Blueprint('userApi', __name__)
 
@@ -136,3 +141,61 @@ def myteam():
             return make_response("Token expired.", HTTPStatus.InvalidToken)
         else:
             return make_response("User not verified", HTTPStatus.UnAuthorised)
+
+
+@userBP.route('/scoreboard', methods=['GET'])
+def scoreboard():
+    auth_token = request.headers.get('auth-token')
+    if not auth_token:
+        return make_response("No 'auth-token' in header", HTTPStatus.NoToken)
+    valid_token, usr_ = validate_token(auth_token)
+    if valid_token:
+        match_id = request.args.get('match_id', None, type=int)
+        if match_id == None:
+            return make_response("Query parameter 'match_id' missing.", HTTPStatus.BadRequest)
+        from server import SQLSession
+        session = SQLSession()
+        connection = session.connection()
+        last_ball = get(match_id)
+        all_player = session.query(Livescore).filter_by(ball=last_ball).join(
+            Livescore.playermatch).filter_by(match_id=match_id).all()
+        my_team = session.query(Userteam).join(Userteam.playermatch).filter(
+            Userteam.user_id == usr_.id).filter(Playermatch.match_id == match_id).all()
+        if my_team == None:
+            return make_response("No Team created for this match", HTTPStatus.BadRequest)
+        p_list = []
+        for i in my_team:
+            p_name = i.playermatch.player.playername
+            p_list.append(p_name)
+        score = 0
+        payload = {
+            "team": {}
+        }
+        for i in all_player:
+            p_name = i.playermatch.player.playername
+            if p_name in p_list:
+                payload['team'][p_name] = i.points
+                score += i.points
+        payload = {
+            "total_score": score
+        }
+        return make_response("Success", status_code=HTTPStatus.Success, payload=payload)
+    else:
+        if usr_ == Constants.InvalidToken:
+            return make_response("Invalid token", HTTPStatus.InvalidToken)
+        elif usr_ == Constants.TokenExpired:
+            return make_response("Token expired.", HTTPStatus.InvalidToken)
+        else:
+            return make_response("User not verified", HTTPStatus.UnAuthorised)
+
+
+def get(key, decode=True):
+    """set decode to False when value stored as a string"""
+    value = redis_client.get(key)
+    if not decode:
+        return value
+    if value is not None:
+        try:
+            return json.loads(value)
+        except json.decoder.JSONDecodeError:
+            return value
