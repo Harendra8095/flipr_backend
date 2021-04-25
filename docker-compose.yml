@@ -47,3 +47,10 @@ services:
     restart: always
     ports:
       - 5000:5000
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./docs:/usr/share/nginx/html
+    ports: 
+      - 8080:80
