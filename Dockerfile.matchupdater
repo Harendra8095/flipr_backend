@@ -1,6 +1,6 @@
 FROM python:3.6-alpine
 LABEL maintainer="Vishnu"
-RUN apk update && apk add ca-certificates && apk add libpq postgresql-client
+RUN apk update && apk add ca-certificates && apk add libpq postgresql-client libpq-dev
 WORKDIR /app
 ADD . /app
 COPY ./matchupdater /app
