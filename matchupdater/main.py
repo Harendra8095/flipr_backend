@@ -10,7 +10,7 @@ from matchupdater.config import DbEngine_config
 
 engine = create_db_engine(DbEngine_config)
 SQLSession = create_db_sessionFactory(engine)
-
+print(os.environ.get('REDIS_URL'))
 redis_client = redis.from_url(os.environ.get('REDIS_URL'))
 redis_client.mset({
     "caught":   25,
