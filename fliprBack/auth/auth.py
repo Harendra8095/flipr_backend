@@ -33,6 +33,7 @@ def validate_token(token):
 
 
 def get_token(data):
+    print(os.environ.get('SECRET_KEY'))
     from server import SQLSession
     session = SQLSession()
     connection = session.connection()

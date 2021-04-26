@@ -54,3 +54,10 @@ services:
       - ./docs:/usr/share/nginx/html
     ports: 
       - 8080:80
+
+  # nginxfrontend:
+  #   image: nginx
+  #   volumes:
+  #     - ./build:/usr/share/nginx/html
+  #   ports: 
+  #     - 80:80

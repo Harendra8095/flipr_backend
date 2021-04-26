@@ -28,10 +28,9 @@ def dropdb():
 
 @click.command()
 def restarteverything():
-    from server import clearlivetable
+    from server import clearlivetable, redis_client
     import redis
     clearlivetable()
-    redis_client = redis.Redis(host='redis', port=6379, db=0)
     redis_client.flushall()
     redis_client.mset({
         "caught":   25,

@@ -11,7 +11,6 @@ import redis
 import json
 import os
 
-redis_client = redis.Redis(host='redis', port=6379, db=0)
 userBP = Blueprint('userApi', __name__)
 
 
@@ -130,16 +129,17 @@ def myteam():
             p_credit = i.playermatch.player.credit_value
             payload['team'].append(
                 {
-                    "id": i.playermatch.player_id,
+                    "player_id": i.playermatch.player_id,
                     "playername": p_name,
                     "credit_value": p_credit,
                 }
             )
             credit_spent += p_credit
         payload["credit_spent"] = credit_spent
+        payload['match_id'] = match_id
         session.close()
         connection.close()
-        return make_response("Detail of the user Team", status_code=HTTPStatus.Success, payload=payload)
+        return make_response("success", status_code=HTTPStatus.Success, payload=payload)
     else:
         if usr_ == Constants.InvalidToken:
             return make_response("Invalid token", HTTPStatus.InvalidToken)
@@ -174,7 +174,7 @@ def scoreboard():
         print(last_ball)
         score = 0
         payload = {
-            "team": {}
+            "team": []
         }
         if last_ball:
             all_player = session.query(Livescore).filter_by(ball=last_ball).join(
@@ -185,11 +185,13 @@ def scoreboard():
         for i in all_player:
             p_name = i.playermatch.player.playername
             if p_name in p_list:
-                payload['team'][p_name] = i.points
-                score += i.points
-        payload = {
-            "total_score": score
-        }
+                payload['team'].append({
+                        "playername": p_name,
+                        "points" : i.points
+                    })
+        for i in payload['team']:
+            score += i['points']
+        payload["total_score"] = score
         session.close()
         connection.close()
         return make_response("Success", status_code=HTTPStatus.Success, payload=payload)
@@ -204,6 +206,7 @@ def scoreboard():
 
 def get(key, decode=True):
     """set decode to False when value stored as a string"""
+    from server import redis_client
     value = redis_client.get(key)
     if not decode:
         return value
