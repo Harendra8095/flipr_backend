@@ -56,4 +56,4 @@ if __name__ == "__main__":
         livematch(cur_date)
         redis_client.set("match_id", i+1)
         print("Next match starting in 1 min")
-        time.sleep(60)
+        time.sleep(18000)
