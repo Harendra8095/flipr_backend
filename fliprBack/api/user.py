@@ -7,9 +7,7 @@ from fliprBack.auth import validate_token, get_token
 from fliprBack.response import make_response, HTTPStatus
 from fliprBack.models import *
 import datetime
-import redis
 import json
-import os
 
 userBP = Blueprint('userApi', __name__)
 
@@ -70,6 +68,7 @@ def get_my_detail():
     valid_token, usr_ = validate_token(auth_token)
     if valid_token:
         result = {
+            "id": usr_.id,
             "username": usr_.username,
             "varified": usr_.varified,
             "contact_number": usr_.contact_number,
@@ -132,6 +131,8 @@ def myteam():
                     "player_id": i.playermatch.player_id,
                     "playername": p_name,
                     "credit_value": p_credit,
+                    "captain": i.captain,
+                    "vice_captain": i.vice_captain
                 }
             )
             credit_spent += p_credit
@@ -170,6 +171,12 @@ def scoreboard():
         for i in my_team:
             p_name = i.playermatch.player.playername
             p_list.append(p_name)
+            if i.captain:
+                c = i.captain
+                print(c)
+            if i.vice_captain:
+                vc = i.vice_captain
+                print(vc)
         last_ball = get(match_id)
         print(last_ball)
         score = 0
@@ -215,3 +222,50 @@ def get(key, decode=True):
             return json.loads(value)
         except json.decoder.JSONDecodeError:
             return value
+
+
+@userBP.route('/assign', methods=['POST'])
+def assign():
+    auth_token = request.headers.get('auth-token')
+    if not auth_token:
+        return make_response("No 'auth-token' in header", HTTPStatus.NoToken)
+    valid_token, usr_ = validate_token(auth_token)
+    data = request.json
+    required_parameters = ['match_id', 'player_id', 'role']
+    if (set(required_parameters)-data.keys()):
+        return make_response("Missing Input.", HTTPStatus.BadRequest)
+    if not valid_token:
+        if usr_ == Constants.InvalidToken:
+            return make_response("Invalid token", HTTPStatus.InvalidToken)
+        elif usr_ == Constants.TokenExpired:
+            return make_response("Token expired.", HTTPStatus.InvalidToken)
+        else:
+            return make_response("User not verified", HTTPStatus.UnAuthorised)
+    else:
+        from server import SQLSession
+        session = SQLSession()
+        connection = session.connection()
+        match_id = data['match_id']
+        player_id = data['player_id']
+        player = session.query(Userteam).join(Userteam.playermatch).filter(
+            Userteam.user_id == usr_.id).filter(Playermatch.match_id == match_id).all()
+        if data['role'].lower()=='c':
+            for i in player:
+                if i.playermatch.player_id==player_id:
+                    i.captain = True
+                    i.vice_captain = False
+                    print(player_id, i.captain)
+                else:
+                    i.captain = False
+        elif data['role'].lower()=='vc':
+            for i in player:
+                if i.playermatch.player_id==player_id:
+                    i.vice_captain = True
+                    i.captain = False
+                    print(player_id, i.vice_captain)
+                else:
+                    i.vice_captain = False
+        session.commit()
+        session.close()
+        connection.close()
+        return make_response("success", HTTPStatus.Success)

@@ -35,15 +35,16 @@
 * **Step 4**
 
     Create the .env file with following key-values
+    Copy same .env in the matchupdater folder
     
         SECRET_KEY=DefaultSecretKey
         DB_DIALECT=postgresql
-        DB_HOST=localhost
+        DB_HOST=postgres
         DB_PORT=5432
         DB_USER=postgres
-        DB_PASS=postgres    (if any)
-        DB_NAME=flipr_test
-        REDIS_HOST=localhost
+        DB_PASS=postgres
+        DB_NAME=flipr
+        REDIS_HOST=redis
         REDIS_PORT=6379
 
 * **Step 5**

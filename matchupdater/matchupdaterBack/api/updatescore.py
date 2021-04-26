@@ -3,27 +3,18 @@ import datetime
 import time
 from matchupdaterBack.models import *
 
-def get(key, decode=True):
-    """set decode to False when value stored as a string"""
-    from main import redis_client
-    value = redis_client.get(key)
-    if not decode:
-        return value
-    if value is not None:
-        try:
-            return json.loads(value)
-        except json.decoder.JSONDecodeError:
-            return value
-
 
 def livematch(curr_date):
-    from main import redis_client, SQLSession
-    curr_date = datetime.datetime(2008, 4, 18)
+    from main import redis_client, SQLSession, get
     session = SQLSession()
     connection = session.connection()
     today_ma = session.query(Match).filter_by(start_date=curr_date).first()
-    if today_ma == None:
+    if today_ma == None or today_ma.match_status == 'Finished':
+        print("Match not found or maybe already finished")
         return
+    session.query(Livescore).delete()
+    session.commit()
+    session.close()
     today_ma.match_status = 'Running'
     match_id = today_ma.id
     redis_client.set(match_id, 0)
@@ -38,7 +29,6 @@ def livematch(curr_date):
         session.add(liv_score)
     session.commit()
     session.close()
-    connection.close()
     event = open('./dummy_data/{}.json'.format(match_id),)
     data = json.load(event)
     time.sleep(5)
@@ -54,8 +44,8 @@ def livematch(curr_date):
                 player = score['batsman']
                 points = score['runs']['total']
                 try:
-                    player = score['bowler']
                     how = score['wicket']['kind']
+                    player = score['bowler']
                     points = get(how)
                 except:
                     pass
@@ -63,8 +53,11 @@ def livematch(curr_date):
                 session = SQLSession()
                 connection = session.connection()
                 print(match_id, " ", last_ball)
-                prev_score = session.query(Livescore).filter_by(ball=last_ball).join(
-                    Livescore.playermatch).filter_by(match_id=match_id).all()
+                prev_score = session.query(Livescore).join(
+                    Livescore.playermatch).filter(
+                        Playermatch.match_id==match_id).filter(
+                            Livescore.ball==last_ball).order_by(
+                                Livescore.id.desc()).limit(22)
                 for i in prev_score:
                     if i.playermatch.player.playername == player:
                         add_p = i.points+points
@@ -78,15 +71,19 @@ def livematch(curr_date):
                     session.add(liv_score)
                 session.commit()
                 session.close()
-                connection.close()
                 # Update last ball
                 redis_client.set(match_id, float(next_ball))
                 time.sleep(5)
     event.close()
+    redis_client.set(match_id, 0)
     session = SQLSession()
     connection = session.connection()
-    prev_score = session.query(Livescore).filter_by(ball=last_ball).join(
-        Livescore.playermatch).filter_by(match_id=match_id).all()
+    print(last_ball)
+    prev_score = session.query(Livescore).join(
+        Livescore.playermatch).filter(
+            Playermatch.match_id==match_id).filter(
+                Livescore.ball==last_ball).order_by(
+                    Livescore.id.desc()).limit(22)
     for i in prev_score:
         score_histroy = Scorehistory(
             points=i.points,
@@ -95,7 +92,6 @@ def livematch(curr_date):
         session.add(score_histroy)
     today_ma = session.query(Match).filter_by(start_date=curr_date).first()
     today_ma.match_status = 'Finished'
+    session.query(Livescore).delete()
     session.commit()
     session.close()
-    connection.close()
-

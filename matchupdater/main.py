@@ -18,14 +18,42 @@ REDIS_HOST = os.environ.get('REDIS_HOST')
 REDIS_PORT = os.environ.get('REDIS_PORT')
 print('redis://',REDIS_HOST,':',REDIS_PORT)
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
+redis_client.mset({
+        "caught":   25,
+        "bowled":	33,
+        "run out":	25,
+        "lbw":	33,
+        "retired hurt":	0,
+        "stumped":	25,
+        "caught and bowled":	40,
+        "hit wicket":	25,
+        "Per Run":	1,
+        "50 runs scored":	58,
+        "100 runs scored":	116,
+        "match_id": 1
+    })
+
+
+def get(key, decode=True):
+    """set decode to False when value stored as a string"""
+    value = redis_client.get(key)
+    if not decode:
+        return value
+    if value is not None:
+        try:
+            return json.loads(value)
+        except json.decoder.JSONDecodeError:
+            return value
+
 
 if __name__ == "__main__":
-    i = 1
-    time.sleep(2)
+    time.sleep(300)
     while True:
+        i = get('match_id')
         session = SQLSession()
         connection = session.connection()
         cur_date = session.query(Day).filter_by(id=i).first().avail_date
         livematch(cur_date)
-        i += 1
-        time.sleep(7200)
+        redis_client.set("match_id", i+1)
+        print("Next match starting in 1 min")
+        time.sleep(60)

@@ -22,12 +22,12 @@ def initdb():
 
 @click.command()
 def dropdb():
-    from server import engine, destroyTables, 
+    from server import engine, destroyTables
     destroyTables(engine)
     click.echo('Dropped the database')
 
 @click.command()
-def restarteverything():
+def restart():
     from server import clearlivetable, redis_client
     import redis
     clearlivetable()
@@ -51,6 +51,7 @@ def restarteverything():
 cli.add_command(testdb)
 cli.add_command(initdb)
 cli.add_command(dropdb)
+cli.add_command(restart)
 
 
 if __name__ == '__main__':

@@ -37,7 +37,7 @@ CORS(app, supports_credentials=True)
 
 @app.route('/')
 def get():
-    return "<h1> Hello, Welcome to backend of Flipr-ipl </h1>"
+    return "<h1> Hello, Welcome to backend of Flipr-ipl </h1><h2> For Routes Refer To API_DOC at same host on port 80 </h2>"
 
 
 app.register_blueprint(userBP, url_prefix='/user')

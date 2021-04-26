@@ -68,7 +68,8 @@ def generate_match_data():
             toss_decision=match_info['toss_decision'],
             umpires1=umpires1,
             umpires2=umpires2,
-            venue=match_info['venue']
+            venue=match_info['venue'],
+            match_status='Upcoming'
         )
         dates = Day(
             avail_date=match_info['start_date']

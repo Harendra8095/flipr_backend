@@ -186,36 +186,3 @@ def removefromteam():
         session.close()
         connection.close()
         return make_response("success", HTTPStatus.Success, payload)
-
-@teamBP.route('/asscaptain', methods=['POST'])
-def ascaptain():
-    auth_token = request.headers.get('auth-token')
-    if not auth_token:
-        return make_response("No 'auth-token' in header", HTTPStatus.NoToken)
-    valid_token, usr_ = validate_token(auth_token)
-    data = request.json
-    required_parameters = ['match_id', 'player_id', 'role']
-    if (set(required_parameters)-data.keys()):
-        return make_response("Missing Input.", HTTPStatus.BadRequest)
-    if not valid_token:
-        if usr_ == Constants.InvalidToken:
-            return make_response("Invalid token", HTTPStatus.InvalidToken)
-        elif usr_ == Constants.TokenExpired:
-            return make_response("Token expired.", HTTPStatus.InvalidToken)
-        else:
-            return make_response("User not verified", HTTPStatus.UnAuthorised)
-    else:
-        from server import SQLSession
-        session = SQLSession()
-        connection = session.connection()
-        match_id = data['match_id']
-        player_id = data['player_id']
-        player = session.query(Userteam).join(Playermatch).filter(
-            Playermatch.match_id==match_id).filter(Playermatch.player_id==player_id).first()
-        if data['role'].lower()=='captain':
-            player.captain = True
-        elif data['role'].lower()=='vice captain':
-            player.vice_captain = True
-        session.close()
-        connection.close()
-        return make_response("success", HTTPStatus.Success)
