@@ -160,7 +160,7 @@ def scoreboard():
         match_id = request.args.get('match_id', None, type=int)
         if match_id == None:
             return make_response("Query parameter 'match_id' missing.", HTTPStatus.BadRequest)
-        from server import SQLSession
+        from server import SQLSession, get
         session = SQLSession()
         connection = session.connection()
         my_team = session.query(Userteam).join(Userteam.playermatch).filter(
@@ -209,19 +209,6 @@ def scoreboard():
             return make_response("Token expired.", HTTPStatus.InvalidToken)
         else:
             return make_response("User not verified", HTTPStatus.UnAuthorised)
-
-
-def get(key, decode=True):
-    """set decode to False when value stored as a string"""
-    from server import redis_client
-    value = redis_client.get(key)
-    if not decode:
-        return value
-    if value is not None:
-        try:
-            return json.loads(value)
-        except json.decoder.JSONDecodeError:
-            return value
 
 
 @userBP.route('/assign', methods=['POST'])

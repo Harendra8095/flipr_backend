@@ -13,8 +13,6 @@ def livematch(curr_date):
         print("Match not found or maybe already finished")
         return
     session.query(Livescore).delete()
-    session.commit()
-    session.close()
     today_ma.match_status = 'Running'
     match_id = today_ma.id
     redis_client.set(match_id, 0)

@@ -1,6 +1,4 @@
-from fliprBack.models.userModel import Userteam
 from flask import Blueprint, request
-from flask.globals import session
 from fliprBack.constants import *
 from fliprBack.models import *
 from fliprBack.response import *
@@ -186,3 +184,48 @@ def removefromteam():
         session.close()
         connection.close()
         return make_response("success", HTTPStatus.Success, payload)
+
+@teamBP.route('/live_score', methods=['GET'])
+def live_score():
+    auth_token = request.headers.get('auth-token')
+    if not auth_token:
+        return make_response("No 'auth-token' in header", HTTPStatus.NoToken)
+    valid_token, usr_ = validate_token(auth_token)
+    if not valid_token:
+        if usr_ == Constants.InvalidToken:
+            return make_response("Invalid token", HTTPStatus.InvalidToken)
+        elif usr_ == Constants.TokenExpired:
+            return make_response("Token expired.", HTTPStatus.InvalidToken)
+        else:
+            return make_response("User not verified", HTTPStatus.UnAuthorised)
+    from server import SQLSession, get
+    session = SQLSession()
+    connection = session.connection()
+    match_id = get('match_id')
+    print(match_id)
+    last_ball = get(match_id)
+    print(last_ball)
+    l_match = session.query(Livescore).join(
+        Livescore.playermatch).filter(
+            Playermatch.match_id==match_id).filter(
+                Livescore.ball==last_ball).order_by(
+                    Livescore.id.desc()).limit(22)
+    teams = session.query(Match).filter_by(id=match_id).first()
+    team1 = teams.team1
+    team2 = teams.team2
+    payload = {
+        "team": []
+    }
+    for i in l_match:
+        payload['team'].append(
+            {
+                "playername": i.playermatch.player.playername,
+                "points": i.points
+            }
+        )
+    payload['team1'] = team1
+    payload['team2'] = team2
+    payload['match_id'] = match_id
+    session.close()
+    connection.close()
+    return make_response("success", HTTPStatus.Success, payload)
