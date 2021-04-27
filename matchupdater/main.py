@@ -33,7 +33,7 @@ def get(key, decode=True):
 
 
 if __name__ == "__main__":
-    time.sleep(300)
+    time.sleep(240)
     while True:
         i = get('match_id')
         session = SQLSession()
@@ -42,4 +42,4 @@ if __name__ == "__main__":
         livematch(cur_date)
         redis_client.set("match_id", i+1)
         print("Next match starting in 5 Hours")
-        time.sleep(18000)
+        time.sleep(2400)
