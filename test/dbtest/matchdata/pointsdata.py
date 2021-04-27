@@ -11,5 +11,6 @@ def generate_points_data():
         "hit wicket":	25,
         "Per Run":	1,
         "50 runs scored":	58,
-        "100 runs scored":	116
+        "100 runs scored":	116,
+        "match_id": 1
     })

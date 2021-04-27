@@ -18,20 +18,6 @@ REDIS_HOST = os.environ.get('REDIS_HOST')
 REDIS_PORT = os.environ.get('REDIS_PORT')
 print('redis://',REDIS_HOST,':',REDIS_PORT)
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
-redis_client.mset({
-        "caught":   25,
-        "bowled":	33,
-        "run out":	25,
-        "lbw":	33,
-        "retired hurt":	0,
-        "stumped":	25,
-        "caught and bowled":	40,
-        "hit wicket":	25,
-        "Per Run":	1,
-        "50 runs scored":	58,
-        "100 runs scored":	116,
-        "match_id": 1
-    })
 
 
 def get(key, decode=True):
