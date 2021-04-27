@@ -27,15 +27,18 @@ def matches():
         q = session.query(Match).all()
         payload = []
         for i in q:
-            payload.append(
-                {
-                    "match_id": i.id,
-                    "start_date": i.start_date,
-                    "team1": i.team1,
-                    "team2": i.team2,
-                    "match_status": i.match_status
-                }
-            )
+            if i.match_status=='Running':
+                pass
+            else:
+                payload.append(
+                    {
+                        "match_id": i.id,
+                        "start_date": i.start_date,
+                        "team1": i.team1,
+                        "team2": i.team2,
+                        "match_status": i.match_status
+                    }
+                )
         session.close()
         connection.close()
         return make_response("success", HTTPStatus.Success, payload)
@@ -61,16 +64,26 @@ def playerlist():
         from server import SQLSession
         session = SQLSession()
         connection = session.connection()
+        my_team = session.query(Userteam).join(Userteam.playermatch).filter(
+            Userteam.user_id == usr_.id).filter(Playermatch.match_id == match_id).all()
+        p_list = []
+        for i in my_team:
+            p_name = i.playermatch.player.playername
+            p_list.append(p_name)
         p_l = session.query(Playermatch).filter_by(match_id=match_id).all()
         payload = []
         for i in p_l:
-            payload.append(
-                {
-                    "player_id": i.player.id,
-                    "playername": i.player.playername,
-                    "credit_value": i.player.credit_value
-                }
-            )
+            name = i.player.playername
+            if name in p_list:
+                pass
+            else:
+                payload.append(
+                    {
+                        "player_id": i.player.id,
+                        "playername": i.player.playername,
+                        "credit_value": i.player.credit_value
+                    }
+                )
         session.close()
         connection.close()
         return make_response("success", HTTPStatus.Success, payload)

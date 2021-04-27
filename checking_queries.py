@@ -52,3 +52,44 @@ mp_q = session.query(Userteam).join(Userteam.playermatch).filter(
     Userteam.user_id == 6).filter(Playermatch.match_id == 3).all()
 for i in mp_q:
     print(i.playermatch.player.playername)
+
+q = session.query(Match).all()
+payload = []
+for i in q:
+    if i.match_status=='Upcoming' or i.match_status=='Finished':
+        payload.append(
+            {
+                "match_id": i.id,
+                "start_date": i.start_date,
+                "team1": i.team1,
+                "team2": i.team2,
+                "match_status": i.match_status
+            }
+        )
+    else:
+        print(i.match_status)
+
+my_team = session.query(Userteam).join(Userteam.playermatch).filter(
+    Userteam.user_id == 1).filter(Playermatch.match_id == 1).all()
+p_list = []
+for i in my_team:
+    p_name = i.playermatch.player.playername
+    p_list.append(p_name)
+p_l = session.query(Playermatch).filter_by(match_id=1).all()
+payload = []
+num=0
+for i in p_l:
+    name = i.player.playername
+    if name in p_list:
+        pass
+    else:
+        payload.append(
+            {
+                "player_id": i.player.id,
+                "playername": i.player.playername,
+                "credit_value": i.player.credit_value
+            }
+        )
+        num += 1
+        print(num)
+print(payload)
