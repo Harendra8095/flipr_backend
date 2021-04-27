@@ -38,8 +38,8 @@ if __name__ == "__main__":
         i = get('match_id')
         session = SQLSession()
         connection = session.connection()
-        cur_date = session.query(Day).filter_by(id=i).first().avail_date
-        livematch(cur_date)
+        # cur_date = session.query(Day).filter_by(id=i).first().avail_date
+        livematch(i)
         redis_client.set("match_id", i+1)
         print("Next match starting in 5 Hours")
         time.sleep(2400)
