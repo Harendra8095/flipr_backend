@@ -49,10 +49,11 @@
 
 * **Step 5**
 
-    To create the database
+    Create your localdatabase with localhost postgres and populate data
     
         python migrations.py db migrate
         python migrations.py db upgrade
+        python manage.py testdb
 * **Step 6**
 
     To run server

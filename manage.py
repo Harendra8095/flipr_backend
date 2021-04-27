@@ -28,8 +28,10 @@ def dropdb():
 
 @click.command()
 def restart():
-    from server import clearlivetable, redis_client
+    from server import clearlivetable, redis_client, SQLSession
+    from fliprBack.models  import Scorehistory
     import redis
+    session = SQLSession()
     clearlivetable()
     redis_client.flushall()
     redis_client.mset({
@@ -46,6 +48,9 @@ def restart():
         "100 runs scored":	116,
         "match_id": 1
     })
+    session.query(Scorehistory).delete()
+    session.commit()
+    session.close()
 
 
 

@@ -202,6 +202,8 @@ def live_score():
     session = SQLSession()
     connection = session.connection()
     match_id = get('match_id')
+    if match_id==None:
+        return make_response("Match not started yet", HTTPStatus.Success)
     print(match_id)
     last_ball = get(match_id)
     print(last_ball)
