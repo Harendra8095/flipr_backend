@@ -168,6 +168,8 @@ def scoreboard():
         p_list = []
         if my_team == None:
             return make_response("No Team created for this match", HTTPStatus.BadRequest)
+        vc = ''
+        c = ''
         for i in my_team:
             p_name = i.playermatch.player.playername
             p_list.append(p_name)
@@ -197,14 +199,11 @@ def scoreboard():
                         "points" : i.points
                     })
         for i in payload['team']:
-            try:
-                if i['playername'] == vc:
-                    score += (i['points']*1.5)
-                if i['playername'] == c:
-                    score += (i['points']*2)
-                else:
-                    score += i['points']
-            except:
+            if i['playername'] == vc:
+                score += (i['points']*1.5)
+            if i['playername'] == c:
+                score += (i['points']*2)
+            else:
                 score += i['points']
         payload["total_score"] = score
         session.close()
