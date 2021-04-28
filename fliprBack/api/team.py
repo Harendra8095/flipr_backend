@@ -129,21 +129,30 @@ def addtoteam():
             session.close()
             connection.close()
             return make_response("No such player for this match.", HTTPStatus.BadRequest)
-        credit_spent += p_m_id.player.credit_value
-        if credit_spent > 100:
-            session.close()
-            connection.close()
-            return make_response("Credit Spent exceeded.", HTTPStatus.BadRequest)
-        userteam = Userteam(
-            user_id=usr_.id,
-            playermatch_id=p_m_id.id,
-            credit_bal=p_m_id.player.credit_value
-        )
-        payload = {
-            "credit_spent": credit_spent,
-            "team_size": team_size+1,
-        }
-        session.add(userteam)
+        my_team = session.query(Userteam).join(Userteam.playermatch).filter(
+            Userteam.user_id == usr_.id).filter(Playermatch.match_id == match_id).all()
+        p_list = []
+        for i in my_team:
+            p_name = i.playermatch.player.playername
+            p_list.append(p_name)
+        if p_m_id.player.playername in p_list:
+            pass
+        else:
+            userteam = Userteam(
+                user_id=usr_.id,
+                playermatch_id=p_m_id.id,
+                credit_bal=p_m_id.player.credit_value
+            )
+            credit_spent += p_m_id.player.credit_value
+            if credit_spent > 100:
+                session.close()
+                connection.close()
+                return make_response("Credit Spent exceeded.", HTTPStatus.BadRequest)
+            payload = {
+                "credit_spent": credit_spent,
+                "team_size": team_size+1,
+            }
+            session.add(userteam)
         session.commit()
         session.close()
         connection.close()
