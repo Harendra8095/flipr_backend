@@ -27,6 +27,7 @@ def livematch(m_id):
         session.add(liv_score)
     session.commit()
     session.close()
+    connection.close()
     event = open('./dummy_data/{}.json'.format(match_id),)
     data = json.load(event)
     time.sleep(5)
@@ -69,6 +70,7 @@ def livematch(m_id):
                     session.add(liv_score)
                 session.commit()
                 session.close()
+                connection.close()
                 # Update last ball
                 redis_client.set(match_id, float(next_ball))
                 time.sleep(5)
@@ -92,4 +94,5 @@ def livematch(m_id):
     today_ma.match_status = 'Finished'
     session.query(Livescore).delete()
     session.commit()
+    connection.close()
     session.close()

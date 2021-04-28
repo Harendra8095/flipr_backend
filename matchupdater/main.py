@@ -33,7 +33,7 @@ def get(key, decode=True):
 
 
 if __name__ == "__main__":
-    time.sleep(240)
+    time.sleep(120)
     while True:
         i = get('match_id')
         session = SQLSession()

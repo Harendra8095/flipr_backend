@@ -197,7 +197,12 @@ def scoreboard():
                         "points" : i.points
                     })
         for i in payload['team']:
-            score += i['points']
+            if i['playername'] == vc:
+                score += (i['points']*1.5)
+            elif i['playername'] == c:
+                score += (i['points']*2)
+            else:
+                score += i['points']
         payload["total_score"] = score
         session.close()
         connection.close()
