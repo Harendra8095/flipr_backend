@@ -174,10 +174,10 @@ def scoreboard():
             p_name = i.playermatch.player.playername
             p_list.append(p_name)
             if i.captain:
-                c = i.captain
+                c = p_name
                 print(c)
             if i.vice_captain:
-                vc = i.vice_captain
+                vc = p_name
                 print(vc)
         last_ball = get(match_id)
         print(last_ball)
@@ -194,17 +194,17 @@ def scoreboard():
         for i in all_player:
             p_name = i.playermatch.player.playername
             if p_name in p_list:
+                poin = i.points
+                if p_name == vc:
+                    poin = i.points*1.5
+                if p_name == c:
+                    poin = i.points*2
                 payload['team'].append({
                         "playername": p_name,
-                        "points" : i.points
+                        "points" : poin
                     })
         for i in payload['team']:
-            if i['playername'] == vc:
-                score += (i['points']*1.5)
-            if i['playername'] == c:
-                score += (i['points']*2)
-            else:
-                score += i['points']
+            score += i['points']
         payload["total_score"] = score
         session.close()
         connection.close()
