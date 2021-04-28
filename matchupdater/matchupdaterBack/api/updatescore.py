@@ -4,11 +4,11 @@ import time
 from matchupdaterBack.models import *
 
 
-def livematch(i):
+def livematch(m_id):
     from main import redis_client, SQLSession, get
     session = SQLSession()
     connection = session.connection()
-    today_ma = session.query(Match).filter_by(id=i).first()
+    today_ma = session.query(Match).filter_by(id=m_id).first()
     if today_ma == None or today_ma.match_status == 'Finished':
         print("Match not found or maybe already finished")
         return
@@ -88,7 +88,7 @@ def livematch(i):
             playermatch_id=i.playermatch.id
         )
         session.add(score_histroy)
-    today_ma = session.query(Match).filter_by(start_date=curr_date).first()
+    today_ma = session.query(Match).filter_by(id=m_id).first()
     today_ma.match_status = 'Finished'
     session.query(Livescore).delete()
     session.commit()
