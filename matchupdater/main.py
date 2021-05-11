@@ -36,8 +36,8 @@ if __name__ == "__main__":
     time.sleep(120)
     while True:
         i = get('match_id')
-        session = SQLSession()
-        connection = session.connection()
+        # session = SQLSession()
+        # connection = session.connection()
         # cur_date = session.query(Day).filter_by(id=i).first().avail_date
         livematch(i)
         redis_client.set("match_id", i+1)

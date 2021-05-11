@@ -11,6 +11,8 @@ def livematch(m_id):
     today_ma = session.query(Match).filter_by(id=m_id).first()
     if today_ma == None or today_ma.match_status == 'Finished':
         print("Match not found or maybe already finished")
+        session.close()
+        connection.close()
         return
     session.query(Livescore).delete()
     today_ma.match_status = 'Running'
