@@ -1,1 +1,1 @@
-web: gunicorn -w 4 -b 0.0.0.0:$PORT -k fliprfantasy main:app
+web: gunicorn -w 4 -b 0.0.0.0:5000 -k fliprfantasy main:app
