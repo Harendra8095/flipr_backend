@@ -1,0 +1,6469 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.2 (Ubuntu 13.2-1.pgdg20.10+1)
+-- Dumped by pg_dump version 13.2 (Ubuntu 13.2-1.pgdg20.10+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: day; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.day (
+    id integer NOT NULL,
+    avail_date timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: day_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.day_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: day_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.day_id_seq OWNED BY public.day.id;
+
+
+--
+-- Name: livescore; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.livescore (
+    id integer NOT NULL,
+    ball double precision,
+    points integer,
+    playermatch_id integer
+);
+
+
+--
+-- Name: livescore_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.livescore_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: livescore_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.livescore_id_seq OWNED BY public.livescore.id;
+
+
+--
+-- Name: match; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.match (
+    id integer NOT NULL,
+    city character varying(128),
+    competition character varying(128),
+    start_date timestamp without time zone NOT NULL,
+    gender character varying(128),
+    match_type character varying(128),
+    team1 character varying(256),
+    team2 character varying(256),
+    winner character varying(256),
+    win_by_wicket integer,
+    win_by_runs integer,
+    player_of_match character varying(256),
+    toss_winner character varying(256),
+    toss_decision character varying(128),
+    umpires1 character varying(256),
+    umpires2 character varying(256),
+    venue character varying(256),
+    match_status character varying(128)
+);
+
+
+--
+-- Name: match_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.match_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: match_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.match_id_seq OWNED BY public.match.id;
+
+
+--
+-- Name: player; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.player (
+    id integer NOT NULL,
+    playername character varying(50) NOT NULL,
+    credit_value integer
+);
+
+
+--
+-- Name: player_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.player_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: player_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.player_id_seq OWNED BY public.player.id;
+
+
+--
+-- Name: playermatch; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.playermatch (
+    id integer NOT NULL,
+    player_id integer,
+    match_id integer
+);
+
+
+--
+-- Name: playermatch_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.playermatch_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: playermatch_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.playermatch_id_seq OWNED BY public.playermatch.id;
+
+
+--
+-- Name: scorehistory; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.scorehistory (
+    id integer NOT NULL,
+    points integer,
+    playermatch_id integer
+);
+
+
+--
+-- Name: scorehistory_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.scorehistory_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: scorehistory_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.scorehistory_id_seq OWNED BY public.scorehistory.id;
+
+
+--
+-- Name: user; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public."user" (
+    id integer NOT NULL,
+    username character varying(50) NOT NULL,
+    password_hash character varying(100) NOT NULL,
+    contact_number character varying(10) NOT NULL,
+    varified boolean NOT NULL,
+    registered_on timestamp without time zone NOT NULL,
+    last_updated_on timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.user_id_seq OWNED BY public."user".id;
+
+
+--
+-- Name: userteam; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.userteam (
+    id integer NOT NULL,
+    user_id integer,
+    playermatch_id integer,
+    captain boolean,
+    vice_captain boolean,
+    credit_bal integer
+);
+
+
+--
+-- Name: userteam_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.userteam_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: userteam_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.userteam_id_seq OWNED BY public.userteam.id;
+
+
+--
+-- Name: day id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.day ALTER COLUMN id SET DEFAULT nextval('public.day_id_seq'::regclass);
+
+
+--
+-- Name: livescore id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.livescore ALTER COLUMN id SET DEFAULT nextval('public.livescore_id_seq'::regclass);
+
+
+--
+-- Name: match id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match ALTER COLUMN id SET DEFAULT nextval('public.match_id_seq'::regclass);
+
+
+--
+-- Name: player id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.player ALTER COLUMN id SET DEFAULT nextval('public.player_id_seq'::regclass);
+
+
+--
+-- Name: playermatch id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playermatch ALTER COLUMN id SET DEFAULT nextval('public.playermatch_id_seq'::regclass);
+
+
+--
+-- Name: scorehistory id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scorehistory ALTER COLUMN id SET DEFAULT nextval('public.scorehistory_id_seq'::regclass);
+
+
+--
+-- Name: user id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq'::regclass);
+
+
+--
+-- Name: userteam id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.userteam ALTER COLUMN id SET DEFAULT nextval('public.userteam_id_seq'::regclass);
+
+
+--
+-- Data for Name: day; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.day (id, avail_date) FROM stdin;
+1	2008-04-18 00:00:00
+2	2008-04-19 00:00:00
+3	2008-04-19 00:00:00
+4	2008-04-20 00:00:00
+5	2008-04-20 00:00:00
+6	2008-04-21 00:00:00
+7	2008-04-22 00:00:00
+8	2008-04-23 00:00:00
+9	2008-04-24 00:00:00
+10	2008-04-25 00:00:00
+11	2008-04-26 00:00:00
+12	2008-04-26 00:00:00
+13	2008-04-27 00:00:00
+14	2008-04-27 00:00:00
+15	2008-04-28 00:00:00
+16	2008-04-29 00:00:00
+17	2008-04-30 00:00:00
+18	2008-05-01 00:00:00
+19	2008-05-01 00:00:00
+20	2008-05-02 00:00:00
+21	2008-05-25 00:00:00
+22	2008-05-03 00:00:00
+23	2008-05-04 00:00:00
+24	2008-05-04 00:00:00
+25	2008-05-05 00:00:00
+26	2008-05-06 00:00:00
+27	2008-05-07 00:00:00
+28	2008-05-08 00:00:00
+29	2008-05-08 00:00:00
+30	2008-05-09 00:00:00
+31	2008-05-28 00:00:00
+32	2008-05-10 00:00:00
+33	2008-05-11 00:00:00
+34	2008-05-11 00:00:00
+35	2008-05-12 00:00:00
+36	2008-05-13 00:00:00
+37	2008-05-14 00:00:00
+38	2008-05-28 00:00:00
+39	2008-05-15 00:00:00
+40	2008-05-16 00:00:00
+41	2008-05-17 00:00:00
+42	2008-05-17 00:00:00
+43	2008-05-18 00:00:00
+44	2008-05-18 00:00:00
+45	2008-05-19 00:00:00
+46	2008-05-20 00:00:00
+47	2008-05-21 00:00:00
+48	2008-05-21 00:00:00
+49	2008-05-23 00:00:00
+50	2008-05-24 00:00:00
+51	2008-05-24 00:00:00
+52	2008-05-03 00:00:00
+53	2008-05-25 00:00:00
+54	2008-05-26 00:00:00
+55	2008-05-27 00:00:00
+56	2008-05-30 00:00:00
+57	2008-05-31 00:00:00
+58	2008-06-01 00:00:00
+59	2009-04-18 00:00:00
+60	2009-04-18 00:00:00
+61	2009-04-19 00:00:00
+62	2009-04-19 00:00:00
+63	2009-04-20 00:00:00
+64	2009-04-21 00:00:00
+65	2009-04-22 00:00:00
+66	2009-04-23 00:00:00
+67	2009-04-23 00:00:00
+68	2009-04-24 00:00:00
+69	2009-04-25 00:00:00
+70	2009-04-26 00:00:00
+71	2009-04-26 00:00:00
+72	2009-04-27 00:00:00
+73	2009-04-27 00:00:00
+74	2009-04-28 00:00:00
+75	2009-04-29 00:00:00
+76	2009-04-29 00:00:00
+77	2009-04-30 00:00:00
+78	2009-04-30 00:00:00
+79	2009-05-01 00:00:00
+80	2009-05-01 00:00:00
+81	2009-05-02 00:00:00
+82	2009-05-02 00:00:00
+83	2009-05-03 00:00:00
+84	2009-05-03 00:00:00
+85	2009-05-04 00:00:00
+86	2009-05-05 00:00:00
+87	2009-05-05 00:00:00
+88	2009-05-06 00:00:00
+89	2009-05-07 00:00:00
+90	2009-05-07 00:00:00
+91	2009-05-08 00:00:00
+92	2009-05-09 00:00:00
+93	2009-05-09 00:00:00
+94	2009-05-10 00:00:00
+95	2009-05-10 00:00:00
+96	2009-05-11 00:00:00
+97	2009-05-12 00:00:00
+98	2009-05-12 00:00:00
+99	2009-05-13 00:00:00
+100	2009-05-14 00:00:00
+101	2009-05-14 00:00:00
+102	2009-05-15 00:00:00
+103	2009-05-16 00:00:00
+104	2009-05-16 00:00:00
+105	2009-05-17 00:00:00
+106	2009-05-17 00:00:00
+107	2009-05-18 00:00:00
+108	2009-05-19 00:00:00
+109	2009-05-20 00:00:00
+110	2009-05-20 00:00:00
+111	2009-05-21 00:00:00
+112	2009-05-21 00:00:00
+113	2009-05-22 00:00:00
+114	2009-05-23 00:00:00
+115	2009-05-24 00:00:00
+116	2010-03-12 00:00:00
+117	2010-03-13 00:00:00
+118	2010-03-13 00:00:00
+119	2010-03-14 00:00:00
+120	2010-03-14 00:00:00
+121	2010-03-15 00:00:00
+122	2010-03-16 00:00:00
+123	2010-03-16 00:00:00
+124	2010-03-17 00:00:00
+125	2010-03-18 00:00:00
+126	2010-03-19 00:00:00
+127	2010-03-19 00:00:00
+128	2010-03-20 00:00:00
+129	2010-03-20 00:00:00
+130	2010-03-21 00:00:00
+131	2010-03-21 00:00:00
+132	2010-03-22 00:00:00
+133	2010-03-23 00:00:00
+134	2010-03-24 00:00:00
+135	2010-03-25 00:00:00
+136	2010-03-26 00:00:00
+137	2010-03-27 00:00:00
+138	2010-03-25 00:00:00
+139	2010-03-28 00:00:00
+140	2010-03-28 00:00:00
+141	2010-03-29 00:00:00
+142	2010-03-30 00:00:00
+143	2010-03-31 00:00:00
+144	2010-03-31 00:00:00
+145	2010-04-01 00:00:00
+146	2010-04-02 00:00:00
+147	2010-04-03 00:00:00
+148	2010-04-03 00:00:00
+149	2010-04-04 00:00:00
+150	2010-04-04 00:00:00
+151	2010-04-05 00:00:00
+152	2010-04-06 00:00:00
+153	2010-04-07 00:00:00
+154	2010-04-07 00:00:00
+155	2010-04-08 00:00:00
+156	2010-04-09 00:00:00
+157	2010-04-10 00:00:00
+158	2010-04-10 00:00:00
+159	2010-04-11 00:00:00
+160	2010-04-11 00:00:00
+161	2010-04-12 00:00:00
+162	2010-04-13 00:00:00
+163	2010-04-13 00:00:00
+164	2010-04-14 00:00:00
+165	2010-04-15 00:00:00
+166	2010-04-16 00:00:00
+167	2010-04-17 00:00:00
+168	2010-04-17 00:00:00
+169	2010-04-18 00:00:00
+170	2010-04-18 00:00:00
+171	2010-04-19 00:00:00
+172	2010-04-21 00:00:00
+173	2010-04-22 00:00:00
+174	2010-04-24 00:00:00
+175	2010-04-25 00:00:00
+176	2011-04-08 00:00:00
+177	2011-04-09 00:00:00
+178	2011-04-09 00:00:00
+179	2011-04-10 00:00:00
+180	2011-04-10 00:00:00
+181	2011-04-11 00:00:00
+182	2011-04-12 00:00:00
+183	2011-04-12 00:00:00
+184	2011-04-13 00:00:00
+185	2011-04-13 00:00:00
+186	2011-04-14 00:00:00
+187	2011-04-15 00:00:00
+188	2011-04-15 00:00:00
+189	2011-04-16 00:00:00
+190	2011-04-16 00:00:00
+191	2011-04-17 00:00:00
+192	2011-04-17 00:00:00
+193	2011-04-18 00:00:00
+194	2011-04-19 00:00:00
+195	2011-04-20 00:00:00
+196	2011-04-20 00:00:00
+197	2011-04-21 00:00:00
+198	2011-04-22 00:00:00
+199	2011-04-22 00:00:00
+200	2011-04-23 00:00:00
+201	2011-04-24 00:00:00
+202	2011-04-24 00:00:00
+203	2011-04-25 00:00:00
+204	2011-04-26 00:00:00
+205	2011-04-27 00:00:00
+206	2011-04-27 00:00:00
+207	2011-04-28 00:00:00
+208	2011-04-29 00:00:00
+209	2011-04-29 00:00:00
+210	2011-04-30 00:00:00
+211	2011-04-30 00:00:00
+212	2011-05-01 00:00:00
+213	2011-05-01 00:00:00
+214	2011-05-02 00:00:00
+215	2011-05-02 00:00:00
+216	2011-05-03 00:00:00
+217	2011-05-04 00:00:00
+218	2011-05-04 00:00:00
+219	2011-05-05 00:00:00
+220	2011-05-05 00:00:00
+221	2011-05-06 00:00:00
+222	2011-05-07 00:00:00
+223	2011-05-07 00:00:00
+224	2011-05-08 00:00:00
+225	2011-05-08 00:00:00
+226	2011-05-09 00:00:00
+227	2011-05-10 00:00:00
+228	2011-05-10 00:00:00
+229	2011-05-11 00:00:00
+230	2011-05-12 00:00:00
+231	2011-05-13 00:00:00
+\.
+
+
+--
+-- Data for Name: livescore; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.livescore (id, ball, points, playermatch_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: match; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.match (id, city, competition, start_date, gender, match_type, team1, team2, winner, win_by_wicket, win_by_runs, player_of_match, toss_winner, toss_decision, umpires1, umpires2, venue, match_status) FROM stdin;
+1	Bangalore	IPL	2008-04-18 00:00:00	male	T20	Royal Challengers Bangalore	Kolkata Knight Riders	Kolkata Knight Riders	\N	140	BB McCullum	Royal Challengers Bangalore	field	Asad Rauf	RE Koertzen	M Chinnaswamy Stadium	Upcoming
+2	Chandigarh	IPL	2008-04-19 00:00:00	male	T20	Kings XI Punjab	Chennai Super Kings	Chennai Super Kings	\N	33	MEK Hussey	Chennai Super Kings	bat	MR Benson	SL Shastri	Punjab Cricket Association Stadium, Mohali	Upcoming
+3	Delhi	IPL	2008-04-19 00:00:00	male	T20	Delhi Daredevils	Rajasthan Royals	Delhi Daredevils	9	\N	MF Maharoof	Rajasthan Royals	bat	Aleem Dar	GA Pratapkumar	Feroz Shah Kotla	Upcoming
+4	Mumbai	IPL	2008-04-20 00:00:00	male	T20	Mumbai Indians	Royal Challengers Bangalore	Royal Challengers Bangalore	5	\N	MV Boucher	Mumbai Indians	bat	SJ Davis	DJ Harper	Wankhede Stadium	Upcoming
+5	Kolkata	IPL	2008-04-20 00:00:00	male	T20	Kolkata Knight Riders	Deccan Chargers	Kolkata Knight Riders	5	\N	DJ Hussey	Deccan Chargers	bat	BF Bowden	K Hariharan	Eden Gardens	Upcoming
+6	Jaipur	IPL	2008-04-21 00:00:00	male	T20	Rajasthan Royals	Kings XI Punjab	Rajasthan Royals	6	\N	SR Watson	Kings XI Punjab	bat	Aleem Dar	RB Tiffin	Sawai Mansingh Stadium	Upcoming
+7	Hyderabad	IPL	2008-04-22 00:00:00	male	T20	Deccan Chargers	Delhi Daredevils	Delhi Daredevils	9	\N	V Sehwag	Deccan Chargers	bat	IL Howell	AM Saheba	Rajiv Gandhi International Stadium, Uppal	Upcoming
+8	Chennai	IPL	2008-04-23 00:00:00	male	T20	Chennai Super Kings	Mumbai Indians	Chennai Super Kings	\N	6	ML Hayden	Mumbai Indians	field	DJ Harper	GA Pratapkumar	MA Chidambaram Stadium, Chepauk	Upcoming
+9	Hyderabad	IPL	2008-04-24 00:00:00	male	T20	Deccan Chargers	Rajasthan Royals	Rajasthan Royals	3	\N	YK Pathan	Rajasthan Royals	field	Asad Rauf	MR Benson	Rajiv Gandhi International Stadium, Uppal	Upcoming
+10	Chandigarh	IPL	2008-04-25 00:00:00	male	T20	Kings XI Punjab	Mumbai Indians	Kings XI Punjab	\N	66	KC Sangakkara	Mumbai Indians	field	Aleem Dar	AM Saheba	Punjab Cricket Association Stadium, Mohali	Upcoming
+11	Bangalore	IPL	2008-04-26 00:00:00	male	T20	Royal Challengers Bangalore	Rajasthan Royals	Rajasthan Royals	7	\N	SR Watson	Rajasthan Royals	field	MR Benson	IL Howell	M Chinnaswamy Stadium	Upcoming
+12	Chennai	IPL	2008-04-26 00:00:00	male	T20	Chennai Super Kings	Kolkata Knight Riders	Chennai Super Kings	9	\N	JDP Oram	Kolkata Knight Riders	bat	BF Bowden	AV Jayaprakash	MA Chidambaram Stadium, Chepauk	Upcoming
+13	Mumbai	IPL	2008-04-27 00:00:00	male	T20	Mumbai Indians	Deccan Chargers	Deccan Chargers	10	\N	AC Gilchrist	Deccan Chargers	field	Asad Rauf	SL Shastri	Dr DY Patil Sports Academy	Upcoming
+14	Chandigarh	IPL	2008-04-27 00:00:00	male	T20	Kings XI Punjab	Delhi Daredevils	Kings XI Punjab	4	\N	SM Katich	Delhi Daredevils	bat	RE Koertzen	I Shivram	Punjab Cricket Association Stadium, Mohali	Upcoming
+15	Bangalore	IPL	2008-04-28 00:00:00	male	T20	Royal Challengers Bangalore	Chennai Super Kings	Chennai Super Kings	\N	13	MS Dhoni	Chennai Super Kings	bat	BR Doctrove	RB Tiffin	M Chinnaswamy Stadium	Upcoming
+16	Kolkata	IPL	2008-04-29 00:00:00	male	T20	Kolkata Knight Riders	Mumbai Indians	Mumbai Indians	7	\N	ST Jayasuriya	Kolkata Knight Riders	bat	BF Bowden	AV Jayaprakash	Eden Gardens	Upcoming
+17	Delhi	IPL	2008-04-30 00:00:00	male	T20	Delhi Daredevils	Royal Challengers Bangalore	Delhi Daredevils	\N	10	GD McGrath	Royal Challengers Bangalore	field	Aleem Dar	I Shivram	Feroz Shah Kotla	Upcoming
+18	Hyderabad	IPL	2008-05-01 00:00:00	male	T20	Deccan Chargers	Kings XI Punjab	Kings XI Punjab	7	\N	SE Marsh	Kings XI Punjab	field	BR Doctrove	RB Tiffin	Rajiv Gandhi International Stadium, Uppal	Upcoming
+19	Jaipur	IPL	2008-05-01 00:00:00	male	T20	Rajasthan Royals	Kolkata Knight Riders	Rajasthan Royals	\N	45	SA Asnodkar	Rajasthan Royals	bat	RE Koertzen	GA Pratapkumar	Sawai Mansingh Stadium	Upcoming
+20	Chennai	IPL	2008-05-02 00:00:00	male	T20	Chennai Super Kings	Delhi Daredevils	Delhi Daredevils	8	\N	V Sehwag	Chennai Super Kings	bat	BF Bowden	K Hariharan	MA Chidambaram Stadium, Chepauk	Upcoming
+21	Hyderabad	IPL	2008-05-25 00:00:00	male	T20	Deccan Chargers	Royal Challengers Bangalore	Royal Challengers Bangalore	5	\N	R Vinay Kumar	Deccan Chargers	bat	Asad Rauf	RE Koertzen	Rajiv Gandhi International Stadium, Uppal	Upcoming
+22	Chandigarh	IPL	2008-05-03 00:00:00	male	T20	Kings XI Punjab	Kolkata Knight Riders	Kings XI Punjab	\N	9	IK Pathan	Kings XI Punjab	bat	DJ Harper	I Shivram	Punjab Cricket Association Stadium, Mohali	Upcoming
+23	Mumbai	IPL	2008-05-04 00:00:00	male	T20	Mumbai Indians	Delhi Daredevils	Mumbai Indians	\N	29	SM Pollock	Delhi Daredevils	field	IL Howell	RE Koertzen	Dr DY Patil Sports Academy	Upcoming
+24	Jaipur	IPL	2008-05-04 00:00:00	male	T20	Rajasthan Royals	Chennai Super Kings	Rajasthan Royals	8	\N	Sohail Tanvir	Chennai Super Kings	bat	Asad Rauf	AV Jayaprakash	Sawai Mansingh Stadium	Upcoming
+25	Bangalore	IPL	2008-05-05 00:00:00	male	T20	Royal Challengers Bangalore	Kings XI Punjab	Kings XI Punjab	6	\N	S Sreesanth	Kings XI Punjab	field	SJ Davis	BR Doctrove	M Chinnaswamy Stadium	Upcoming
+26	Chennai	IPL	2008-05-06 00:00:00	male	T20	Chennai Super Kings	Deccan Chargers	Deccan Chargers	7	\N	AC Gilchrist	Deccan Chargers	field	MR Benson	RB Tiffin	MA Chidambaram Stadium, Chepauk	Upcoming
+27	Mumbai	IPL	2008-05-07 00:00:00	male	T20	Mumbai Indians	Rajasthan Royals	Mumbai Indians	7	\N	A Nehra	Mumbai Indians	field	DJ Harper	RE Koertzen	Dr DY Patil Sports Academy	Upcoming
+28	Delhi	IPL	2008-05-08 00:00:00	male	T20	Delhi Daredevils	Chennai Super Kings	Chennai Super Kings	4	\N	MS Dhoni	Chennai Super Kings	field	Aleem Dar	RB Tiffin	Feroz Shah Kotla	Upcoming
+29	Kolkata	IPL	2008-05-08 00:00:00	male	T20	Kolkata Knight Riders	Royal Challengers Bangalore	Kolkata Knight Riders	\N	5	SC Ganguly	Kolkata Knight Riders	bat	Asad Rauf	IL Howell	Eden Gardens	Upcoming
+30	Jaipur	IPL	2008-05-09 00:00:00	male	T20	Rajasthan Royals	Deccan Chargers	Rajasthan Royals	8	\N	YK Pathan	Rajasthan Royals	field	MR Benson	AM Saheba	Sawai Mansingh Stadium	Upcoming
+31	Bangalore	IPL	2008-05-28 00:00:00	male	T20	Royal Challengers Bangalore	Mumbai Indians	Mumbai Indians	9	\N	CRD Fernando	Mumbai Indians	field	BF Bowden	AV Jayaprakash	M Chinnaswamy Stadium	Upcoming
+32	Chennai	IPL	2008-05-10 00:00:00	male	T20	Chennai Super Kings	Kings XI Punjab	Chennai Super Kings	\N	18	L Balaji	Kings XI Punjab	field	AV Jayaprakash	BG Jerling	MA Chidambaram Stadium, Chepauk	Upcoming
+33	Hyderabad	IPL	2008-05-11 00:00:00	male	T20	Deccan Chargers	Kolkata Knight Riders	Kolkata Knight Riders	\N	23	SC Ganguly	Kolkata Knight Riders	bat	IL Howell	AM Saheba	Rajiv Gandhi International Stadium, Uppal	Upcoming
+34	Jaipur	IPL	2008-05-11 00:00:00	male	T20	Rajasthan Royals	Delhi Daredevils	Rajasthan Royals	3	\N	SR Watson	Rajasthan Royals	field	SJ Davis	RE Koertzen	Sawai Mansingh Stadium	Upcoming
+35	Chandigarh	IPL	2008-05-12 00:00:00	male	T20	Kings XI Punjab	Royal Challengers Bangalore	Kings XI Punjab	9	\N	SE Marsh	Royal Challengers Bangalore	bat	BR Doctrove	I Shivram	Punjab Cricket Association Stadium, Mohali	Upcoming
+36	Kolkata	IPL	2008-05-13 00:00:00	male	T20	Kolkata Knight Riders	Delhi Daredevils	Kolkata Knight Riders	\N	23	Shoaib Akhtar	Kolkata Knight Riders	bat	Asad Rauf	IL Howell	Eden Gardens	Upcoming
+37	Mumbai	IPL	2008-05-14 00:00:00	male	T20	Mumbai Indians	Chennai Super Kings	Mumbai Indians	9	\N	ST Jayasuriya	Mumbai Indians	field	BR Doctrove	AM Saheba	Wankhede Stadium	Upcoming
+38	Chandigarh	IPL	2008-05-28 00:00:00	male	T20	Kings XI Punjab	Rajasthan Royals	Kings XI Punjab	\N	41	SE Marsh	Rajasthan Royals	field	SJ Davis	K Hariharan	Punjab Cricket Association Stadium, Mohali	Upcoming
+39	Delhi	IPL	2008-05-15 00:00:00	male	T20	Delhi Daredevils	Deccan Chargers	Delhi Daredevils	\N	12	A Mishra	Deccan Chargers	field	BG Jerling	GA Pratapkumar	Feroz Shah Kotla	Upcoming
+40	Mumbai	IPL	2008-05-16 00:00:00	male	T20	Mumbai Indians	Kolkata Knight Riders	Mumbai Indians	8	\N	SM Pollock	Mumbai Indians	field	BR Doctrove	DJ Harper	Wankhede Stadium	Upcoming
+41	Delhi	IPL	2008-05-17 00:00:00	male	T20	Delhi Daredevils	Kings XI Punjab	Kings XI Punjab	\N	6	DPMD Jayawardene	Delhi Daredevils	bat	AV Jayaprakash	RE Koertzen	Feroz Shah Kotla	Upcoming
+42	Jaipur	IPL	2008-05-17 00:00:00	male	T20	Rajasthan Royals	Royal Challengers Bangalore	Rajasthan Royals	\N	65	GC Smith	Royal Challengers Bangalore	field	BF Bowden	SL Shastri	Sawai Mansingh Stadium	Upcoming
+43	Hyderabad	IPL	2008-05-18 00:00:00	male	T20	Deccan Chargers	Mumbai Indians	Mumbai Indians	\N	25	DJ Bravo	Deccan Chargers	field	BR Doctrove	DJ Harper	Rajiv Gandhi International Stadium, Uppal	Upcoming
+44	Kolkata	IPL	2008-05-18 00:00:00	male	T20	Kolkata Knight Riders	Chennai Super Kings	Chennai Super Kings	\N	3	M Ntini	Kolkata Knight Riders	bat	Asad Rauf	K Hariharan	Eden Gardens	Upcoming
+45	Bangalore	IPL	2008-05-19 00:00:00	male	T20	Royal Challengers Bangalore	Delhi Daredevils	Delhi Daredevils	5	\N	SP Goswami	Delhi Daredevils	field	SJ Davis	GA Pratapkumar	M Chinnaswamy Stadium	Upcoming
+46	Kolkata	IPL	2008-05-20 00:00:00	male	T20	Kolkata Knight Riders	Rajasthan Royals	Rajasthan Royals	6	\N	YK Pathan	Rajasthan Royals	field	BG Jerling	RE Koertzen	Eden Gardens	Upcoming
+47	Mumbai	IPL	2008-05-21 00:00:00	male	T20	Mumbai Indians	Kings XI Punjab	Kings XI Punjab	\N	1	SE Marsh	Mumbai Indians	field	BF Bowden	GA Pratapkumar	Wankhede Stadium	Upcoming
+48	Chennai	IPL	2008-05-21 00:00:00	male	T20	Chennai Super Kings	Royal Challengers Bangalore	Royal Challengers Bangalore	\N	14	A Kumble	Royal Challengers Bangalore	bat	DJ Harper	I Shivram	MA Chidambaram Stadium, Chepauk	Upcoming
+49	Chandigarh	IPL	2008-05-23 00:00:00	male	T20	Kings XI Punjab	Deccan Chargers	Kings XI Punjab	6	\N	SE Marsh	Kings XI Punjab	field	Asad Rauf	SJ Davis	Punjab Cricket Association Stadium, Mohali	Upcoming
+50	Delhi	IPL	2008-05-24 00:00:00	male	T20	Delhi Daredevils	Mumbai Indians	Delhi Daredevils	5	\N	KD Karthik	Delhi Daredevils	field	BF Bowden	K Hariharan	Feroz Shah Kotla	Upcoming
+51	Chennai	IPL	2008-05-24 00:00:00	male	T20	Chennai Super Kings	Rajasthan Royals	Rajasthan Royals	\N	10	JA Morkel	Rajasthan Royals	bat	DJ Harper	SL Shastri	MA Chidambaram Stadium, Chepauk	Upcoming
+52	Bangalore	IPL	2008-05-03 00:00:00	male	T20	Royal Challengers Bangalore	Deccan Chargers	Royal Challengers Bangalore	\N	3	P Kumar	Deccan Chargers	field	BR Doctrove	SL Shastri	M Chinnaswamy Stadium	Upcoming
+53	Kolkata	IPL	2008-05-25 00:00:00	male	T20	Kolkata Knight Riders	Kings XI Punjab	Kolkata Knight Riders	3	\N	Umar Gul	Kings XI Punjab	bat	SJ Davis	I Shivram	Eden Gardens	Upcoming
+54	Jaipur	IPL	2008-05-26 00:00:00	male	T20	Rajasthan Royals	Mumbai Indians	Rajasthan Royals	5	\N	Sohail Tanvir	Rajasthan Royals	field	BF Bowden	K Hariharan	Sawai Mansingh Stadium	Upcoming
+55	Hyderabad	IPL	2008-05-27 00:00:00	male	T20	Deccan Chargers	Chennai Super Kings	Chennai Super Kings	7	\N	SK Raina	Deccan Chargers	bat	BG Jerling	AM Saheba	Rajiv Gandhi International Stadium, Uppal	Upcoming
+56	Mumbai	IPL	2008-05-30 00:00:00	male	T20	Delhi Daredevils	Rajasthan Royals	Rajasthan Royals	\N	105	SR Watson	Delhi Daredevils	field	BF Bowden	RE Koertzen	Wankhede Stadium	Upcoming
+57	Mumbai	IPL	2008-05-31 00:00:00	male	T20	Chennai Super Kings	Kings XI Punjab	Chennai Super Kings	9	\N	M Ntini	Kings XI Punjab	bat	Asad Rauf	DJ Harper	Wankhede Stadium	Upcoming
+58	Mumbai	IPL	2008-06-01 00:00:00	male	T20	Chennai Super Kings	Rajasthan Royals	Rajasthan Royals	3	\N	YK Pathan	Rajasthan Royals	field	BF Bowden	RE Koertzen	Dr DY Patil Sports Academy	Upcoming
+59	Cape Town	IPL	2009-04-18 00:00:00	male	T20	Chennai Super Kings	Mumbai Indians	Mumbai Indians	\N	19	SR Tendulkar	Chennai Super Kings	field	BR Doctrove	K Hariharan	Newlands	Upcoming
+60	Cape Town	IPL	2009-04-18 00:00:00	male	T20	Royal Challengers Bangalore	Rajasthan Royals	Royal Challengers Bangalore	\N	75	R Dravid	Royal Challengers Bangalore	bat	BR Doctrove	RB Tiffin	Newlands	Upcoming
+61	Cape Town	IPL	2009-04-19 00:00:00	male	T20	Delhi Daredevils	Kings XI Punjab	Delhi Daredevils	10	\N	DL Vettori	Delhi Daredevils	field	MR Benson	SD Ranade	Newlands	Upcoming
+62	Cape Town	IPL	2009-04-19 00:00:00	male	T20	Deccan Chargers	Kolkata Knight Riders	Deccan Chargers	8	\N	RP Singh	Kolkata Knight Riders	bat	MR Benson	BR Doctrove	Newlands	Upcoming
+63	Port Elizabeth	IPL	2009-04-20 00:00:00	male	T20	Royal Challengers Bangalore	Chennai Super Kings	Chennai Super Kings	\N	92	M Muralitharan	Chennai Super Kings	bat	BG Jerling	SJA Taufel	St George's Park	Upcoming
+64	Durban	IPL	2009-04-21 00:00:00	male	T20	Kings XI Punjab	Kolkata Knight Riders	Kolkata Knight Riders	\N	11	CH Gayle	Kolkata Knight Riders	field	DJ Harper	SD Ranade	Kingsmead	Upcoming
+65	Cape Town	IPL	2009-04-22 00:00:00	male	T20	Royal Challengers Bangalore	Deccan Chargers	Deccan Chargers	\N	24	AC Gilchrist	Deccan Chargers	bat	M Erasmus	AM Saheba	Newlands	Upcoming
+66	Durban	IPL	2009-04-23 00:00:00	male	T20	Chennai Super Kings	Delhi Daredevils	Delhi Daredevils	\N	9	AB de Villiers	Delhi Daredevils	bat	BR Doctrove	SJA Taufel	Kingsmead	Upcoming
+67	Cape Town	IPL	2009-04-23 00:00:00	male	T20	Kolkata Knight Riders	Rajasthan Royals	Delhi Daredevils	\N	\N	YK Pathan	Kolkata Knight Riders	field	MR Benson	M Erasmus	Newlands	Upcoming
+68	Durban	IPL	2009-04-24 00:00:00	male	T20	Royal Challengers Bangalore	Kings XI Punjab	Kings XI Punjab	7	\N	RS Bopara	Royal Challengers Bangalore	bat	BR Doctrove	TH Wijewardene	Kingsmead	Upcoming
+69	Durban	IPL	2009-04-25 00:00:00	male	T20	Deccan Chargers	Mumbai Indians	Deccan Chargers	\N	12	PP Ojha	Deccan Chargers	bat	HDPK Dharmasena	SJA Taufel	Kingsmead	Upcoming
+70	Port Elizabeth	IPL	2009-04-26 00:00:00	male	T20	Royal Challengers Bangalore	Delhi Daredevils	Delhi Daredevils	6	\N	TM Dilshan	Royal Challengers Bangalore	bat	S Asnani	BG Jerling	St George's Park	Upcoming
+71	Cape Town	IPL	2009-04-26 00:00:00	male	T20	Kings XI Punjab	Rajasthan Royals	Kings XI Punjab	\N	27	KC Sangakkara	Kings XI Punjab	bat	M Erasmus	K Hariharan	Newlands	Upcoming
+72	Durban	IPL	2009-04-27 00:00:00	male	T20	Chennai Super Kings	Deccan Chargers	Deccan Chargers	6	\N	HH Gibbs	Deccan Chargers	field	IL Howell	TH Wijewardene	Kingsmead	Upcoming
+73	Port Elizabeth	IPL	2009-04-27 00:00:00	male	T20	Kolkata Knight Riders	Mumbai Indians	Mumbai Indians	\N	92	SR Tendulkar	Mumbai Indians	bat	BG Jerling	RB Tiffin	St George's Park	Upcoming
+74	Centurion	IPL	2009-04-28 00:00:00	male	T20	Delhi Daredevils	Rajasthan Royals	Rajasthan Royals	5	\N	YK Pathan	Delhi Daredevils	bat	GAV Baxter	RE Koertzen	SuperSport Park	Upcoming
+75	Durban	IPL	2009-04-29 00:00:00	male	T20	Royal Challengers Bangalore	Kolkata Knight Riders	Royal Challengers Bangalore	5	\N	MV Boucher	Kolkata Knight Riders	bat	MR Benson	TH Wijewardene	Kingsmead	Upcoming
+76	Durban	IPL	2009-04-29 00:00:00	male	T20	Kings XI Punjab	Mumbai Indians	Kings XI Punjab	\N	3	KC Sangakkara	Kings XI Punjab	bat	MR Benson	SL Shastri	Kingsmead	Upcoming
+77	Centurion	IPL	2009-04-30 00:00:00	male	T20	Deccan Chargers	Delhi Daredevils	Delhi Daredevils	6	\N	DP Nannes	Delhi Daredevils	field	GAV Baxter	AM Saheba	SuperSport Park	Upcoming
+78	Centurion	IPL	2009-04-30 00:00:00	male	T20	Chennai Super Kings	Rajasthan Royals	Chennai Super Kings	\N	38	SK Raina	Rajasthan Royals	field	GAV Baxter	RE Koertzen	SuperSport Park	Upcoming
+79	East London	IPL	2009-05-01 00:00:00	male	T20	Kolkata Knight Riders	Mumbai Indians	Mumbai Indians	\N	9	JP Duminy	Mumbai Indians	bat	M Erasmus	SK Tarapore	Buffalo Park	Upcoming
+80	Durban	IPL	2009-05-01 00:00:00	male	T20	Royal Challengers Bangalore	Kings XI Punjab	Royal Challengers Bangalore	\N	8	Yuvraj Singh	Royal Challengers Bangalore	bat	HDPK Dharmasena	S Ravi	Kingsmead	Upcoming
+81	Port Elizabeth	IPL	2009-05-02 00:00:00	male	T20	Deccan Chargers	Rajasthan Royals	Rajasthan Royals	3	\N	YK Pathan	Deccan Chargers	bat	S Asnani	BG Jerling	St George's Park	Upcoming
+82	Johannesburg	IPL	2009-05-02 00:00:00	male	T20	Chennai Super Kings	Delhi Daredevils	Chennai Super Kings	\N	18	SB Jakati	Delhi Daredevils	field	DJ Harper	RE Koertzen	New Wanderers Stadium	Upcoming
+83	Port Elizabeth	IPL	2009-05-03 00:00:00	male	T20	Kings XI Punjab	Kolkata Knight Riders	Kings XI Punjab	6	\N	DPMD Jayawardene	Kolkata Knight Riders	bat	S Asnani	MR Benson	St George's Park	Upcoming
+84	Johannesburg	IPL	2009-05-03 00:00:00	male	T20	Royal Challengers Bangalore	Mumbai Indians	Royal Challengers Bangalore	9	\N	JH Kallis	Mumbai Indians	bat	RE Koertzen	TH Wijewardene	New Wanderers Stadium	Upcoming
+85	East London	IPL	2009-05-04 00:00:00	male	T20	Chennai Super Kings	Deccan Chargers	Chennai Super Kings	\N	78	MS Dhoni	Chennai Super Kings	bat	BR Doctrove	M Erasmus	Buffalo Park	Upcoming
+86	Durban	IPL	2009-05-05 00:00:00	male	T20	Kings XI Punjab	Rajasthan Royals	Rajasthan Royals	\N	78	GC Smith	Kings XI Punjab	field	SS Hazare	IL Howell	Kingsmead	Upcoming
+87	Durban	IPL	2009-05-05 00:00:00	male	T20	Delhi Daredevils	Kolkata Knight Riders	Delhi Daredevils	9	\N	G Gambhir	Kolkata Knight Riders	bat	GAV Baxter	IL Howell	Kingsmead	Upcoming
+88	Centurion	IPL	2009-05-06 00:00:00	male	T20	Deccan Chargers	Mumbai Indians	Deccan Chargers	\N	19	RG Sharma	Deccan Chargers	bat	MR Benson	HDPK Dharmasena	SuperSport Park	Upcoming
+89	Centurion	IPL	2009-05-07 00:00:00	male	T20	Royal Challengers Bangalore	Rajasthan Royals	Rajasthan Royals	7	\N	A Singh	Rajasthan Royals	field	K Hariharan	DJ Harper	SuperSport Park	Upcoming
+90	Centurion	IPL	2009-05-07 00:00:00	male	T20	Chennai Super Kings	Kings XI Punjab	Chennai Super Kings	\N	12	ML Hayden	Chennai Super Kings	bat	DJ Harper	TH Wijewardene	SuperSport Park	Upcoming
+91	East London	IPL	2009-05-08 00:00:00	male	T20	Delhi Daredevils	Mumbai Indians	Delhi Daredevils	7	\N	A Nehra	Mumbai Indians	bat	M Erasmus	SK Tarapore	Buffalo Park	Upcoming
+92	Kimberley	IPL	2009-05-09 00:00:00	male	T20	Deccan Chargers	Kings XI Punjab	Kings XI Punjab	3	\N	DPMD Jayawardene	Kings XI Punjab	field	GAV Baxter	AM Saheba	De Beers Diamond Oval	Upcoming
+93	Kimberley	IPL	2009-05-09 00:00:00	male	T20	Chennai Super Kings	Rajasthan Royals	Chennai Super Kings	7	\N	S Badrinath	Rajasthan Royals	bat	GAV Baxter	HDPK Dharmasena	De Beers Diamond Oval	Upcoming
+94	Port Elizabeth	IPL	2009-05-10 00:00:00	male	T20	Royal Challengers Bangalore	Mumbai Indians	Mumbai Indians	\N	16	JP Duminy	Mumbai Indians	bat	BR Doctrove	BG Jerling	St George's Park	Upcoming
+95	Johannesburg	IPL	2009-05-10 00:00:00	male	T20	Delhi Daredevils	Kolkata Knight Riders	Delhi Daredevils	7	\N	A Mishra	Delhi Daredevils	field	SL Shastri	RB Tiffin	New Wanderers Stadium	Upcoming
+96	Kimberley	IPL	2009-05-11 00:00:00	male	T20	Deccan Chargers	Rajasthan Royals	Deccan Chargers	\N	53	DR Smith	Deccan Chargers	bat	GAV Baxter	HDPK Dharmasena	De Beers Diamond Oval	Upcoming
+97	Centurion	IPL	2009-05-12 00:00:00	male	T20	Royal Challengers Bangalore	Kolkata Knight Riders	Royal Challengers Bangalore	6	\N	LRPL Taylor	Royal Challengers Bangalore	field	M Erasmus	SS Hazare	SuperSport Park	Upcoming
+98	Centurion	IPL	2009-05-12 00:00:00	male	T20	Kings XI Punjab	Mumbai Indians	Mumbai Indians	8	\N	Harbhajan Singh	Kings XI Punjab	bat	SS Hazare	RE Koertzen	SuperSport Park	Upcoming
+99	Durban	IPL	2009-05-13 00:00:00	male	T20	Deccan Chargers	Delhi Daredevils	Delhi Daredevils	\N	12	R Bhatia	Deccan Chargers	field	DJ Harper	SL Shastri	Kingsmead	Upcoming
+100	Durban	IPL	2009-05-14 00:00:00	male	T20	Royal Challengers Bangalore	Chennai Super Kings	Royal Challengers Bangalore	2	\N	LRPL Taylor	Chennai Super Kings	bat	BR Doctrove	DJ Harper	Kingsmead	Upcoming
+101	Durban	IPL	2009-05-14 00:00:00	male	T20	Mumbai Indians	Rajasthan Royals	Rajasthan Royals	\N	2	SK Warne	Rajasthan Royals	bat	BR Doctrove	DJ Harper	Kingsmead	Upcoming
+102	Bloemfontein	IPL	2009-05-15 00:00:00	male	T20	Delhi Daredevils	Kings XI Punjab	Kings XI Punjab	6	\N	B Lee	Kings XI Punjab	field	HDPK Dharmasena	IL Howell	OUTsurance Oval	Upcoming
+103	Port Elizabeth	IPL	2009-05-16 00:00:00	male	T20	Chennai Super Kings	Mumbai Indians	Chennai Super Kings	7	\N	ML Hayden	Mumbai Indians	bat	SK Tarapore	SJA Taufel	St George's Park	Upcoming
+104	Johannesburg	IPL	2009-05-16 00:00:00	male	T20	Deccan Chargers	Kolkata Knight Riders	Deccan Chargers	6	\N	RG Sharma	Deccan Chargers	field	RE Koertzen	S Ravi	New Wanderers Stadium	Upcoming
+105	Johannesburg	IPL	2009-05-17 00:00:00	male	T20	Deccan Chargers	Kings XI Punjab	Kings XI Punjab	\N	1	Yuvraj Singh	Deccan Chargers	field	S Ravi	RB Tiffin	New Wanderers Stadium	Upcoming
+106	Bloemfontein	IPL	2009-05-17 00:00:00	male	T20	Delhi Daredevils	Rajasthan Royals	Delhi Daredevils	\N	14	AB de Villiers	Delhi Daredevils	bat	SS Hazare	IL Howell	OUTsurance Oval	Upcoming
+107	Centurion	IPL	2009-05-18 00:00:00	male	T20	Chennai Super Kings	Kolkata Knight Riders	Kolkata Knight Riders	7	\N	BJ Hodge	Chennai Super Kings	bat	SJA Taufel	RB Tiffin	SuperSport Park	Upcoming
+108	Johannesburg	IPL	2009-05-19 00:00:00	male	T20	Royal Challengers Bangalore	Delhi Daredevils	Royal Challengers Bangalore	7	\N	JH Kallis	Delhi Daredevils	bat	IL Howell	RB Tiffin	New Wanderers Stadium	Upcoming
+109	Durban	IPL	2009-05-20 00:00:00	male	T20	Kolkata Knight Riders	Rajasthan Royals	Kolkata Knight Riders	4	\N	LR Shukla	Kolkata Knight Riders	field	BG Jerling	SJA Taufel	Kingsmead	Upcoming
+110	Durban	IPL	2009-05-20 00:00:00	male	T20	Chennai Super Kings	Kings XI Punjab	Chennai Super Kings	\N	24	M Muralitharan	Chennai Super Kings	bat	BG Jerling	SJA Taufel	Kingsmead	Upcoming
+111	Centurion	IPL	2009-05-21 00:00:00	male	T20	Delhi Daredevils	Mumbai Indians	Delhi Daredevils	4	\N	V Sehwag	Delhi Daredevils	field	IL Howell	S Ravi	SuperSport Park	Upcoming
+112	Centurion	IPL	2009-05-21 00:00:00	male	T20	Royal Challengers Bangalore	Deccan Chargers	Royal Challengers Bangalore	\N	12	MK Pandey	Royal Challengers Bangalore	bat	IL Howell	S Ravi	SuperSport Park	Upcoming
+113	Centurion	IPL	2009-05-22 00:00:00	male	T20	Delhi Daredevils	Deccan Chargers	Deccan Chargers	6	\N	AC Gilchrist	Deccan Chargers	field	BR Doctrove	DJ Harper	SuperSport Park	Upcoming
+114	Johannesburg	IPL	2009-05-23 00:00:00	male	T20	Royal Challengers Bangalore	Chennai Super Kings	Royal Challengers Bangalore	6	\N	MK Pandey	Royal Challengers Bangalore	field	RE Koertzen	SJA Taufel	New Wanderers Stadium	Upcoming
+115	Johannesburg	IPL	2009-05-24 00:00:00	male	T20	Royal Challengers Bangalore	Deccan Chargers	Deccan Chargers	\N	6	A Kumble	Royal Challengers Bangalore	field	RE Koertzen	SJA Taufel	New Wanderers Stadium	Upcoming
+116	Mumbai	IPL	2010-03-12 00:00:00	male	T20	Deccan Chargers	Kolkata Knight Riders	Kolkata Knight Riders	\N	11	AD Mathews	Deccan Chargers	field	RE Koertzen	RB Tiffin	Dr DY Patil Sports Academy	Upcoming
+117	Mumbai	IPL	2010-03-13 00:00:00	male	T20	Mumbai Indians	Rajasthan Royals	Mumbai Indians	\N	4	YK Pathan	Mumbai Indians	bat	RE Koertzen	RB Tiffin	Brabourne Stadium	Upcoming
+118	Chandigarh	IPL	2010-03-13 00:00:00	male	T20	Kings XI Punjab	Delhi Daredevils	Delhi Daredevils	5	\N	G Gambhir	Delhi Daredevils	field	BR Doctrove	S Ravi	Punjab Cricket Association Stadium, Mohali	Upcoming
+119	Kolkata	IPL	2010-03-14 00:00:00	male	T20	Kolkata Knight Riders	Royal Challengers Bangalore	Kolkata Knight Riders	7	\N	MK Tiwary	Kolkata Knight Riders	field	HDPK Dharmasena	AM Saheba	Eden Gardens	Upcoming
+120	Chennai	IPL	2010-03-14 00:00:00	male	T20	Chennai Super Kings	Deccan Chargers	Deccan Chargers	\N	31	WPUJC Vaas	Deccan Chargers	bat	K Hariharan	DJ Harper	MA Chidambaram Stadium, Chepauk	Upcoming
+121	Ahmedabad	IPL	2010-03-15 00:00:00	male	T20	Rajasthan Royals	Delhi Daredevils	Delhi Daredevils	6	\N	V Sehwag	Delhi Daredevils	field	BG Jerling	RE Koertzen	Sardar Patel Stadium, Motera	Upcoming
+122	Bangalore	IPL	2010-03-16 00:00:00	male	T20	Royal Challengers Bangalore	Kings XI Punjab	Royal Challengers Bangalore	8	\N	JH Kallis	Kings XI Punjab	bat	S Das	DJ Harper	M Chinnaswamy Stadium	Upcoming
+123	Kolkata	IPL	2010-03-16 00:00:00	male	T20	Kolkata Knight Riders	Chennai Super Kings	Chennai Super Kings	\N	55	MS Dhoni	Chennai Super Kings	bat	HDPK Dharmasena	AM Saheba	Eden Gardens	Upcoming
+124	Delhi	IPL	2010-03-17 00:00:00	male	T20	Delhi Daredevils	Mumbai Indians	Mumbai Indians	\N	98	SR Tendulkar	Delhi Daredevils	field	BR Doctrove	SK Tarapore	Feroz Shah Kotla	Upcoming
+125	Bangalore	IPL	2010-03-18 00:00:00	male	T20	Royal Challengers Bangalore	Rajasthan Royals	Royal Challengers Bangalore	10	\N	JH Kallis	Royal Challengers Bangalore	field	K Hariharan	DJ Harper	M Chinnaswamy Stadium	Upcoming
+126	Delhi	IPL	2010-03-19 00:00:00	male	T20	Delhi Daredevils	Chennai Super Kings	Chennai Super Kings	5	\N	ML Hayden	Delhi Daredevils	bat	BR Doctrove	SK Tarapore	Feroz Shah Kotla	Upcoming
+127	Cuttack	IPL	2010-03-19 00:00:00	male	T20	Deccan Chargers	Kings XI Punjab	Deccan Chargers	\N	6	A Symonds	Kings XI Punjab	field	BF Bowden	M Erasmus	Barabati Stadium	Upcoming
+128	Ahmedabad	IPL	2010-03-20 00:00:00	male	T20	Rajasthan Royals	Kolkata Knight Riders	Rajasthan Royals	\N	34	AA Jhunjhunwala	Rajasthan Royals	bat	RE Koertzen	RB Tiffin	Sardar Patel Stadium, Motera	Upcoming
+129	Mumbai	IPL	2010-03-20 00:00:00	male	T20	Mumbai Indians	Royal Challengers Bangalore	Royal Challengers Bangalore	7	\N	JH Kallis	Mumbai Indians	bat	HDPK Dharmasena	SS Hazare	Brabourne Stadium	Upcoming
+130	Cuttack	IPL	2010-03-21 00:00:00	male	T20	Deccan Chargers	Delhi Daredevils	Deccan Chargers	\N	10	A Symonds	Deccan Chargers	bat	BF Bowden	M Erasmus	Barabati Stadium	Upcoming
+131	Chennai	IPL	2010-03-21 00:00:00	male	T20	Chennai Super Kings	Kings XI Punjab	Deccan Chargers	\N	\N	J Theron	Chennai Super Kings	field	K Hariharan	DJ Harper	MA Chidambaram Stadium, Chepauk	Upcoming
+132	Mumbai	IPL	2010-03-22 00:00:00	male	T20	Mumbai Indians	Kolkata Knight Riders	Mumbai Indians	7	\N	SR Tendulkar	Kolkata Knight Riders	bat	SS Hazare	SJA Taufel	Brabourne Stadium	Upcoming
+133	Bangalore	IPL	2010-03-23 00:00:00	male	T20	Royal Challengers Bangalore	Chennai Super Kings	Royal Challengers Bangalore	\N	36	RV Uthappa	Chennai Super Kings	field	RE Koertzen	RB Tiffin	M Chinnaswamy Stadium	Upcoming
+134	Chandigarh	IPL	2010-03-24 00:00:00	male	T20	Kings XI Punjab	Rajasthan Royals	Rajasthan Royals	\N	31	AC Voges	Kings XI Punjab	field	BR Doctrove	SK Tarapore	Punjab Cricket Association Stadium, Mohali	Upcoming
+135	Mumbai	IPL	2010-03-25 00:00:00	male	T20	Chennai Super Kings	Mumbai Indians	Mumbai Indians	5	\N	SR Tendulkar	Mumbai Indians	field	AM Saheba	BF Bowden	Brabourne Stadium, Mumbai	Upcoming
+136	Ahmedabad	IPL	2010-03-26 00:00:00	male	T20	Rajasthan Royals	Deccan Chargers	Rajasthan Royals	8	\N	YK Pathan	Deccan Chargers	bat	HDPK Dharmasena	SJA Taufel	Sardar Patel Stadium, Motera	Upcoming
+137	Chandigarh	IPL	2010-03-27 00:00:00	male	T20	Kings XI Punjab	Kolkata Knight Riders	Kolkata Knight Riders	\N	39	MK Tiwary	Kolkata Knight Riders	bat	BR Doctrove	S Ravi	Punjab Cricket Association Stadium, Mohali	Upcoming
+138	Bangalore	IPL	2010-03-25 00:00:00	male	T20	Royal Challengers Bangalore	Delhi Daredevils	Delhi Daredevils	\N	17	KM Jadhav	Royal Challengers Bangalore	field	BG Jerling	RE Koertzen	M Chinnaswamy Stadium	Upcoming
+139	Ahmedabad	IPL	2010-03-28 00:00:00	male	T20	Rajasthan Royals	Chennai Super Kings	Rajasthan Royals	\N	17	NV Ojha	Rajasthan Royals	bat	SS Hazare	SJA Taufel	Sardar Patel Stadium, Motera	Upcoming
+140	Mumbai	IPL	2010-03-28 00:00:00	male	T20	Deccan Chargers	Mumbai Indians	Mumbai Indians	\N	41	Harbhajan Singh	Deccan Chargers	field	S Das	K Hariharan	Dr DY Patil Sports Academy	Upcoming
+141	Delhi	IPL	2010-03-29 00:00:00	male	T20	Delhi Daredevils	Kolkata Knight Riders	Delhi Daredevils	\N	40	DA Warner	Delhi Daredevils	bat	SS Hazare	SJA Taufel	Feroz Shah Kotla	Upcoming
+142	Mumbai	IPL	2010-03-30 00:00:00	male	T20	Mumbai Indians	Kings XI Punjab	Mumbai Indians	4	\N	SL Malinga	Mumbai Indians	field	BR Doctrove	SK Tarapore	Brabourne Stadium	Upcoming
+143	Chennai	IPL	2010-03-31 00:00:00	male	T20	Chennai Super Kings	Royal Challengers Bangalore	Chennai Super Kings	5	\N	M Vijay	Royal Challengers Bangalore	bat	BG Jerling	RE Koertzen	MA Chidambaram Stadium, Chepauk	Upcoming
+144	Delhi	IPL	2010-03-31 00:00:00	male	T20	Delhi Daredevils	Rajasthan Royals	Delhi Daredevils	\N	67	KD Karthik	Delhi Daredevils	bat	HDPK Dharmasena	SJA Taufel	Feroz Shah Kotla	Upcoming
+145	Kolkata	IPL	2010-04-01 00:00:00	male	T20	Kolkata Knight Riders	Deccan Chargers	Kolkata Knight Riders	\N	24	SC Ganguly	Kolkata Knight Riders	bat	K Hariharan	DJ Harper	Eden Gardens	Upcoming
+146	Chandigarh	IPL	2010-04-02 00:00:00	male	T20	Kings XI Punjab	Royal Challengers Bangalore	Royal Challengers Bangalore	6	\N	KP Pietersen	Kings XI Punjab	bat	BF Bowden	M Erasmus	Punjab Cricket Association Stadium, Mohali	Upcoming
+147	Chennai	IPL	2010-04-03 00:00:00	male	T20	Chennai Super Kings	Rajasthan Royals	Chennai Super Kings	\N	23	M Vijay	Chennai Super Kings	bat	RE Koertzen	RB Tiffin	MA Chidambaram Stadium, Chepauk	Upcoming
+148	Mumbai	IPL	2010-04-03 00:00:00	male	T20	Mumbai Indians	Deccan Chargers	Mumbai Indians	\N	63	AT Rayudu	Mumbai Indians	bat	BR Doctrove	S Ravi	Brabourne Stadium	Upcoming
+149	Kolkata	IPL	2010-04-04 00:00:00	male	T20	Kolkata Knight Riders	Kings XI Punjab	Kings XI Punjab	8	\N	DPMD Jayawardene	Kolkata Knight Riders	bat	S Asnani	DJ Harper	Eden Gardens	Upcoming
+150	Delhi	IPL	2010-04-04 00:00:00	male	T20	Delhi Daredevils	Royal Challengers Bangalore	Delhi Daredevils	\N	37	PD Collingwood	Delhi Daredevils	bat	BF Bowden	M Erasmus	Feroz Shah Kotla	Upcoming
+151	Nagpur	IPL	2010-04-05 00:00:00	male	T20	Deccan Chargers	Rajasthan Royals	Rajasthan Royals	\N	2	SK Warne	Rajasthan Royals	bat	HDPK Dharmasena	SJA Taufel	Vidarbha Cricket Association Stadium, Jamtha	Upcoming
+152	Chennai	IPL	2010-04-06 00:00:00	male	T20	Chennai Super Kings	Mumbai Indians	Chennai Super Kings	\N	24	SK Raina	Chennai Super Kings	bat	S Asnani	DJ Harper	MA Chidambaram Stadium, Chepauk	Upcoming
+153	Jaipur	IPL	2010-04-07 00:00:00	male	T20	Rajasthan Royals	Kings XI Punjab	Rajasthan Royals	9	\N	MJ Lumb	Kings XI Punjab	bat	S Ravi	SK Tarapore	Sawai Mansingh Stadium	Upcoming
+154	Kolkata	IPL	2010-04-07 00:00:00	male	T20	Kolkata Knight Riders	Delhi Daredevils	Kolkata Knight Riders	\N	14	SC Ganguly	Kolkata Knight Riders	bat	BG Jerling	RE Koertzen	Eden Gardens	Upcoming
+155	Bangalore	IPL	2010-04-08 00:00:00	male	T20	Royal Challengers Bangalore	Deccan Chargers	Deccan Chargers	7	\N	TL Suman	Deccan Chargers	field	S Asnani	DJ Harper	M Chinnaswamy Stadium	Upcoming
+156	Chandigarh	IPL	2010-04-09 00:00:00	male	T20	Kings XI Punjab	Mumbai Indians	Kings XI Punjab	6	\N	KC Sangakkara	Mumbai Indians	bat	M Erasmus	AM Saheba	Punjab Cricket Association Stadium, Mohali	Upcoming
+157	Nagpur	IPL	2010-04-10 00:00:00	male	T20	Deccan Chargers	Chennai Super Kings	Deccan Chargers	6	\N	RJ Harris	Chennai Super Kings	bat	HDPK Dharmasena	SJA Taufel	Vidarbha Cricket Association Stadium, Jamtha	Upcoming
+158	Bangalore	IPL	2010-04-10 00:00:00	male	T20	Royal Challengers Bangalore	Kolkata Knight Riders	Royal Challengers Bangalore	7	\N	R Vinay Kumar	Royal Challengers Bangalore	field	K Hariharan	DJ Harper	M Chinnaswamy Stadium	Upcoming
+159	Delhi	IPL	2010-04-11 00:00:00	male	T20	Delhi Daredevils	Kings XI Punjab	Kings XI Punjab	7	\N	PP Chawla	Delhi Daredevils	bat	BF Bowden	AM Saheba	Feroz Shah Kotla	Upcoming
+160	Jaipur	IPL	2010-04-11 00:00:00	male	T20	Rajasthan Royals	Mumbai Indians	Mumbai Indians	\N	37	SR Tendulkar	Rajasthan Royals	field	BR Doctrove	SK Tarapore	Sawai Mansingh Stadium	Upcoming
+161	Nagpur	IPL	2010-04-12 00:00:00	male	T20	Deccan Chargers	Royal Challengers Bangalore	Deccan Chargers	\N	13	Harmeet Singh	Royal Challengers Bangalore	field	RE Koertzen	RB Tiffin	Vidarbha Cricket Association Stadium, Jamtha	Upcoming
+162	Mumbai	IPL	2010-04-13 00:00:00	male	T20	Mumbai Indians	Delhi Daredevils	Mumbai Indians	\N	39	KA Pollard	Mumbai Indians	bat	S Asnani	DJ Harper	Brabourne Stadium	Upcoming
+163	Chennai	IPL	2010-04-13 00:00:00	male	T20	Chennai Super Kings	Kolkata Knight Riders	Chennai Super Kings	9	\N	R Ashwin	Kolkata Knight Riders	bat	SS Hazare	SJA Taufel	MA Chidambaram Stadium, Chepauk	Upcoming
+164	Jaipur	IPL	2010-04-14 00:00:00	male	T20	Rajasthan Royals	Royal Challengers Bangalore	Royal Challengers Bangalore	5	\N	KP Pietersen	Rajasthan Royals	bat	BR Doctrove	S Ravi	Sawai Mansingh Stadium	Upcoming
+165	Chennai	IPL	2010-04-15 00:00:00	male	T20	Chennai Super Kings	Delhi Daredevils	Delhi Daredevils	6	\N	G Gambhir	Chennai Super Kings	bat	HDPK Dharmasena	SS Hazare	MA Chidambaram Stadium, Chepauk	Upcoming
+166	Dharamsala	IPL	2010-04-16 00:00:00	male	T20	Kings XI Punjab	Deccan Chargers	Deccan Chargers	5	\N	RG Sharma	Deccan Chargers	field	M Erasmus	AM Saheba	Himachal Pradesh Cricket Association Stadium	Upcoming
+167	Bangalore	IPL	2010-04-17 00:00:00	male	T20	Royal Challengers Bangalore	Mumbai Indians	Mumbai Indians	\N	57	R McLaren	Royal Challengers Bangalore	field	HDPK Dharmasena	SJA Taufel	M Chinnaswamy Stadium	Upcoming
+168	Kolkata	IPL	2010-04-17 00:00:00	male	T20	Kolkata Knight Riders	Rajasthan Royals	Kolkata Knight Riders	8	\N	JD Unadkat	Rajasthan Royals	bat	BG Jerling	RB Tiffin	Eden Gardens	Upcoming
+169	Dharamsala	IPL	2010-04-18 00:00:00	male	T20	Kings XI Punjab	Chennai Super Kings	Chennai Super Kings	6	\N	MS Dhoni	Chennai Super Kings	field	BF Bowden	AM Saheba	Himachal Pradesh Cricket Association Stadium	Upcoming
+170	Delhi	IPL	2010-04-18 00:00:00	male	T20	Delhi Daredevils	Deccan Chargers	Deccan Chargers	\N	11	A Symonds	Deccan Chargers	bat	BR Doctrove	SK Tarapore	Feroz Shah Kotla	Upcoming
+171	Kolkata	IPL	2010-04-19 00:00:00	male	T20	Kolkata Knight Riders	Mumbai Indians	Kolkata Knight Riders	9	\N	M Kartik	Mumbai Indians	bat	BG Jerling	RE Koertzen	Eden Gardens	Upcoming
+172	Mumbai	IPL	2010-04-21 00:00:00	male	T20	Royal Challengers Bangalore	Mumbai Indians	Mumbai Indians	\N	35	KA Pollard	Mumbai Indians	bat	BR Doctrove	RB Tiffin	Dr DY Patil Sports Academy	Upcoming
+173	Mumbai	IPL	2010-04-22 00:00:00	male	T20	Chennai Super Kings	Deccan Chargers	Chennai Super Kings	\N	38	DE Bollinger	Chennai Super Kings	bat	BR Doctrove	RB Tiffin	Dr DY Patil Sports Academy	Upcoming
+174	Mumbai	IPL	2010-04-24 00:00:00	male	T20	Royal Challengers Bangalore	Deccan Chargers	Royal Challengers Bangalore	9	\N	A Kumble	Deccan Chargers	bat	RE Koertzen	SJA Taufel	Dr DY Patil Sports Academy	Upcoming
+175	Mumbai	IPL	2010-04-25 00:00:00	male	T20	Chennai Super Kings	Mumbai Indians	Chennai Super Kings	\N	22	SK Raina	Chennai Super Kings	bat	RE Koertzen	SJA Taufel	Dr DY Patil Sports Academy	Upcoming
+176	Chennai	IPL	2011-04-08 00:00:00	male	T20	Chennai Super Kings	Kolkata Knight Riders	Chennai Super Kings	\N	2	S Anirudha	Chennai Super Kings	bat	BR Doctrove	PR Reiffel	MA Chidambaram Stadium, Chepauk	Upcoming
+177	Hyderabad	IPL	2011-04-09 00:00:00	male	T20	Deccan Chargers	Rajasthan Royals	Rajasthan Royals	8	\N	SK Trivedi	Rajasthan Royals	field	RE Koertzen	SK Tarapore	Rajiv Gandhi International Stadium, Uppal	Upcoming
+178	Kochi	IPL	2011-04-09 00:00:00	male	T20	Kochi Tuskers Kerala	Royal Challengers Bangalore	Royal Challengers Bangalore	6	\N	AB de Villiers	Kochi Tuskers Kerala	bat	HDPK Dharmasena	K Hariharan	Nehru Stadium	Upcoming
+179	Delhi	IPL	2011-04-10 00:00:00	male	T20	Delhi Daredevils	Mumbai Indians	Mumbai Indians	8	\N	SL Malinga	Delhi Daredevils	bat	AM Saheba	RB Tiffin	Feroz Shah Kotla	Upcoming
+180	Mumbai	IPL	2011-04-10 00:00:00	male	T20	Pune Warriors	Kings XI Punjab	Pune Warriors	7	\N	SB Wagh	Kings XI Punjab	bat	BR Doctrove	PR Reiffel	Dr DY Patil Sports Academy	Upcoming
+181	Kolkata	IPL	2011-04-11 00:00:00	male	T20	Kolkata Knight Riders	Deccan Chargers	Kolkata Knight Riders	\N	9	JH Kallis	Kolkata Knight Riders	bat	RE Koertzen	SK Tarapore	Eden Gardens	Upcoming
+182	Jaipur	IPL	2011-04-12 00:00:00	male	T20	Rajasthan Royals	Delhi Daredevils	Rajasthan Royals	6	\N	SK Warne	Delhi Daredevils	bat	Aleem Dar	RB Tiffin	Sawai Mansingh Stadium	Upcoming
+183	Bangalore	IPL	2011-04-12 00:00:00	male	T20	Royal Challengers Bangalore	Mumbai Indians	Mumbai Indians	9	\N	SR Tendulkar	Mumbai Indians	field	HDPK Dharmasena	AL Hill	M Chinnaswamy Stadium	Upcoming
+184	Chandigarh	IPL	2011-04-13 00:00:00	male	T20	Kings XI Punjab	Chennai Super Kings	Kings XI Punjab	6	\N	PC Valthaty	Kings XI Punjab	field	Asad Rauf	SL Shastri	Punjab Cricket Association Stadium, Mohali	Upcoming
+185	Mumbai	IPL	2011-04-13 00:00:00	male	T20	Pune Warriors	Kochi Tuskers Kerala	Pune Warriors	4	\N	MD Mishra	Kochi Tuskers Kerala	bat	S Asnani	PR Reiffel	Dr DY Patil Sports Academy	Upcoming
+186	Hyderabad	IPL	2011-04-14 00:00:00	male	T20	Deccan Chargers	Royal Challengers Bangalore	Deccan Chargers	\N	33	DW Steyn	Royal Challengers Bangalore	field	RE Koertzen	S Ravi	Rajiv Gandhi International Stadium, Uppal	Upcoming
+187	Jaipur	IPL	2011-04-15 00:00:00	male	T20	Rajasthan Royals	Kolkata Knight Riders	Kolkata Knight Riders	9	\N	G Gambhir	Kolkata Knight Riders	field	Aleem Dar	SS Hazare	Sawai Mansingh Stadium	Upcoming
+188	Mumbai	IPL	2011-04-15 00:00:00	male	T20	Mumbai Indians	Kochi Tuskers Kerala	Kochi Tuskers Kerala	8	\N	BB McCullum	Kochi Tuskers Kerala	field	BR Doctrove	PR Reiffel	Wankhede Stadium	Upcoming
+189	Chennai	IPL	2011-04-16 00:00:00	male	T20	Chennai Super Kings	Royal Challengers Bangalore	Chennai Super Kings	\N	21	MEK Hussey	Chennai Super Kings	bat	HDPK Dharmasena	AL Hill	MA Chidambaram Stadium, Chepauk	Upcoming
+190	Hyderabad	IPL	2011-04-16 00:00:00	male	T20	Deccan Chargers	Kings XI Punjab	Kings XI Punjab	8	\N	PC Valthaty	Kings XI Punjab	field	RE Koertzen	S Ravi	Rajiv Gandhi International Stadium, Uppal	Upcoming
+191	Mumbai	IPL	2011-04-17 00:00:00	male	T20	Pune Warriors	Delhi Daredevils	Delhi Daredevils	3	\N	Yuvraj Singh	Delhi Daredevils	field	Asad Rauf	AM Saheba	Dr DY Patil Sports Academy	Upcoming
+192	Kolkata	IPL	2011-04-17 00:00:00	male	T20	Kolkata Knight Riders	Rajasthan Royals	Kolkata Knight Riders	8	\N	L Balaji	Kolkata Knight Riders	field	Aleem Dar	RB Tiffin	Eden Gardens	Upcoming
+193	Kochi	IPL	2011-04-18 00:00:00	male	T20	Kochi Tuskers Kerala	Chennai Super Kings	Kochi Tuskers Kerala	7	\N	BB McCullum	Kochi Tuskers Kerala	field	K Hariharan	AL Hill	Nehru Stadium	Upcoming
+194	Delhi	IPL	2011-04-19 00:00:00	male	T20	Delhi Daredevils	Deccan Chargers	Deccan Chargers	\N	16	S Sohal	Deccan Chargers	bat	PR Reiffel	RJ Tucker	Feroz Shah Kotla	Upcoming
+195	Mumbai	IPL	2011-04-20 00:00:00	male	T20	Mumbai Indians	Pune Warriors	Mumbai Indians	7	\N	MM Patel	Pune Warriors	bat	Asad Rauf	AM Saheba	Wankhede Stadium	Upcoming
+196	Kolkata	IPL	2011-04-20 00:00:00	male	T20	Kolkata Knight Riders	Kochi Tuskers Kerala	Kochi Tuskers Kerala	\N	6	DPMD Jayawardene	Kolkata Knight Riders	field	Aleem Dar	RB Tiffin	Eden Gardens	Upcoming
+197	Chandigarh	IPL	2011-04-21 00:00:00	male	T20	Kings XI Punjab	Rajasthan Royals	Kings XI Punjab	\N	48	SE Marsh	Rajasthan Royals	field	S Asnani	PR Reiffel	Punjab Cricket Association Stadium, Mohali	Upcoming
+198	Mumbai	IPL	2011-04-22 00:00:00	male	T20	Mumbai Indians	Chennai Super Kings	Mumbai Indians	\N	8	Harbhajan Singh	Chennai Super Kings	field	Asad Rauf	AM Saheba	Wankhede Stadium	Upcoming
+199	Kolkata	IPL	2011-04-22 00:00:00	male	T20	Kolkata Knight Riders	Royal Challengers Bangalore	Royal Challengers Bangalore	9	\N	CH Gayle	Royal Challengers Bangalore	field	SS Hazare	RB Tiffin	Eden Gardens	Upcoming
+200	Delhi	IPL	2011-04-23 00:00:00	male	T20	Delhi Daredevils	Kings XI Punjab	Delhi Daredevils	\N	29	DA Warner	Kings XI Punjab	field	S Asnani	RE Koertzen	Feroz Shah Kotla	Upcoming
+201	Hyderabad	IPL	2011-04-24 00:00:00	male	T20	Deccan Chargers	Mumbai Indians	Mumbai Indians	\N	37	SL Malinga	Deccan Chargers	field	HDPK Dharmasena	AL Hill	Rajiv Gandhi International Stadium, Uppal	Upcoming
+202	Jaipur	IPL	2011-04-24 00:00:00	male	T20	Rajasthan Royals	Kochi Tuskers Kerala	Rajasthan Royals	8	\N	SK Warne	Rajasthan Royals	field	BR Doctrove	SK Tarapore	Sawai Mansingh Stadium	Upcoming
+203	Chennai	IPL	2011-04-25 00:00:00	male	T20	Chennai Super Kings	Pune Warriors	Chennai Super Kings	\N	25	MEK Hussey	Pune Warriors	field	Aleem Dar	RB Tiffin	MA Chidambaram Stadium, Chepauk	Upcoming
+204	Delhi	IPL	2011-04-26 00:00:00	male	T20	Delhi Daredevils	Royal Challengers Bangalore	Royal Challengers Bangalore	3	\N	V Kohli	Royal Challengers Bangalore	field	S Asnani	RJ Tucker	Feroz Shah Kotla	Upcoming
+205	Mumbai	IPL	2011-04-27 00:00:00	male	T20	Pune Warriors	Chennai Super Kings	Chennai Super Kings	8	\N	DE Bollinger	Pune Warriors	bat	Asad Rauf	SL Shastri	Dr DY Patil Sports Academy	Upcoming
+206	Kochi	IPL	2011-04-27 00:00:00	male	T20	Kochi Tuskers Kerala	Deccan Chargers	Deccan Chargers	\N	55	I Sharma	Kochi Tuskers Kerala	field	HDPK Dharmasena	AL Hill	Nehru Stadium	Upcoming
+207	Delhi	IPL	2011-04-28 00:00:00	male	T20	Delhi Daredevils	Kolkata Knight Riders	Kolkata Knight Riders	\N	17	MK Tiwary	Delhi Daredevils	field	PR Reiffel	RJ Tucker	Feroz Shah Kotla	Upcoming
+208	Jaipur	IPL	2011-04-29 00:00:00	male	T20	Rajasthan Royals	Mumbai Indians	Rajasthan Royals	7	\N	J Botha	Rajasthan Royals	field	Asad Rauf	SK Tarapore	Sawai Mansingh Stadium	Upcoming
+209	Bangalore	IPL	2011-04-29 00:00:00	male	T20	Royal Challengers Bangalore	Pune Warriors	Royal Challengers Bangalore	\N	26	V Kohli	Pune Warriors	field	Aleem Dar	SS Hazare	M Chinnaswamy Stadium	Upcoming
+210	Kochi	IPL	2011-04-30 00:00:00	male	T20	Kochi Tuskers Kerala	Delhi Daredevils	Delhi Daredevils	\N	38	V Sehwag	Delhi Daredevils	bat	HDPK Dharmasena	AL Hill	Nehru Stadium	Upcoming
+211	Kolkata	IPL	2011-04-30 00:00:00	male	T20	Kolkata Knight Riders	Kings XI Punjab	Kolkata Knight Riders	8	\N	Iqbal Abdulla	Kolkata Knight Riders	field	AM Saheba	SL Shastri	Eden Gardens	Upcoming
+212	Jaipur	IPL	2011-05-01 00:00:00	male	T20	Rajasthan Royals	Pune Warriors	Rajasthan Royals	6	\N	LRPL Taylor	Rajasthan Royals	field	SK Tarapore	SJA Taufel	Sawai Mansingh Stadium	Upcoming
+213	Chennai	IPL	2011-05-01 00:00:00	male	T20	Chennai Super Kings	Deccan Chargers	Chennai Super Kings	\N	19	JA Morkel	Chennai Super Kings	bat	Aleem Dar	RB Tiffin	MA Chidambaram Stadium, Chepauk	Upcoming
+214	Mumbai	IPL	2011-05-02 00:00:00	male	T20	Mumbai Indians	Kings XI Punjab	Mumbai Indians	\N	23	KA Pollard	Kings XI Punjab	field	HDPK Dharmasena	PR Reiffel	Wankhede Stadium	Upcoming
+215	Delhi	IPL	2011-05-02 00:00:00	male	T20	Delhi Daredevils	Kochi Tuskers Kerala	Kochi Tuskers Kerala	7	\N	P Parameswaran	Kochi Tuskers Kerala	field	Asad Rauf	SL Shastri	Feroz Shah Kotla	Upcoming
+216	Hyderabad	IPL	2011-05-03 00:00:00	male	T20	Deccan Chargers	Kolkata Knight Riders	Kolkata Knight Riders	\N	20	YK Pathan	Deccan Chargers	field	S Asnani	RJ Tucker	Rajiv Gandhi International Stadium, Uppal	Upcoming
+217	Chennai	IPL	2011-05-04 00:00:00	male	T20	Chennai Super Kings	Rajasthan Royals	Chennai Super Kings	8	\N	MEK Hussey	Rajasthan Royals	bat	SS Hazare	RB Tiffin	MA Chidambaram Stadium, Chepauk	Upcoming
+218	Mumbai	IPL	2011-05-04 00:00:00	male	T20	Pune Warriors	Mumbai Indians	Mumbai Indians	\N	21	R Sharma	Pune Warriors	field	HDPK Dharmasena	SJA Taufel	Dr DY Patil Sports Academy	Upcoming
+219	Kochi	IPL	2011-05-05 00:00:00	male	T20	Kochi Tuskers Kerala	Kolkata Knight Riders	Kochi Tuskers Kerala	\N	17	BJ Hodge	Kolkata Knight Riders	field	S Ravi	RJ Tucker	Nehru Stadium	Upcoming
+220	Hyderabad	IPL	2011-05-05 00:00:00	male	T20	Deccan Chargers	Delhi Daredevils	Delhi Daredevils	4	\N	V Sehwag	Delhi Daredevils	field	Asad Rauf	AM Saheba	Rajiv Gandhi International Stadium, Uppal	Upcoming
+221	Bangalore	IPL	2011-05-06 00:00:00	male	T20	Royal Challengers Bangalore	Kings XI Punjab	Royal Challengers Bangalore	\N	85	CH Gayle	Kings XI Punjab	field	Aleem Dar	RB Tiffin	M Chinnaswamy Stadium	Upcoming
+222	Kolkata	IPL	2011-05-07 00:00:00	male	T20	Kolkata Knight Riders	Chennai Super Kings	Kolkata Knight Riders	\N	10	Iqbal Abdulla	Chennai Super Kings	bat	Asad Rauf	PR Reiffel	Eden Gardens	Upcoming
+223	Mumbai	IPL	2011-05-07 00:00:00	male	T20	Mumbai Indians	Delhi Daredevils	Mumbai Indians	\N	32	AT Rayudu	Delhi Daredevils	field	K Hariharan	SJA Taufel	Wankhede Stadium	Upcoming
+224	Bangalore	IPL	2011-05-08 00:00:00	male	T20	Royal Challengers Bangalore	Kochi Tuskers Kerala	Royal Challengers Bangalore	9	\N	CH Gayle	Kochi Tuskers Kerala	bat	Aleem Dar	SS Hazare	M Chinnaswamy Stadium	Upcoming
+225	Chandigarh	IPL	2011-05-08 00:00:00	male	T20	Kings XI Punjab	Pune Warriors	Pune Warriors	5	\N	R Sharma	Kings XI Punjab	bat	SK Tarapore	RJ Tucker	Punjab Cricket Association Stadium, Mohali	Upcoming
+226	Jaipur	IPL	2011-05-09 00:00:00	male	T20	Rajasthan Royals	Chennai Super Kings	Chennai Super Kings	\N	63	M Vijay	Rajasthan Royals	field	K Hariharan	SJA Taufel	Sawai Mansingh Stadium	Upcoming
+227	Hyderabad	IPL	2011-05-10 00:00:00	male	T20	Deccan Chargers	Pune Warriors	Pune Warriors	6	\N	MR Marsh	Deccan Chargers	bat	Asad Rauf	AM Saheba	Rajiv Gandhi International Stadium, Uppal	Upcoming
+228	Chandigarh	IPL	2011-05-10 00:00:00	male	T20	Kings XI Punjab	Mumbai Indians	Kings XI Punjab	\N	76	BA Bhatt	Mumbai Indians	field	SK Tarapore	RJ Tucker	Punjab Cricket Association Stadium, Mohali	Upcoming
+229	Jaipur	IPL	2011-05-11 00:00:00	male	T20	Rajasthan Royals	Royal Challengers Bangalore	Royal Challengers Bangalore	9	\N	S Aravind	Royal Challengers Bangalore	field	HDPK Dharmasena	K Hariharan	Sawai Mansingh Stadium	Upcoming
+230	Chennai	IPL	2011-05-12 00:00:00	male	T20	Chennai Super Kings	Delhi Daredevils	Chennai Super Kings	\N	18	MS Dhoni	Chennai Super Kings	bat	AM Saheba	SL Shastri	MA Chidambaram Stadium, Chepauk	Upcoming
+231	Indore	IPL	2011-05-13 00:00:00	male	T20	Kochi Tuskers Kerala	Kings XI Punjab	Kings XI Punjab	6	\N	KD Karthik	Kings XI Punjab	field	S Asnani	RJ Tucker	Holkar Cricket Stadium	Upcoming
+\.
+
+
+--
+-- Data for Name: player; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.player (id, playername, credit_value) FROM stdin;
+1	SC Ganguly	10
+2	P Kumar	7
+3	BB McCullum	11
+4	Z Khan	9
+5	AA Noffke	7
+6	JH Kallis	10
+7	RT Ponting	11
+8	SB Joshi	6
+9	DJ Hussey	8
+10	CL White	8
+11	Mohammad Hafeez	8
+12	R Dravid	10
+13	AB Dinda	7
+14	W Jaffer	8
+15	I Sharma	9
+16	V Kohli	8
+17	AB Agarkar	7
+18	M Kartik	6
+19	MV Boucher	8
+20	B Akhil	6
+21	WP Saha	7
+22	LR Shukla	6
+23	PA Patel	7
+24	B Lee	9
+25	ML Hayden	11
+26	S Sreesanth	9
+27	KC Sangakkara	10
+28	MEK Hussey	10
+29	JR Hopes	7
+30	IK Pathan	9
+31	MS Dhoni	12
+32	SK Raina	10
+33	K Goel	7
+34	PP Chawla	8
+35	WA Mota	6
+36	JDP Oram	7
+37	S Badrinath	8
+38	MS Gony	7
+39	M Muralitharan	10
+40	P Amarnath	6
+41	Joginder Sharma	8
+42	Yuvraj Singh	12
+43	SM Katich	9
+44	T Kohli	7
+45	GD McGrath	10
+46	YK Pathan	10
+47	B Geeves	7
+48	M Manhas	7
+49	SR Watson	10
+50	M Kaif	8
+51	MF Maharoof	8
+52	R Bhatia	6
+53	DS Lehmann	7
+54	RA Jadeja	8
+55	M Rawat	6
+56	DL Vettori	9
+57	D Salunkhe	6
+58	SK Warne	10
+59	SK Trivedi	8
+60	G Gambhir	11
+61	MM Patel	8
+62	V Sehwag	12
+63	S Dhawan	9
+64	L Ronchi	8
+65	ST Jayasuriya	9
+66	DJ Thornely	7
+67	RV Uthappa	9
+68	PR Shah	6
+69	R Vinay Kumar	7
+70	AM Nayar	7
+71	SM Pollock	10
+72	Harbhajan Singh	9
+73	S Chanderpaul	9
+74	A Nehra	9
+75	DS Kulkarni	7
+76	LRPL Taylor	10
+77	AC Gilchrist	10
+78	Y Venugopal Rao	8
+79	VVS Laxman	9
+80	A Symonds	10
+81	RG Sharma	8
+82	SB Styris	8
+83	AS Yadav	6
+84	SB Bangar	6
+85	WPUJC Vaas	10
+86	RP Singh	9
+87	PP Ojha	8
+88	DPMD Jayawardene	10
+89	Kamran Akmal	8
+90	Pankaj Singh	7
+91	S Sohal	6
+92	Mohammad Asif	9
+93	VY Mahesh	6
+94	KD Karthik	8
+95	Shahid Afridi	9
+96	MK Tiwary	8
+97	DJ Bravo	10
+98	VS Yeligati	6
+99	MA Khote	6
+100	GC Smith	9
+101	D Kalyankrishna	6
+102	RR Sarwan	9
+103	VRV Singh	7
+104	SS Tiwary	7
+105	Sohail Tanvir	10
+106	A Kumble	10
+107	DNT Zoysa	9
+108	AM Rahane	7
+109	SD Chitnis	6
+110	Shoaib Malik	8
+111	TM Srivastava	6
+112	DW Steyn	10
+113	B Chipli	6
+114	JA Morkel	9
+115	DB Das	6
+116	CRD Fernando	8
+117	MK Pandey	6
+118	HH Gibbs	9
+119	Gagandeep Singh	6
+120	SE Marsh	9
+121	SA Asnodkar	7
+122	Umar Gul	8
+123	Salman Butt	8
+124	BJ Hodge	9
+125	SP Fleming	9
+126	S Vidyut	7
+127	PJ Sangwan	6
+128	M Ntini	9
+129	AB de Villiers	9
+130	SP Goswami	7
+131	LPC Silva	7
+132	DB Ravi Teja	6
+133	DP Vijaykumar	7
+134	Misbah-ul-Haq	8
+135	YV Takawale	5
+136	RR Raje	5
+137	U Kaul	6
+138	DT Patil	5
+139	S Anirudha	6
+140	L Balaji	8
+141	CK Kapugedera	8
+142	A Chopra	7
+143	T Taibu	8
+144	J Arunkumar	7
+145	SR Tendulkar	11
+146	DR Smith	8
+147	AD Mascarenhas	8
+148	TM Dilshan	9
+149	A Mishra	8
+150	Niraj Patel	6
+151	LA Pomersbach	8
+152	Iqbal Abdulla	7
+153	Shoaib Akhtar	9
+154	Younis Khan	9
+155	RR Powar	8
+156	PM Sarvesh Kumar	6
+157	Abdur Razzak	7
+158	H Das	6
+159	A Nel	8
+160	A Mukund	6
+161	BAW Mendis	10
+162	T Thushara	7
+163	A Flintoff	9
+164	JP Duminy	9
+165	R Ashwin	8
+166	SL Malinga	10
+167	JD Ryder	8
+168	KP Pietersen	10
+169	Kamran Khan	6
+170	T Henderson	6
+171	RS Bopara	7
+172	DP Nannes	8
+173	AM Salvi	7
+174	YA Abdulla	6
+175	VS Malik	7
+176	FH Edwards	8
+177	CH Gayle	10
+178	Harmeet Singh	7
+179	MC Henriques	7
+180	R Bishnoi	7
+181	Yashpal Singh	6
+182	KV Sharma	5
+183	PC Valthaty	6
+184	Anureet Singh	7
+185	RJ Quiney	8
+186	AS Raut	6
+187	RR Bose	6
+188	KP Appanna	7
+189	Shoaib Ahmed	6
+190	AA Bilakhia	5
+191	AN Ghosh	5
+192	RE van der Merwe	7
+193	MN van Wyk	8
+194	TL Suman	6
+195	S Tyagi	5
+196	GR Napier	7
+197	SM Harwood	8
+198	LA Carseldine	7
+199	NV Ojha	8
+200	M Vijay	8
+201	SB Jakati	7
+202	DA Warner	9
+203	D du Preez	7
+204	RJ Harris	8
+205	A Singh	6
+206	M Morkel	8
+207	A Mithun	7
+208	C Nanda	6
+209	SS Sarkar	6
+210	AD Mathews	8
+211	J Botha	8
+212	Mashrafe Mortaza	9
+213	Jaskaran Singh	7
+214	GJ Bailey	8
+215	AB McDonald	7
+216	Y Nagar	7
+217	CK Langeveldt	8
+218	SS Shaikh	6
+219	Mohammad Ashraful	9
+220	RA Shaikh	6
+221	Anirudh Singh	6
+222	CA Pujara	7
+223	OA Shah	8
+224	SW Tait	8
+225	A Uniyal	6
+226	AP Tare	6
+227	AT Rayudu	8
+228	AA Jhunjhunwala	6
+229	P Dogra	6
+230	R Sathish	6
+231	R McLaren	7
+232	AG Murtaza	7
+233	MS Bisla	8
+234	EJG Morgan	8
+235	RS Gavaskar	7
+236	JM Kemp	8
+237	S Ladda	6
+238	Bipul Sharma	6
+239	SE Bond	10
+240	KA Pollard	9
+241	MJ Lumb	7
+242	DR Martyn	9
+243	S Narwal	6
+244	UT Yadav	7
+245	SJ Srivastava	6
+246	AB Barath	6
+247	FY Fazal	6
+248	AC Voges	7
+249	MD Mishra	6
+250	R Sharma	8
+251	J Theron	7
+252	NLTC Perera	8
+253	Mandeep Singh	7
+254	KM Jadhav	7
+255	KB Arun Karthik	7
+256	KAJ Roach	8
+257	PD Collingwood	9
+258	C Ganapathy	6
+259	MB Parmar	6
+260	SB Wagh	7
+261	DE Bollinger	8
+262	JD Unadkat	7
+263	AP Dole	6
+264	AN Ahmed	6
+265	MR Marsh	8
+266	L Ablish	6
+267	RS Sodhi	7
+268	B Sumanth	5
+269	S Sriram	5
+270	C Madan	6
+271	AG Paunikar	6
+272	AJ Finch	7
+273	STR Binny	7
+274	ND Doshi	6
+275	TG Southee	8
+276	S Randiv	6
+277	IR Jaggi	6
+278	DT Christian	8
+279	AL Menaria	6
+280	AUK Pathan	7
+281	RV Gomez	6
+282	MA Agarwal	7
+283	UBT Chand	8
+284	JEC Franklin	8
+285	DJ Jacobs	8
+286	AC Thomas	7
+287	Sunny Singh	6
+288	WD Parnell	9
+289	NJ Rimmington	7
+290	RN ten Doeschate	8
+291	S Nadeem	7
+292	BA Bhatt	6
+293	JJ van der Wath	8
+294	S Aravind	7
+295	R Ninan	5
+296	Shakib Al Hasan	8
+297	MS Wade	9
+298	TD Paine	9
+299	DH Yagnik	6
+300	BJ Haddin	9
+301	J Syed Mohammad	6
+302	VR Aaron	7
+303	NL McCullum	7
+304	JE Taylor	8
+305	KMDN Kulasekara	9
+306	TR Birt	8
+307	Harpreet Singh	6
+308	M Klinger	7
+309	P Parameswaran	6
+310	AC Blizzard	8
+311	I Malhotra	5
+312	CA Ingram	8
+313	B Kumar	8
+314	CJ Ferguson	7
+315	AA Kazi	5
+\.
+
+
+--
+-- Data for Name: playermatch; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.playermatch (id, player_id, match_id) FROM stdin;
+1	5	1
+2	3	1
+3	14	1
+4	9	1
+5	6	1
+6	10	1
+7	22	1
+8	1	1
+9	15	1
+10	4	1
+11	16	1
+12	11	1
+13	24	1
+14	13	1
+15	7	1
+16	2	1
+17	8	1
+18	17	1
+19	12	1
+20	20	1
+21	19	1
+22	122	1
+23	42	2
+24	35	2
+25	41	2
+26	30	2
+27	40	2
+28	39	2
+29	34	2
+30	28	2
+31	26	2
+32	43	2
+33	38	2
+34	25	2
+35	23	2
+36	24	2
+37	31	2
+38	33	2
+39	27	2
+40	36	2
+41	29	2
+42	251	2
+43	37	2
+44	32	2
+45	54	3
+46	46	3
+47	59	3
+48	58	3
+49	52	3
+50	45	3
+51	63	3
+52	44	3
+53	51	3
+54	279	3
+55	57	3
+56	50	3
+57	47	3
+58	53	3
+59	299	3
+60	60	3
+61	56	3
+62	49	3
+63	7	3
+64	61	3
+65	62	3
+66	55	3
+67	72	4
+68	65	4
+69	71	4
+70	67	4
+71	6	4
+72	68	4
+73	73	4
+74	76	4
+75	4	4
+76	43	4
+77	16	4
+78	75	4
+79	64	4
+80	70	4
+81	2	4
+82	8	4
+83	74	4
+84	12	4
+85	20	4
+86	19	4
+87	66	4
+88	69	4
+89	3	5
+90	78	5
+91	82	5
+92	86	5
+93	9	5
+94	83	5
+95	22	5
+96	1	5
+97	15	5
+98	87	5
+99	81	5
+100	11	5
+101	13	5
+102	79	5
+103	7	5
+104	21	5
+105	77	5
+106	18	5
+107	80	5
+108	17	5
+109	85	5
+110	84	5
+111	54	6
+112	42	6
+113	35	6
+114	90	6
+115	46	6
+116	59	6
+117	58	6
+118	30	6
+119	91	6
+120	34	6
+121	57	6
+122	50	6
+123	53	6
+124	26	6
+125	89	6
+126	88	6
+127	24	6
+128	49	6
+129	33	6
+130	27	6
+131	61	6
+132	29	6
+133	92	7
+134	78	7
+135	95	7
+136	52	7
+137	86	7
+138	221	7
+139	45	7
+140	63	7
+141	51	7
+142	83	7
+143	292	7
+144	87	7
+145	261	7
+146	60	7
+147	81	7
+148	79	7
+149	93	7
+150	77	7
+151	80	7
+152	85	7
+153	62	7
+154	84	7
+155	72	8
+156	65	8
+157	71	8
+158	67	8
+159	41	8
+160	40	8
+161	39	8
+162	28	8
+163	38	8
+164	75	8
+165	99	8
+166	25	8
+167	23	8
+168	31	8
+169	64	8
+170	36	8
+171	98	8
+172	70	8
+173	37	8
+174	74	8
+175	32	8
+176	97	8
+177	54	9
+178	90	9
+179	46	9
+180	59	9
+181	58	9
+182	95	9
+183	86	9
+184	109	9
+185	57	9
+186	83	9
+187	50	9
+188	89	9
+189	87	9
+190	81	9
+191	79	9
+192	49	9
+193	101	9
+194	77	9
+195	61	9
+196	80	9
+197	85	9
+198	100	9
+199	72	10
+200	42	10
+201	65	10
+202	71	10
+203	67	10
+204	30	10
+205	91	10
+206	34	10
+207	102	10
+208	26	10
+209	88	10
+210	75	10
+211	99	10
+212	24	10
+213	103	10
+214	33	10
+215	27	10
+216	64	10
+217	70	10
+218	74	10
+219	104	10
+220	97	10
+221	46	11
+222	59	11
+223	58	11
+224	6	11
+225	105	11
+226	50	11
+227	292	11
+228	73	11
+229	76	11
+230	4	11
+231	16	11
+232	49	11
+233	106	11
+234	118	11
+235	61	11
+236	2	11
+237	8	11
+238	12	11
+239	19	11
+240	100	11
+241	55	11
+242	69	11
+243	3	12
+244	200	12
+245	41	12
+246	40	12
+247	9	12
+248	39	12
+249	22	12
+250	1	12
+251	173	12
+252	15	12
+253	38	12
+254	11	12
+255	23	12
+256	25	12
+257	13	12
+258	31	12
+259	7	12
+260	21	12
+261	36	12
+262	18	12
+263	154	12
+264	17	12
+265	65	13
+266	71	13
+267	67	13
+268	95	13
+269	109	13
+270	86	13
+271	87	13
+272	75	13
+273	99	13
+274	79	13
+275	259	13
+276	64	13
+277	107	13
+278	108	13
+279	101	13
+280	77	13
+281	70	13
+282	313	13
+283	74	13
+284	136	13
+285	84	13
+286	97	13
+287	42	14
+288	92	14
+289	110	14
+290	30	14
+291	52	14
+292	45	14
+293	34	14
+294	63	14
+295	111	14
+296	51	14
+297	26	14
+298	96	14
+299	43	14
+300	60	14
+301	88	14
+302	24	14
+303	103	14
+304	33	14
+305	27	14
+306	93	14
+307	62	14
+308	94	14
+309	14	15
+310	41	15
+311	40	15
+312	6	15
+313	28	15
+314	113	15
+315	76	15
+316	4	15
+317	38	15
+318	16	15
+319	112	15
+320	25	15
+321	23	15
+322	31	15
+323	36	15
+324	2	15
+325	114	15
+326	12	15
+327	20	15
+328	19	15
+329	104	15
+330	32	15
+331	3	16
+332	115	16
+333	65	16
+334	270	16
+335	71	16
+336	67	16
+337	86	16
+338	9	16
+339	22	16
+340	117	16
+341	1	16
+342	15	16
+343	75	16
+344	11	16
+345	13	16
+346	7	16
+347	108	16
+348	116	16
+349	18	16
+350	74	16
+351	17	16
+352	97	16
+353	92	17
+354	14	17
+355	110	17
+356	52	17
+357	6	17
+358	45	17
+359	63	17
+360	76	17
+361	4	17
+362	96	17
+363	60	17
+364	56	17
+365	16	17
+366	112	17
+367	93	17
+368	2	17
+369	8	17
+370	12	17
+371	19	17
+372	62	17
+373	94	17
+374	69	17
+375	42	18
+376	78	18
+377	119	18
+378	30	18
+379	95	18
+380	86	18
+381	34	18
+382	102	18
+383	26	18
+384	88	18
+385	81	18
+386	79	18
+387	103	18
+388	27	18
+389	107	18
+390	120	18
+391	101	18
+392	118	18
+393	77	18
+394	74	18
+395	85	18
+396	84	18
+397	54	19
+398	115	19
+399	46	19
+400	59	19
+401	58	19
+402	121	19
+403	9	19
+404	22	19
+405	105	19
+406	1	19
+407	50	19
+408	15	19
+409	124	19
+410	123	19
+411	13	19
+412	49	19
+413	21	19
+414	61	19
+415	17	19
+416	100	19
+417	122	19
+418	55	19
+419	92	20
+420	128	20
+421	110	20
+422	41	20
+423	52	20
+424	39	20
+425	45	20
+426	126	20
+427	63	20
+428	125	20
+429	60	20
+430	38	20
+431	127	20
+432	23	20
+433	31	20
+434	129	20
+435	93	20
+436	37	20
+437	114	20
+438	179	20
+439	62	20
+440	32	20
+441	133	21
+442	78	21
+443	134	21
+444	14	21
+445	86	21
+446	6	21
+447	10	21
+448	83	21
+449	16	21
+450	81	21
+451	131	21
+452	112	21
+453	106	21
+454	107	21
+455	118	21
+456	77	21
+457	132	21
+458	12	21
+459	20	21
+460	85	21
+461	69	21
+462	84	21
+463	115	22
+464	42	22
+465	119	22
+466	30	22
+467	9	22
+468	34	22
+469	22	22
+470	1	22
+471	15	22
+472	26	22
+473	124	22
+474	88	22
+475	11	22
+476	13	22
+477	103	22
+478	33	22
+479	27	22
+480	120	22
+481	21	22
+482	29	22
+483	17	22
+484	122	22
+485	65	23
+486	92	23
+487	71	23
+488	67	23
+489	110	23
+490	52	23
+491	45	23
+492	63	23
+493	60	23
+494	75	23
+495	127	23
+496	129	23
+497	93	23
+498	70	23
+499	74	23
+500	66	23
+501	62	23
+502	104	23
+503	136	23
+504	94	23
+505	135	23
+506	97	23
+507	128	24
+508	46	24
+509	59	24
+510	58	24
+511	41	24
+512	121	24
+513	39	24
+514	126	24
+515	241	24
+516	125	24
+517	105	24
+518	38	24
+519	23	24
+520	31	24
+521	129	24
+522	49	24
+523	61	24
+524	37	24
+525	114	24
+526	20	24
+527	100	24
+528	32	24
+529	42	25
+530	119	25
+531	134	25
+532	14	25
+533	30	25
+534	6	25
+535	34	25
+536	10	25
+537	102	25
+538	26	25
+539	4	25
+540	88	25
+541	16	25
+542	112	25
+543	103	25
+544	106	25
+545	120	25
+546	29	25
+547	2	25
+548	138	25
+549	12	25
+550	69	25
+551	133	26
+552	42	26
+553	128	26
+554	82	26
+555	139	26
+556	41	26
+557	95	26
+558	86	26
+559	39	26
+560	125	26
+561	50	26
+562	87	26
+563	38	26
+564	81	26
+565	23	26
+566	31	26
+567	77	26
+568	118	26
+569	37	26
+570	114	26
+571	32	26
+572	84	26
+573	54	27
+574	65	27
+575	71	27
+576	67	27
+577	46	27
+578	59	27
+579	58	27
+580	121	27
+581	105	27
+582	50	27
+583	75	27
+584	194	27
+585	49	27
+586	61	27
+587	70	27
+588	74	27
+589	235	27
+590	100	27
+591	136	27
+592	55	27
+593	135	27
+594	97	27
+595	141	28
+596	92	28
+597	110	28
+598	40	28
+599	45	28
+600	39	28
+601	126	28
+602	63	28
+603	125	28
+604	96	28
+605	60	28
+606	38	28
+607	127	28
+608	31	28
+609	129	28
+610	93	28
+611	37	28
+612	114	28
+613	140	28
+614	62	28
+615	94	28
+616	32	28
+617	144	29
+618	143	29
+619	9	29
+620	10	29
+621	22	29
+622	142	29
+623	1	29
+624	73	29
+625	15	29
+626	4	29
+627	124	29
+628	112	29
+629	13	29
+630	106	29
+631	103	29
+632	21	29
+633	2	29
+634	18	29
+635	12	29
+636	19	29
+637	122	29
+638	69	29
+639	133	30
+640	78	30
+641	82	30
+642	46	30
+643	59	30
+644	58	30
+645	95	30
+646	86	30
+647	105	30
+648	117	30
+649	50	30
+650	87	30
+651	89	30
+652	81	30
+653	49	30
+654	118	30
+655	77	30
+656	61	30
+657	132	30
+658	100	30
+659	256	30
+660	84	30
+661	65	31
+662	270	31
+663	71	31
+664	134	31
+665	67	31
+666	145	31
+667	10	31
+668	236	31
+669	16	31
+670	75	31
+671	112	31
+672	106	31
+673	116	31
+674	61	31
+675	2	31
+676	146	31
+677	130	31
+678	74	31
+679	12	31
+680	20	31
+681	19	31
+682	69	31
+683	141	32
+684	42	32
+685	137	32
+686	30	32
+687	40	32
+688	39	32
+689	34	32
+690	126	32
+691	125	32
+692	102	32
+693	26	32
+694	88	32
+695	38	32
+696	31	32
+697	103	32
+698	33	32
+699	120	32
+700	29	32
+701	37	32
+702	114	32
+703	140	32
+704	32	32
+705	133	33
+706	78	33
+707	143	33
+708	82	33
+709	86	33
+710	9	33
+711	22	33
+712	142	33
+713	1	33
+714	15	33
+715	87	33
+716	81	33
+717	123	33
+718	13	33
+719	79	33
+720	118	33
+721	77	33
+722	18	33
+723	132	33
+724	85	33
+725	122	33
+726	84	33
+727	54	34
+728	149	34
+729	46	34
+730	59	34
+731	58	34
+732	45	34
+733	63	34
+734	147	34
+735	51	34
+736	50	34
+737	60	34
+738	127	34
+739	150	34
+740	129	34
+741	49	34
+742	148	34
+743	93	34
+744	61	34
+745	62	34
+746	94	34
+747	100	34
+748	55	34
+749	144	35
+750	42	35
+751	134	35
+752	30	35
+753	34	35
+754	10	35
+755	26	35
+756	4	35
+757	243	35
+758	16	35
+759	112	35
+760	103	35
+761	106	35
+762	120	35
+763	29	35
+764	2	35
+765	12	35
+766	20	35
+767	19	35
+768	66	35
+769	69	35
+770	151	35
+771	149	36
+772	143	36
+773	9	36
+774	45	36
+775	63	36
+776	51	36
+777	22	36
+778	142	36
+779	1	36
+780	15	36
+781	96	36
+782	60	36
+783	152	36
+784	123	36
+785	127	36
+786	13	36
+787	129	36
+788	148	36
+789	93	36
+790	21	36
+791	153	36
+792	62	36
+793	141	37
+794	65	37
+795	71	37
+796	67	37
+797	250	37
+798	41	37
+799	145	37
+800	39	37
+801	126	37
+802	125	37
+803	105	37
+804	38	37
+805	75	37
+806	31	37
+807	37	37
+808	114	37
+809	74	37
+810	140	37
+811	66	37
+812	136	37
+813	32	37
+814	97	37
+815	42	38
+816	157	38
+817	90	38
+818	46	38
+819	59	38
+820	30	38
+821	34	38
+822	44	38
+823	57	38
+824	155	38
+825	50	38
+826	26	38
+827	89	38
+828	150	38
+829	49	38
+830	103	38
+831	120	38
+832	61	38
+833	29	38
+834	154	38
+835	55	38
+836	151	38
+837	133	39
+838	92	39
+839	78	39
+840	211	39
+841	149	39
+842	82	39
+843	95	39
+844	52	39
+845	86	39
+846	45	39
+847	63	39
+848	51	39
+849	87	39
+850	96	39
+851	60	39
+852	81	39
+853	148	39
+854	77	39
+855	118	39
+856	156	39
+857	132	39
+858	62	39
+859	65	40
+860	71	40
+861	137	40
+862	67	40
+863	145	40
+864	9	40
+865	22	40
+866	142	40
+867	1	40
+868	15	40
+869	123	40
+870	214	40
+871	11	40
+872	13	40
+873	21	40
+874	153	40
+875	74	40
+876	17	40
+877	180	40
+878	66	40
+879	136	40
+880	97	40
+881	42	41
+882	149	41
+883	14	41
+884	110	41
+885	30	41
+886	52	41
+887	45	41
+888	34	41
+889	63	41
+890	51	41
+891	155	41
+892	26	41
+893	60	41
+894	88	41
+895	127	41
+896	148	41
+897	103	41
+898	120	41
+899	29	41
+900	195	41
+901	62	41
+902	151	41
+903	54	42
+904	144	42
+905	157	42
+906	134	42
+907	46	42
+908	59	42
+909	58	42
+910	121	42
+911	6	42
+912	10	42
+913	105	42
+914	28	42
+915	4	42
+916	16	42
+917	49	42
+918	106	42
+919	61	42
+920	2	42
+921	138	42
+922	74	42
+923	12	42
+924	100	42
+925	133	43
+926	65	43
+927	78	43
+928	67	43
+929	145	43
+930	95	43
+931	86	43
+932	68	43
+933	87	43
+934	81	43
+935	131	43
+936	158	43
+937	107	43
+938	116	43
+939	77	43
+940	70	43
+941	132	43
+942	74	43
+943	66	43
+944	136	43
+945	135	43
+946	97	43
+947	115	44
+948	128	44
+949	9	44
+950	269	44
+951	39	44
+952	125	44
+953	22	44
+954	57	44
+955	1	44
+956	15	44
+957	181	44
+958	38	44
+959	123	44
+960	11	44
+961	23	44
+962	13	44
+963	21	44
+964	210	44
+965	153	44
+966	114	44
+967	17	44
+968	140	44
+969	134	45
+970	52	45
+971	6	45
+972	45	45
+973	63	45
+974	10	45
+975	51	45
+976	113	45
+977	4	45
+978	60	45
+979	127	45
+980	112	45
+981	148	45
+982	129	45
+983	106	45
+984	93	45
+985	2	45
+986	130	45
+987	12	45
+988	20	45
+989	62	45
+990	94	45
+991	115	46
+992	277	46
+993	46	46
+994	59	46
+995	58	46
+996	121	46
+997	9	46
+998	105	46
+999	22	46
+1000	1	46
+1001	280	46
+1002	50	46
+1003	15	46
+1004	123	46
+1005	11	46
+1006	13	46
+1007	49	46
+1008	21	46
+1009	61	46
+1010	17	46
+1011	122	46
+1012	100	46
+1013	42	47
+1014	65	47
+1015	71	47
+1016	67	47
+1017	30	47
+1018	145	47
+1019	109	47
+1020	34	47
+1021	68	47
+1022	26	47
+1023	244	47
+1024	88	47
+1025	103	47
+1026	120	47
+1027	98	47
+1028	116	47
+1029	70	47
+1030	29	47
+1031	146	47
+1032	74	47
+1033	32	47
+1034	151	47
+1035	128	48
+1036	134	48
+1037	6	48
+1038	39	48
+1039	126	48
+1040	125	48
+1041	38	48
+1042	16	48
+1043	112	48
+1044	23	48
+1045	31	48
+1046	106	48
+1047	2	48
+1048	37	48
+1049	114	48
+1050	130	48
+1051	12	48
+1052	140	48
+1053	19	48
+1054	20	48
+1055	32	48
+1056	69	48
+1057	54	49
+1058	133	49
+1059	42	49
+1060	78	49
+1061	119	49
+1062	82	49
+1063	86	49
+1064	109	49
+1065	34	49
+1066	155	49
+1067	26	49
+1068	87	49
+1069	88	49
+1070	81	49
+1071	131	49
+1072	103	49
+1073	27	49
+1074	120	49
+1075	118	49
+1076	77	49
+1077	132	49
+1078	151	49
+1079	65	50
+1080	149	50
+1081	71	50
+1082	67	50
+1083	145	50
+1084	109	50
+1085	45	50
+1086	63	50
+1087	51	50
+1088	68	50
+1089	47	50
+1090	96	50
+1091	60	50
+1092	75	50
+1093	148	50
+1094	93	50
+1095	159	50
+1096	70	50
+1097	146	50
+1098	74	50
+1099	62	50
+1100	94	50
+1101	128	51
+1102	90	51
+1103	46	51
+1104	58	51
+1105	121	51
+1106	39	51
+1107	44	51
+1108	125	51
+1109	160	51
+1110	105	51
+1111	57	51
+1112	50	51
+1113	89	51
+1114	38	51
+1115	23	51
+1116	31	51
+1117	61	51
+1118	37	51
+1119	114	51
+1120	140	51
+1121	100	51
+1122	32	51
+1123	133	52
+1124	134	52
+1125	14	52
+1126	82	52
+1127	95	52
+1128	86	52
+1129	6	52
+1130	83	52
+1131	113	52
+1132	4	52
+1133	87	52
+1134	16	52
+1135	81	52
+1136	112	52
+1137	79	52
+1138	106	52
+1139	118	52
+1140	77	52
+1141	2	52
+1142	12	52
+1143	19	52
+1144	84	52
+1145	115	53
+1146	42	53
+1147	30	53
+1148	9	53
+1149	111	53
+1150	34	53
+1151	161	53
+1152	22	53
+1153	155	53
+1154	1	53
+1155	142	53
+1156	15	53
+1157	26	53
+1158	88	53
+1159	123	53
+1160	13	53
+1161	103	53
+1162	27	53
+1163	120	53
+1164	21	53
+1165	29	53
+1166	122	53
+1167	54	54
+1168	65	54
+1169	71	54
+1170	67	54
+1171	90	54
+1172	46	54
+1173	59	54
+1174	145	54
+1175	58	54
+1176	121	54
+1177	105	54
+1178	117	54
+1179	50	54
+1180	89	54
+1181	150	54
+1182	49	54
+1183	116	54
+1184	70	54
+1185	146	54
+1186	74	54
+1187	136	54
+1188	135	54
+1189	133	55
+1190	78	55
+1191	128	55
+1192	82	55
+1193	95	55
+1194	86	55
+1195	39	55
+1196	125	55
+1197	83	55
+1198	22	55
+1199	87	55
+1200	38	55
+1201	23	55
+1202	31	55
+1203	106	55
+1204	118	55
+1205	77	55
+1206	156	55
+1207	132	55
+1208	114	55
+1209	140	55
+1210	32	55
+1211	54	56
+1212	92	56
+1213	149	56
+1214	46	56
+1215	59	56
+1216	58	56
+1217	121	56
+1218	45	56
+1219	63	56
+1220	51	56
+1221	105	56
+1222	50	56
+1223	96	56
+1224	60	56
+1225	148	56
+1226	49	56
+1227	93	56
+1228	61	56
+1229	62	56
+1230	100	56
+1231	55	56
+1232	94	56
+1233	42	57
+1234	128	57
+1235	35	57
+1236	157	57
+1237	82	57
+1238	30	57
+1239	34	57
+1240	39	57
+1241	126	57
+1242	155	57
+1243	28	57
+1244	26	57
+1245	88	57
+1246	38	57
+1247	23	57
+1248	103	57
+1249	27	57
+1250	120	57
+1251	29	57
+1252	114	57
+1253	140	57
+1254	32	57
+1255	54	58
+1256	141	58
+1257	128	58
+1258	46	58
+1259	59	58
+1260	58	58
+1261	121	58
+1262	39	58
+1263	126	58
+1264	105	58
+1265	50	58
+1266	89	58
+1267	38	58
+1268	150	58
+1269	23	58
+1270	31	58
+1271	49	58
+1272	61	58
+1273	37	58
+1274	114	58
+1275	140	58
+1276	32	58
+1277	72	59
+1278	65	59
+1279	41	59
+1280	145	59
+1281	63	59
+1282	68	59
+1283	163	59
+1284	4	59
+1285	38	59
+1286	290	59
+1287	164	59
+1288	25	59
+1289	23	59
+1290	31	59
+1291	166	59
+1292	36	59
+1293	70	59
+1294	37	59
+1295	136	59
+1296	32	59
+1297	97	59
+1298	162	59
+1299	54	60
+1300	170	60
+1301	67	60
+1302	46	60
+1303	58	60
+1304	121	60
+1305	147	60
+1306	76	60
+1307	16	60
+1308	112	60
+1309	150	60
+1310	167	60
+1311	106	60
+1312	169	60
+1313	61	60
+1314	168	60
+1315	2	60
+1316	12	60
+1317	20	60
+1318	100	60
+1319	55	60
+1320	69	60
+1321	144	61
+1322	42	61
+1323	172	61
+1324	30	61
+1325	41	61
+1326	34	61
+1327	44	61
+1328	155	61
+1329	173	61
+1330	60	61
+1331	88	61
+1332	56	61
+1333	127	61
+1334	171	61
+1335	103	61
+1336	33	61
+1337	27	61
+1338	93	61
+1339	174	61
+1340	175	61
+1341	265	61
+1342	62	61
+1343	3	62
+1344	264	62
+1345	82	62
+1346	86	62
+1347	22	62
+1348	1	62
+1349	142	62
+1350	178	62
+1351	15	62
+1352	87	62
+1353	124	62
+1354	176	62
+1355	81	62
+1356	13	62
+1357	79	62
+1358	129	62
+1359	118	62
+1360	77	62
+1361	18	62
+1362	177	62
+1363	17	62
+1364	179	62
+1365	67	63
+1366	41	63
+1367	58	63
+1368	6	63
+1369	39	63
+1370	76	63
+1371	163	63
+1372	38	63
+1373	16	63
+1374	112	63
+1375	25	63
+1376	23	63
+1377	31	63
+1378	106	63
+1379	168	63
+1380	2	63
+1381	114	63
+1382	180	63
+1383	12	63
+1384	140	63
+1385	32	63
+1386	69	63
+1387	3	64
+1388	42	64
+1389	110	64
+1390	30	64
+1391	34	64
+1392	44	64
+1393	22	64
+1394	1	64
+1395	253	64
+1396	15	64
+1397	124	64
+1398	88	64
+1399	171	64
+1400	13	64
+1401	33	64
+1402	27	64
+1403	174	64
+1404	175	64
+1405	18	64
+1406	177	64
+1407	179	64
+1408	198	64
+1409	78	65
+1410	67	65
+1411	82	65
+1412	86	65
+1413	6	65
+1414	178	65
+1415	87	65
+1416	176	65
+1417	16	65
+1418	81	65
+1419	112	65
+1420	167	65
+1421	79	65
+1422	106	65
+1423	182	65
+1424	118	65
+1425	77	65
+1426	168	65
+1427	2	65
+1428	132	65
+1429	180	65
+1430	12	65
+1431	41	66
+1432	172	66
+1433	39	66
+1434	173	66
+1435	163	66
+1436	96	66
+1437	60	66
+1438	56	66
+1439	38	66
+1440	127	66
+1441	25	66
+1442	23	66
+1443	31	66
+1444	129	66
+1445	148	66
+1446	37	66
+1447	114	66
+1448	74	66
+1449	140	66
+1450	62	66
+1451	94	66
+1452	32	66
+1453	54	67
+1454	3	67
+1455	186	67
+1456	46	67
+1457	58	67
+1458	183	67
+1459	147	67
+1460	161	67
+1461	22	67
+1462	1	67
+1463	15	67
+1464	124	67
+1465	181	67
+1466	194	67
+1467	185	67
+1468	169	67
+1469	61	67
+1470	177	67
+1471	17	67
+1472	100	67
+1473	84	67
+1474	184	67
+1475	42	68
+1476	67	68
+1477	90	68
+1478	30	68
+1479	6	68
+1480	34	68
+1481	193	68
+1482	76	68
+1483	88	68
+1484	16	68
+1485	171	68
+1486	167	68
+1487	103	68
+1488	106	68
+1489	33	68
+1490	27	68
+1491	187	68
+1492	174	68
+1493	168	68
+1494	2	68
+1495	12	68
+1496	69	68
+1497	72	69
+1498	65	69
+1499	78	69
+1500	145	69
+1501	86	69
+1502	63	69
+1503	68	69
+1504	178	69
+1505	4	69
+1506	87	69
+1507	176	69
+1508	81	69
+1509	75	69
+1510	164	69
+1511	79	69
+1512	166	69
+1513	118	69
+1514	77	69
+1515	70	69
+1516	132	69
+1517	146	69
+1518	97	69
+1519	149	70
+1520	67	70
+1521	90	70
+1522	172	70
+1523	6	70
+1524	76	70
+1525	48	70
+1526	60	70
+1527	56	70
+1528	16	70
+1529	127	70
+1530	148	70
+1531	129	70
+1532	106	70
+1533	188	70
+1534	168	70
+1535	74	70
+1536	20	70
+1537	19	70
+1538	62	70
+1539	94	70
+1540	69	70
+1541	54	71
+1542	42	71
+1543	186	71
+1544	35	71
+1545	46	71
+1546	30	71
+1547	58	71
+1548	121	71
+1549	34	71
+1550	147	71
+1551	155	71
+1552	88	71
+1553	171	71
+1554	185	71
+1555	33	71
+1556	27	71
+1557	103	71
+1558	174	71
+1559	169	71
+1560	61	71
+1561	100	71
+1562	55	71
+1563	78	72
+1564	41	72
+1565	86	72
+1566	39	72
+1567	87	72
+1568	176	72
+1569	38	72
+1570	81	72
+1571	25	72
+1572	23	72
+1573	31	72
+1574	79	72
+1575	36	72
+1576	77	72
+1577	118	72
+1578	37	72
+1579	190	72
+1580	146	72
+1581	114	72
+1582	140	72
+1583	189	72
+1584	32	72
+1585	72	73
+1586	144	73
+1587	3	73
+1588	65	73
+1589	145	73
+1590	63	73
+1591	161	73
+1592	22	73
+1593	1	73
+1594	68	73
+1595	191	73
+1596	15	73
+1597	4	73
+1598	181	73
+1599	124	73
+1600	164	73
+1601	13	73
+1602	166	73
+1603	70	73
+1604	177	73
+1605	104	73
+1606	97	73
+1607	54	74
+1608	149	74
+1609	46	74
+1610	172	74
+1611	58	74
+1612	121	74
+1613	183	74
+1614	147	74
+1615	48	74
+1616	60	74
+1617	56	74
+1618	127	74
+1619	214	74
+1620	129	74
+1621	148	74
+1622	185	74
+1623	169	74
+1624	61	74
+1625	74	74
+1626	62	74
+1627	94	74
+1628	100	74
+1629	3	75
+1630	90	75
+1631	310	75
+1632	6	75
+1633	193	75
+1634	22	75
+1635	1	75
+1636	117	75
+1637	15	75
+1638	124	75
+1639	16	75
+1640	106	75
+1641	21	75
+1642	188	75
+1643	168	75
+1644	2	75
+1645	18	75
+1646	177	75
+1647	130	75
+1648	17	75
+1649	19	75
+1650	192	75
+1651	72	76
+1652	42	76
+1653	65	76
+1654	35	76
+1655	145	76
+1656	30	76
+1657	34	76
+1658	63	76
+1659	155	76
+1660	4	76
+1661	88	76
+1662	164	76
+1663	171	76
+1664	166	76
+1665	33	76
+1666	27	76
+1667	174	76
+1668	70	76
+1669	175	76
+1670	285	76
+1671	104	76
+1672	97	76
+1673	78	77
+1674	149	77
+1675	172	77
+1676	86	77
+1677	48	77
+1678	87	77
+1679	60	77
+1680	176	77
+1681	56	77
+1682	81	77
+1683	127	77
+1684	194	77
+1685	148	77
+1686	129	77
+1687	118	77
+1688	77	77
+1689	190	77
+1690	146	77
+1691	74	77
+1692	62	77
+1693	94	77
+1694	189	77
+1695	54	78
+1696	46	78
+1697	59	78
+1698	58	78
+1699	121	78
+1700	39	78
+1701	147	78
+1702	25	78
+1703	23	78
+1704	31	78
+1705	185	78
+1706	36	78
+1707	169	78
+1708	116	78
+1709	61	78
+1710	37	78
+1711	195	78
+1712	114	78
+1713	140	78
+1714	100	78
+1715	55	78
+1716	32	78
+1717	72	79
+1718	3	79
+1719	65	79
+1720	149	79
+1721	145	79
+1722	22	79
+1723	193	79
+1724	1	79
+1725	15	79
+1726	220	79
+1727	4	79
+1728	124	79
+1729	164	79
+1730	13	79
+1731	166	79
+1732	108	79
+1733	21	79
+1734	70	79
+1735	18	79
+1736	177	79
+1737	17	79
+1738	196	79
+1739	42	80
+1740	67	80
+1741	30	80
+1742	6	80
+1743	34	80
+1744	111	80
+1745	155	80
+1746	43	80
+1747	88	80
+1748	16	80
+1749	167	80
+1750	106	80
+1751	33	80
+1752	27	80
+1753	174	80
+1754	188	80
+1755	175	80
+1756	2	80
+1757	130	80
+1758	180	80
+1759	19	80
+1760	192	80
+1761	54	81
+1762	78	81
+1763	186	81
+1764	197	81
+1765	46	81
+1766	59	81
+1767	58	81
+1768	121	81
+1769	86	81
+1770	87	81
+1771	176	81
+1772	81	81
+1773	194	81
+1774	199	81
+1775	77	81
+1776	118	81
+1777	61	81
+1778	190	81
+1779	146	81
+1780	198	81
+1781	100	81
+1782	189	81
+1783	149	82
+1784	200	82
+1785	172	82
+1786	52	82
+1787	202	82
+1788	39	82
+1789	48	82
+1790	60	82
+1791	127	82
+1792	25	82
+1793	31	82
+1794	148	82
+1795	129	82
+1796	201	82
+1797	36	82
+1798	37	82
+1799	195	82
+1800	114	82
+1801	74	82
+1802	140	82
+1803	94	82
+1804	32	82
+1805	3	83
+1806	42	83
+1807	30	83
+1808	91	83
+1809	34	83
+1810	193	83
+1811	155	83
+1812	1	83
+1813	22	83
+1814	15	83
+1815	43	83
+1816	124	83
+1817	88	83
+1818	171	83
+1819	13	83
+1820	27	83
+1821	174	83
+1822	175	83
+1823	29	83
+1824	18	83
+1825	177	83
+1826	17	83
+1827	54	84
+1828	72	84
+1829	65	84
+1830	67	84
+1831	14	84
+1832	145	84
+1833	6	84
+1834	203	84
+1835	4	84
+1836	164	84
+1837	309	84
+1838	31	84
+1839	166	84
+1840	106	84
+1841	108	84
+1842	118	84
+1843	70	84
+1844	61	84
+1845	2	84
+1846	192	84
+1847	69	84
+1848	97	84
+1849	78	85
+1850	200	85
+1851	86	85
+1852	39	85
+1853	87	85
+1854	81	85
+1855	131	85
+1856	194	85
+1857	25	85
+1858	31	85
+1859	79	85
+1860	201	85
+1861	77	85
+1862	118	85
+1863	116	85
+1864	195	85
+1865	146	85
+1866	114	85
+1867	140	85
+1868	189	85
+1869	32	85
+1870	204	85
+1871	54	86
+1872	42	86
+1873	186	86
+1874	197	86
+1875	46	86
+1876	59	86
+1877	30	86
+1878	58	86
+1879	91	86
+1880	34	86
+1881	155	86
+1882	26	86
+1883	43	86
+1884	88	86
+1885	33	86
+1886	27	86
+1887	174	86
+1888	199	86
+1889	159	86
+1890	198	86
+1891	100	86
+1892	205	86
+1893	3	87
+1894	149	87
+1895	231	87
+1896	172	87
+1897	262	87
+1898	52	87
+1899	202	87
+1900	193	87
+1901	15	87
+1902	124	87
+1903	60	87
+1904	127	87
+1905	288	87
+1906	13	87
+1907	148	87
+1908	21	87
+1909	18	87
+1910	195	87
+1911	74	87
+1912	17	87
+1913	179	87
+1914	184	87
+1915	72	88
+1916	65	88
+1917	78	88
+1918	145	88
+1919	86	88
+1920	97	88
+1921	68	88
+1922	178	88
+1923	81	88
+1924	75	88
+1925	164	88
+1926	194	88
+1927	166	88
+1928	118	88
+1929	77	88
+1930	70	88
+1931	132	88
+1932	146	88
+1933	104	88
+1934	136	88
+1935	189	88
+1936	204	88
+1937	54	89
+1938	186	89
+1939	119	89
+1940	67	89
+1941	14	89
+1942	46	89
+1943	58	89
+1944	6	89
+1945	203	89
+1946	16	89
+1947	206	89
+1948	106	89
+1949	199	89
+1950	61	89
+1951	2	89
+1952	12	89
+1953	19	89
+1954	192	89
+1955	198	89
+1956	100	89
+1957	69	89
+1958	205	89
+1959	42	90
+1960	30	90
+1961	91	90
+1962	39	90
+1963	34	90
+1964	26	90
+1965	283	90
+1966	43	90
+1967	88	90
+1968	38	90
+1969	25	90
+1970	31	90
+1971	103	90
+1972	33	90
+1973	201	90
+1974	174	90
+1975	37	90
+1976	195	90
+1977	114	90
+1978	140	90
+1979	32	90
+1980	219	90
+1981	72	91
+1982	149	91
+1983	172	91
+1984	145	91
+1985	52	91
+1986	221	91
+1987	202	91
+1988	68	91
+1989	60	91
+1990	75	91
+1991	164	91
+1992	127	91
+1993	148	91
+1994	166	91
+1995	129	91
+1996	64	91
+1997	108	91
+1998	70	91
+1999	74	91
+2000	94	91
+2001	136	91
+2002	97	91
+2003	42	92
+2004	78	92
+2005	35	92
+2006	30	92
+2007	58	92
+2008	86	92
+2009	91	92
+2010	34	92
+2011	26	92
+2012	87	92
+2013	43	92
+2014	88	92
+2015	81	92
+2016	194	92
+2017	24	92
+2018	27	92
+2019	118	92
+2020	77	92
+2021	208	92
+2022	80	92
+2023	189	92
+2024	204	92
+2025	54	93
+2026	186	93
+2027	197	93
+2028	200	93
+2029	46	93
+2030	59	93
+2031	58	93
+2032	121	93
+2033	39	93
+2034	25	93
+2035	201	93
+2036	36	93
+2037	199	93
+2038	285	93
+2039	195	93
+2040	37	93
+2041	114	93
+2042	140	93
+2043	198	93
+2044	100	93
+2045	32	93
+2046	205	93
+2047	72	94
+2048	65	94
+2049	67	94
+2050	145	94
+2051	91	94
+2052	6	94
+2053	39	94
+2054	207	94
+2055	76	94
+2056	16	94
+2057	75	94
+2058	164	94
+2059	166	94
+2060	106	94
+2061	108	94
+2062	188	94
+2063	208	94
+2064	12	94
+2065	19	94
+2066	192	94
+2067	69	94
+2068	97	94
+2069	3	95
+2070	42	95
+2071	149	95
+2072	172	95
+2073	52	95
+2074	202	95
+2075	193	95
+2076	1	95
+2077	15	95
+2078	124	95
+2079	181	95
+2080	60	95
+2081	127	95
+2082	209	95
+2083	148	95
+2084	129	95
+2085	21	95
+2086	18	95
+2087	74	95
+2088	17	95
+2089	179	95
+2090	94	95
+2091	54	96
+2092	78	96
+2093	186	96
+2094	46	96
+2095	59	96
+2096	58	96
+2097	121	96
+2098	86	96
+2099	87	96
+2100	81	96
+2101	194	96
+2102	206	96
+2103	199	96
+2104	77	96
+2105	61	96
+2106	132	96
+2107	80	96
+2108	146	96
+2109	245	96
+2110	198	96
+2111	85	96
+2112	100	96
+2113	3	97
+2114	67	97
+2115	9	97
+2116	6	97
+2117	161	97
+2118	280	97
+2119	1	97
+2120	191	97
+2121	15	97
+2122	76	97
+2123	167	97
+2124	106	97
+2125	215	97
+2126	21	97
+2127	188	97
+2128	210	97
+2129	18	97
+2130	17	97
+2131	12	97
+2132	20	97
+2133	19	97
+2134	69	97
+2135	72	98
+2136	42	98
+2137	65	98
+2138	149	98
+2139	35	98
+2140	30	98
+2141	145	98
+2142	91	98
+2143	34	98
+2144	26	98
+2145	43	98
+2146	75	98
+2147	164	98
+2148	24	98
+2149	166	98
+2150	33	98
+2151	27	98
+2152	108	98
+2153	36	98
+2154	136	98
+2155	151	98
+2156	97	98
+2157	78	99
+2158	149	99
+2159	172	99
+2160	52	99
+2161	86	99
+2162	202	99
+2163	87	99
+2164	60	99
+2165	81	99
+2166	127	99
+2167	194	99
+2168	148	99
+2169	129	99
+2170	77	99
+2171	132	99
+2172	80	99
+2173	146	99
+2174	74	99
+2175	85	99
+2176	62	99
+2177	189	99
+2178	94	99
+2179	67	100
+2180	200	100
+2181	6	100
+2182	39	100
+2183	76	100
+2184	16	100
+2185	25	100
+2186	31	100
+2187	106	100
+2188	201	100
+2189	36	100
+2190	2	100
+2191	37	100
+2192	195	100
+2193	114	100
+2194	12	100
+2195	20	100
+2196	140	100
+2197	192	100
+2198	19	100
+2199	32	100
+2200	69	100
+2201	54	101
+2202	72	101
+2203	65	101
+2204	211	101
+2205	46	101
+2206	59	101
+2207	58	101
+2208	145	101
+2209	109	101
+2210	75	101
+2211	164	101
+2212	127	101
+2213	166	101
+2214	185	101
+2215	108	101
+2216	199	101
+2217	61	101
+2218	70	101
+2219	208	101
+2220	100	101
+2221	135	101
+2222	97	101
+2223	42	102
+2224	35	102
+2225	30	102
+2226	52	102
+2227	91	102
+2228	34	102
+2229	51	102
+2230	155	102
+2231	26	102
+2232	48	102
+2233	43	102
+2234	60	102
+2235	56	102
+2236	127	102
+2237	24	102
+2238	148	102
+2239	129	102
+2240	27	102
+2241	74	102
+2242	62	102
+2243	94	102
+2244	151	102
+2245	72	103
+2246	65	103
+2247	157	103
+2248	145	103
+2249	39	103
+2250	165	103
+2251	75	103
+2252	164	103
+2253	25	103
+2254	23	103
+2255	31	103
+2256	166	103
+2257	201	103
+2258	70	103
+2259	208	103
+2260	195	103
+2261	37	103
+2262	230	103
+2263	114	103
+2264	140	103
+2265	32	103
+2266	97	103
+2267	3	104
+2268	65	104
+2269	78	104
+2270	14	104
+2271	172	104
+2272	86	104
+2273	9	104
+2274	1	104
+2275	178	104
+2276	15	104
+2277	87	104
+2278	124	104
+2279	81	104
+2280	194	104
+2281	21	104
+2282	77	104
+2283	118	104
+2284	18	104
+2285	80	104
+2286	17	104
+2287	204	104
+2288	212	104
+2289	42	105
+2290	78	105
+2291	35	105
+2292	30	105
+2293	86	105
+2294	91	105
+2295	34	105
+2296	155	105
+2297	26	105
+2298	87	105
+2299	43	105
+2300	213	105
+2301	81	105
+2302	194	105
+2303	24	105
+2304	27	105
+2305	118	105
+2306	77	105
+2307	132	105
+2308	80	105
+2309	151	105
+2310	204	105
+2311	54	106
+2312	211	106
+2313	186	106
+2314	149	106
+2315	143	106
+2316	46	106
+2317	59	106
+2318	58	106
+2319	172	106
+2320	51	106
+2321	173	106
+2322	60	106
+2323	129	106
+2324	148	106
+2325	185	106
+2326	199	106
+2327	61	106
+2328	74	106
+2329	62	106
+2330	94	106
+2331	100	106
+2332	205	106
+2333	3	107
+2334	9	107
+2335	39	107
+2336	236	107
+2337	161	107
+2338	1	107
+2339	124	107
+2340	214	107
+2341	23	107
+2342	31	107
+2343	13	107
+2344	201	107
+2345	21	107
+2346	168	107
+2347	18	107
+2348	195	107
+2349	114	107
+2350	17	107
+2351	74	107
+2352	140	107
+2353	32	107
+2354	184	107
+2355	216	108
+2356	67	108
+2357	6	108
+2358	51	108
+2359	173	108
+2360	76	108
+2361	48	108
+2362	60	108
+2363	56	108
+2364	16	108
+2365	129	108
+2366	106	108
+2367	215	108
+2368	2	108
+2369	74	108
+2370	12	108
+2371	20	108
+2372	19	108
+2373	192	108
+2374	62	108
+2375	94	108
+2376	97	108
+2377	54	109
+2378	3	109
+2379	211	109
+2380	170	109
+2381	46	109
+2382	58	109
+2383	121	109
+2384	9	109
+2385	22	109
+2386	1	109
+2387	124	109
+2388	181	109
+2389	150	109
+2390	209	109
+2391	13	109
+2392	185	109
+2393	217	109
+2394	199	109
+2395	61	109
+2396	17	109
+2397	218	109
+2398	205	109
+2399	42	110
+2400	35	110
+2401	30	110
+2402	91	110
+2403	39	110
+2404	34	110
+2405	165	110
+2406	155	110
+2407	26	110
+2408	43	110
+2409	38	110
+2410	214	110
+2411	23	110
+2412	24	110
+2413	31	110
+2414	27	110
+2415	36	110
+2416	37	110
+2417	140	110
+2418	32	110
+2419	151	110
+2420	162	110
+2421	72	111
+2422	65	111
+2423	149	111
+2424	172	111
+2425	145	111
+2426	52	111
+2427	202	111
+2428	68	111
+2429	173	111
+2430	220	111
+2431	60	111
+2432	75	111
+2433	164	111
+2434	127	111
+2435	148	111
+2436	166	111
+2437	129	111
+2438	108	111
+2439	70	111
+2440	62	111
+2441	94	111
+2442	219	111
+2443	78	112
+2444	315	112
+2445	310	112
+2446	86	112
+2447	6	112
+2448	117	112
+2449	76	112
+2450	87	112
+2451	213	112
+2452	16	112
+2453	81	112
+2454	194	112
+2455	106	112
+2456	118	112
+2457	77	112
+2458	2	112
+2459	80	112
+2460	190	112
+2461	12	112
+2462	20	112
+2463	192	112
+2464	204	112
+2465	149	113
+2466	172	113
+2467	52	113
+2468	86	113
+2469	202	113
+2470	125	113
+2471	178	113
+2472	87	113
+2473	60	113
+2474	81	113
+2475	127	113
+2476	194	113
+2477	148	113
+2478	129	113
+2479	77	113
+2480	118	113
+2481	80	113
+2482	190	113
+2483	74	113
+2484	62	113
+2485	94	113
+2486	204	113
+2487	6	114
+2488	39	114
+2489	117	114
+2490	28	114
+2491	76	114
+2492	16	114
+2493	38	114
+2494	25	114
+2495	23	114
+2496	31	114
+2497	11	114
+2498	106	114
+2499	201	114
+2500	36	114
+2501	2	114
+2502	37	114
+2503	114	114
+2504	12	114
+2505	140	114
+2506	192	114
+2507	32	114
+2508	69	114
+2509	78	115
+2510	67	115
+2511	86	115
+2512	6	115
+2513	117	115
+2514	178	115
+2515	76	115
+2516	87	115
+2517	16	115
+2518	81	115
+2519	194	115
+2520	106	115
+2521	118	115
+2522	77	115
+2523	2	115
+2524	80	115
+2525	190	115
+2526	12	115
+2527	19	115
+2528	192	115
+2529	69	115
+2530	204	115
+2531	86	116
+2532	221	116
+2533	22	116
+2534	1	116
+2535	15	116
+2536	96	116
+2537	213	116
+2538	124	116
+2539	223	116
+2540	87	116
+2541	228	116
+2542	81	116
+2543	194	116
+2544	79	116
+2545	217	116
+2546	77	116
+2547	118	116
+2548	210	116
+2549	18	116
+2550	80	116
+2551	222	116
+2552	85	116
+2553	72	117
+2554	65	117
+2555	229	117
+2556	231	117
+2557	225	117
+2558	46	117
+2559	145	117
+2560	58	117
+2561	121	117
+2562	147	117
+2563	226	117
+2564	4	117
+2565	227	117
+2566	228	117
+2567	232	117
+2568	166	117
+2569	224	117
+2570	199	117
+2571	169	117
+2572	230	117
+2573	104	117
+2574	100	117
+2575	42	118
+2576	149	118
+2577	172	118
+2578	30	118
+2579	34	118
+2580	51	118
+2581	155	118
+2582	50	118
+2583	26	118
+2584	48	118
+2585	60	118
+2586	88	118
+2587	127	118
+2588	171	118
+2589	148	118
+2590	129	118
+2591	27	118
+2592	93	118
+2593	174	118
+2594	62	118
+2595	94	118
+2596	233	118
+2597	67	119
+2598	234	119
+2599	6	119
+2600	117	119
+2601	1	119
+2602	15	119
+2603	96	119
+2604	124	119
+2605	223	119
+2606	16	119
+2607	112	119
+2608	106	119
+2609	217	119
+2610	210	119
+2611	2	119
+2612	18	119
+2613	130	119
+2614	222	119
+2615	12	119
+2616	235	119
+2617	192	119
+2618	135	119
+2619	200	120
+2620	86	120
+2621	39	120
+2622	165	120
+2623	236	120
+2624	87	120
+2625	213	120
+2626	81	120
+2627	194	120
+2628	25	120
+2629	31	120
+2630	79	120
+2631	118	120
+2632	77	120
+2633	116	120
+2634	195	120
+2635	37	120
+2636	80	120
+2637	114	120
+2638	140	120
+2639	85	120
+2640	32	120
+2641	149	121
+2642	229	121
+2643	225	121
+2644	46	121
+2645	172	121
+2646	58	121
+2647	121	121
+2648	147	121
+2649	51	121
+2650	237	121
+2651	48	121
+2652	60	121
+2653	228	121
+2654	127	121
+2655	148	121
+2656	129	121
+2657	224	121
+2658	199	121
+2659	61	121
+2660	62	121
+2661	100	121
+2662	94	121
+2663	42	122
+2664	67	122
+2665	306	122
+2666	30	122
+2667	6	122
+2668	34	122
+2669	117	122
+2670	26	122
+2671	88	122
+2672	16	122
+2673	152	122
+2674	112	122
+2675	171	122
+2676	288	122
+2677	238	122
+2678	106	122
+2679	174	122
+2680	2	122
+2681	192	122
+2682	233	122
+2683	271	122
+2684	69	122
+2685	239	123
+2686	200	123
+2687	39	123
+2688	236	123
+2689	165	123
+2690	22	123
+2691	1	123
+2692	15	123
+2693	96	123
+2694	124	123
+2695	223	123
+2696	38	123
+2697	25	123
+2698	31	123
+2699	21	123
+2700	210	123
+2701	18	123
+2702	37	123
+2703	114	123
+2704	140	123
+2705	235	123
+2706	32	123
+2707	72	124
+2708	65	124
+2709	149	124
+2710	172	124
+2711	145	124
+2712	240	124
+2713	51	124
+2714	57	124
+2715	226	124
+2716	237	124
+2717	48	124
+2718	4	124
+2719	227	124
+2720	127	124
+2721	148	124
+2722	166	124
+2723	129	124
+2724	230	124
+2725	104	124
+2726	62	124
+2727	94	124
+2728	97	124
+2729	229	125
+2730	225	125
+2731	46	125
+2732	242	125
+2733	59	125
+2734	58	125
+2735	6	125
+2736	183	125
+2737	241	125
+2738	117	125
+2739	243	125
+2740	56	125
+2741	228	125
+2742	112	125
+2743	206	125
+2744	106	125
+2745	199	125
+2746	77	125
+2747	61	125
+2748	2	125
+2749	69	125
+2750	135	125
+2751	149	126
+2752	200	126
+2753	41	126
+2754	172	126
+2755	52	126
+2756	39	126
+2757	202	126
+2758	165	126
+2759	236	126
+2760	48	126
+2761	244	126
+2762	127	126
+2763	25	126
+2764	23	126
+2765	148	126
+2766	129	126
+2767	37	126
+2768	114	126
+2769	140	126
+2770	62	126
+2771	94	126
+2772	32	126
+2773	42	127
+2774	30	127
+2775	86	127
+2776	221	127
+2777	34	127
+2778	246	127
+2779	26	127
+2780	87	127
+2781	213	127
+2782	88	127
+2783	81	127
+2784	171	127
+2785	194	127
+2786	79	127
+2787	238	127
+2788	27	127
+2789	118	127
+2790	77	127
+2791	80	127
+2792	245	127
+2793	85	127
+2794	233	127
+2795	239	128
+2796	248	128
+2797	229	128
+2798	46	128
+2799	59	128
+2800	58	128
+2801	247	128
+2802	241	128
+2803	1	128
+2804	15	128
+2805	96	128
+2806	124	128
+2807	223	128
+2808	228	128
+2809	13	128
+2810	224	128
+2811	21	128
+2812	199	128
+2813	61	128
+2814	210	128
+2815	18	128
+2816	222	128
+2817	72	129
+2818	65	129
+2819	67	129
+2820	145	129
+2821	240	129
+2822	234	129
+2823	6	129
+2824	117	129
+2825	226	129
+2826	4	129
+2827	227	129
+2828	16	129
+2829	112	129
+2830	166	129
+2831	106	129
+2832	182	129
+2833	281	129
+2834	2	129
+2835	230	129
+2836	104	129
+2837	69	129
+2838	97	129
+2839	78	130
+2840	216	130
+2841	149	130
+2842	250	130
+2843	172	130
+2844	249	130
+2845	86	130
+2846	202	130
+2847	237	130
+2848	244	130
+2849	48	130
+2850	87	130
+2851	81	130
+2852	194	130
+2853	129	130
+2854	118	130
+2855	77	130
+2856	80	130
+2857	179	130
+2858	85	130
+2859	62	130
+2860	94	130
+2861	42	131
+2862	200	131
+2863	30	131
+2864	34	131
+2865	39	131
+2866	165	131
+2867	236	131
+2868	155	131
+2869	50	131
+2870	88	131
+2871	38	131
+2872	171	131
+2873	25	131
+2874	23	131
+2875	27	131
+2876	251	131
+2877	37	131
+2878	114	131
+2879	245	131
+2880	140	131
+2881	233	131
+2882	32	131
+2883	239	132
+2884	72	132
+2885	231	132
+2886	200	132
+2887	145	132
+2888	240	132
+2889	63	132
+2890	1	132
+2891	15	132
+2892	4	132
+2893	89	132
+2894	223	132
+2895	166	132
+2896	304	132
+2897	210	132
+2898	2	132
+2899	18	132
+2900	265	132
+2901	177	132
+2902	230	132
+2903	104	132
+2904	97	132
+2905	67	133
+2906	200	133
+2907	234	133
+2908	6	133
+2909	39	133
+2910	165	133
+2911	117	133
+2912	16	133
+2913	112	133
+2914	214	133
+2915	25	133
+2916	23	133
+2917	106	133
+2918	2	133
+2919	195	133
+2920	37	133
+2921	114	133
+2922	12	133
+2923	140	133
+2924	19	133
+2925	32	133
+2926	69	133
+2927	248	134
+2928	42	134
+2929	229	134
+2930	46	134
+2931	59	134
+2932	30	134
+2933	247	134
+2934	58	134
+2935	34	134
+2936	241	134
+2937	50	134
+2938	26	134
+2939	88	134
+2940	228	134
+2941	171	134
+2942	27	134
+2943	224	134
+2944	199	134
+2945	61	134
+2946	251	134
+2947	245	134
+2948	233	134
+2949	72	135
+2950	231	135
+2951	41	135
+2952	145	135
+2953	240	135
+2954	221	135
+2955	252	135
+2956	39	135
+2957	63	135
+2958	4	135
+2959	25	135
+2960	23	135
+2961	166	135
+2962	201	135
+2963	37	135
+2964	230	135
+2965	114	135
+2966	140	135
+2967	104	135
+2968	32	135
+2969	97	135
+2970	312	135
+2971	248	136
+2972	78	136
+2973	170	136
+2974	250	136
+2975	46	136
+2976	59	136
+2977	58	136
+2978	247	136
+2979	86	136
+2980	241	136
+2981	243	136
+2982	87	136
+2983	228	136
+2984	81	136
+2985	194	136
+2986	79	136
+2987	224	136
+2988	199	136
+2989	118	136
+2990	77	136
+2991	80	136
+2992	85	136
+2993	239	137
+2994	42	137
+2995	30	137
+2996	9	137
+2997	34	137
+2998	1	137
+2999	253	137
+3000	96	137
+3001	88	137
+3002	152	137
+3003	171	137
+3004	24	137
+3005	13	137
+3006	33	137
+3007	27	137
+3008	21	137
+3009	175	137
+3010	210	137
+3011	177	137
+3012	17	137
+3013	245	137
+3014	233	137
+3015	149	138
+3016	67	138
+3017	172	138
+3018	234	138
+3019	6	138
+3020	202	138
+3021	39	138
+3022	117	138
+3023	244	138
+3024	16	138
+3025	127	138
+3026	112	138
+3027	129	138
+3028	106	138
+3029	215	138
+3030	254	138
+3031	2	138
+3032	12	138
+3033	19	138
+3034	62	138
+3035	94	138
+3036	69	138
+3037	248	139
+3038	229	139
+3039	200	139
+3040	46	139
+3041	41	139
+3042	58	139
+3043	247	139
+3044	59	139
+3045	39	139
+3046	241	139
+3047	243	139
+3048	228	139
+3049	255	139
+3050	25	139
+3051	31	139
+3052	201	139
+3053	224	139
+3054	199	139
+3055	37	139
+3056	114	139
+3057	32	139
+3058	162	139
+3059	72	140
+3060	78	140
+3061	231	140
+3062	145	140
+3063	240	140
+3064	249	140
+3065	86	140
+3066	63	140
+3067	4	140
+3068	87	140
+3069	227	140
+3070	213	140
+3071	81	140
+3072	194	140
+3073	166	140
+3074	77	140
+3075	118	140
+3076	80	140
+3077	230	140
+3078	104	140
+3079	256	140
+3080	97	140
+3081	149	141
+3082	172	141
+3083	52	141
+3084	9	141
+3085	202	141
+3086	1	141
+3087	253	141
+3088	257	141
+3089	15	141
+3090	244	141
+3091	96	141
+3092	60	141
+3093	215	141
+3094	217	141
+3095	254	141
+3096	21	141
+3097	210	141
+3098	18	141
+3099	177	141
+3100	17	141
+3101	62	141
+3102	94	141
+3103	72	142
+3104	42	142
+3105	231	142
+3106	240	142
+3107	30	142
+3108	145	142
+3109	34	142
+3110	63	142
+3111	4	142
+3112	227	142
+3113	88	142
+3114	171	142
+3115	24	142
+3116	166	142
+3117	33	142
+3118	120	142
+3119	175	142
+3120	230	142
+3121	245	142
+3122	104	142
+3123	233	142
+3124	97	142
+3125	67	143
+3126	200	143
+3127	6	143
+3128	258	143
+3129	39	143
+3130	10	143
+3131	117	143
+3132	16	143
+3133	38	143
+3134	112	143
+3135	25	143
+3136	31	143
+3137	106	143
+3138	201	143
+3139	174	143
+3140	168	143
+3141	2	143
+3142	37	143
+3143	114	143
+3144	32	143
+3145	69	143
+3146	162	143
+3147	248	144
+3148	149	144
+3149	229	144
+3150	46	144
+3151	59	144
+3152	58	144
+3153	247	144
+3154	202	144
+3155	241	144
+3156	51	144
+3157	237	144
+3158	257	144
+3159	244	144
+3160	243	144
+3161	60	144
+3162	228	144
+3163	215	144
+3164	224	144
+3165	254	144
+3166	199	144
+3167	62	144
+3168	94	144
+3169	239	145
+3170	78	145
+3171	249	145
+3172	9	145
+3173	1	145
+3174	178	145
+3175	96	145
+3176	213	145
+3177	87	145
+3178	81	145
+3179	194	145
+3180	259	145
+3181	21	145
+3182	118	145
+3183	77	145
+3184	210	145
+3185	18	145
+3186	177	145
+3187	80	145
+3188	222	145
+3189	17	145
+3190	256	145
+3191	42	146
+3192	67	146
+3193	306	146
+3194	30	146
+3195	6	146
+3196	34	146
+3197	10	146
+3198	117	146
+3199	26	146
+3200	16	146
+3201	112	146
+3202	171	146
+3203	24	146
+3204	238	146
+3205	106	146
+3206	27	146
+3207	120	146
+3208	168	146
+3209	2	146
+3210	245	146
+3211	233	146
+3212	69	146
+3213	186	147
+3214	200	147
+3215	46	147
+3216	139	147
+3217	58	147
+3218	247	147
+3219	39	147
+3220	241	147
+3221	260	147
+3222	243	147
+3223	261	147
+3224	228	147
+3225	25	147
+3226	31	147
+3227	49	147
+3228	201	147
+3229	224	147
+3230	199	147
+3231	37	147
+3232	195	147
+3233	114	147
+3234	32	147
+3235	72	148
+3236	231	148
+3237	250	148
+3238	145	148
+3239	240	148
+3240	249	148
+3241	63	148
+3242	204	148
+3243	226	148
+3244	4	148
+3245	87	148
+3246	227	148
+3247	213	148
+3248	81	148
+3249	194	148
+3250	79	148
+3251	166	148
+3252	118	148
+3253	77	148
+3254	80	148
+3255	104	148
+3256	97	148
+3257	239	149
+3258	42	149
+3259	30	149
+3260	262	149
+3261	9	149
+3262	34	149
+3263	155	149
+3264	1	149
+3265	142	149
+3266	178	149
+3267	96	149
+3268	88	149
+3269	171	149
+3270	27	149
+3271	210	149
+3272	251	149
+3273	18	149
+3274	177	149
+3275	17	149
+3276	245	149
+3277	233	149
+3278	205	149
+3279	149	150
+3280	67	150
+3281	52	150
+3282	6	150
+3283	202	150
+3284	207	150
+3285	10	150
+3286	51	150
+3287	257	150
+3288	76	150
+3289	60	150
+3290	56	150
+3291	16	150
+3292	127	150
+3293	106	150
+3294	254	150
+3295	188	150
+3296	168	150
+3297	12	150
+3298	62	150
+3299	94	150
+3300	69	150
+3301	186	151
+3302	46	151
+3303	59	151
+3304	58	151
+3305	247	151
+3306	263	151
+3307	86	151
+3308	221	151
+3309	241	151
+3310	178	151
+3311	87	151
+3312	228	151
+3313	81	151
+3314	79	151
+3315	49	151
+3316	206	151
+3317	199	151
+3318	77	151
+3319	80	151
+3320	146	151
+3321	190	151
+3322	204	151
+3323	72	152
+3324	231	152
+3325	200	152
+3326	264	152
+3327	240	152
+3328	145	152
+3329	63	152
+3330	165	152
+3331	28	152
+3332	261	152
+3333	227	152
+3334	25	152
+3335	31	152
+3336	166	152
+3337	201	152
+3338	37	152
+3339	195	152
+3340	230	152
+3341	104	152
+3342	32	152
+3343	97	152
+3344	162	152
+3345	42	153
+3346	46	153
+3347	59	153
+3348	58	153
+3349	263	153
+3350	30	153
+3351	247	153
+3352	121	153
+3353	34	153
+3354	241	153
+3355	155	153
+3356	26	153
+3357	213	153
+3358	88	153
+3359	171	153
+3360	238	153
+3361	49	153
+3362	103	153
+3363	27	153
+3364	199	153
+3365	251	153
+3366	233	153
+3367	3	154
+3368	119	154
+3369	149	154
+3370	52	154
+3371	202	154
+3372	51	154
+3373	161	154
+3374	1	154
+3375	257	154
+3376	96	154
+3377	60	154
+3378	296	154
+3379	56	154
+3380	152	154
+3381	127	154
+3382	13	154
+3383	254	154
+3384	210	154
+3385	177	154
+3386	17	154
+3387	62	154
+3388	94	154
+3389	67	155
+3390	249	155
+3391	86	155
+3392	6	155
+3393	10	155
+3394	117	155
+3395	193	155
+3396	178	155
+3397	76	155
+3398	87	155
+3399	16	155
+3400	81	155
+3401	112	155
+3402	194	155
+3403	106	155
+3404	77	155
+3405	2	155
+3406	265	155
+3407	80	155
+3408	12	155
+3409	69	155
+3410	204	155
+3411	72	156
+3412	266	156
+3413	42	156
+3414	267	156
+3415	231	156
+3416	145	156
+3417	30	156
+3418	240	156
+3419	109	156
+3420	34	156
+3421	63	156
+3422	246	156
+3423	155	156
+3424	4	156
+3425	227	156
+3426	88	156
+3427	164	156
+3428	24	156
+3429	166	156
+3430	27	156
+3431	230	156
+3432	104	156
+3433	115	157
+3434	200	157
+3435	249	157
+3436	86	157
+3437	165	157
+3438	28	157
+3439	178	157
+3440	87	157
+3441	261	157
+3442	81	157
+3443	194	157
+3444	25	157
+3445	31	157
+3446	201	157
+3447	77	157
+3448	37	157
+3449	195	157
+3450	80	157
+3451	146	157
+3452	32	157
+3453	204	157
+3454	162	157
+3455	3	158
+3456	67	158
+3457	242	158
+3458	6	158
+3459	269	158
+3460	161	158
+3461	1	158
+3462	15	158
+3463	76	158
+3464	96	158
+3465	112	158
+3466	23	158
+3467	13	158
+3468	106	158
+3469	21	158
+3470	210	158
+3471	2	158
+3472	177	158
+3473	222	158
+3474	17	158
+3475	12	158
+3476	69	158
+3477	266	159
+3478	42	159
+3479	149	159
+3480	30	159
+3481	52	159
+3482	34	159
+3483	202	159
+3484	51	159
+3485	246	159
+3486	155	159
+3487	291	159
+3488	257	159
+3489	48	159
+3490	60	159
+3491	88	159
+3492	56	159
+3493	27	159
+3494	251	159
+3495	74	159
+3496	20	159
+3497	62	159
+3498	94	159
+3499	72	160
+3500	248	160
+3501	65	160
+3502	186	160
+3503	46	160
+3504	59	160
+3505	145	160
+3506	263	160
+3507	58	160
+3508	240	160
+3509	247	160
+3510	241	160
+3511	4	160
+3512	227	160
+3513	228	160
+3514	75	160
+3515	164	160
+3516	49	160
+3517	166	160
+3518	199	160
+3519	230	160
+3520	104	160
+3521	67	161
+3522	249	161
+3523	86	161
+3524	6	161
+3525	10	161
+3526	117	161
+3527	178	161
+3528	76	161
+3529	87	161
+3530	16	161
+3531	81	161
+3532	268	161
+3533	112	161
+3534	194	161
+3535	106	161
+3536	77	161
+3537	118	161
+3538	188	161
+3539	80	161
+3540	12	161
+3541	69	161
+3542	204	161
+3543	72	162
+3544	270	162
+3545	149	162
+3546	145	162
+3547	240	162
+3548	202	162
+3549	237	162
+3550	257	162
+3551	4	162
+3552	227	162
+3553	60	162
+3554	232	162
+3555	127	162
+3556	164	162
+3557	129	162
+3558	215	162
+3559	116	162
+3560	74	162
+3561	104	162
+3562	62	162
+3563	94	162
+3564	97	162
+3565	3	163
+3566	200	163
+3567	9	163
+3568	39	163
+3569	165	163
+3570	22	163
+3571	1	163
+3572	261	163
+3573	96	163
+3574	43	163
+3575	152	163
+3576	25	163
+3577	13	163
+3578	201	163
+3579	21	163
+3580	210	163
+3581	177	163
+3582	132	163
+3583	114	163
+3584	17	163
+3585	218	163
+3586	32	163
+3587	248	164
+3588	186	164
+3589	67	164
+3590	90	164
+3591	46	164
+3592	59	164
+3593	58	164
+3594	6	164
+3595	241	164
+3596	117	164
+3597	76	164
+3598	16	164
+3599	228	164
+3600	112	164
+3601	49	164
+3602	106	164
+3603	169	164
+3604	199	164
+3605	168	164
+3606	12	164
+3607	271	164
+3608	69	164
+3609	149	165
+3610	200	165
+3611	172	165
+3612	202	165
+3613	165	165
+3614	28	165
+3615	282	165
+3616	244	165
+3617	48	165
+3618	261	165
+3619	60	165
+3620	25	165
+3621	31	165
+3622	148	165
+3623	201	165
+3624	37	165
+3625	114	165
+3626	74	165
+3627	140	165
+3628	62	165
+3629	94	165
+3630	32	165
+3631	42	166
+3632	250	166
+3633	30	166
+3634	249	166
+3635	86	166
+3636	34	166
+3637	45	166
+3638	87	166
+3639	88	166
+3640	81	166
+3641	268	166
+3642	194	166
+3643	167	166
+3644	27	166
+3645	120	166
+3646	77	166
+3647	175	166
+3648	265	166
+3649	251	166
+3650	80	166
+3651	245	166
+3652	204	166
+3653	72	167
+3654	231	167
+3655	67	167
+3656	90	167
+3657	145	167
+3658	240	167
+3659	6	167
+3660	117	167
+3661	76	167
+3662	4	167
+3663	227	167
+3664	16	167
+3665	164	167
+3666	112	167
+3667	106	167
+3668	93	167
+3669	116	167
+3670	70	167
+3671	168	167
+3672	12	167
+3673	69	167
+3674	151	167
+3675	239	168
+3676	248	168
+3677	3	168
+3678	186	168
+3679	229	168
+3680	46	168
+3681	59	168
+3682	58	168
+3683	262	168
+3684	247	168
+3685	22	168
+3686	1	168
+3687	13	168
+3688	49	168
+3689	169	168
+3690	199	168
+3691	18	168
+3692	153	168
+3693	177	168
+3694	190	168
+3695	272	168
+3696	222	168
+3697	42	169
+3698	65	169
+3699	200	169
+3700	30	169
+3701	258	169
+3702	34	169
+3703	165	169
+3704	236	169
+3705	155	169
+3706	261	169
+3707	88	169
+3708	25	169
+3709	31	169
+3710	103	169
+3711	27	169
+3712	201	169
+3713	120	169
+3714	251	169
+3715	195	169
+3716	37	169
+3717	114	169
+3718	32	169
+3719	149	170
+3720	250	170
+3721	172	170
+3722	249	170
+3723	202	170
+3724	257	170
+3725	178	170
+3726	244	170
+3727	48	170
+3728	87	170
+3729	60	170
+3730	81	170
+3731	268	170
+3732	194	170
+3733	148	170
+3734	77	170
+3735	265	170
+3736	80	170
+3737	74	170
+3738	85	170
+3739	62	170
+3740	94	170
+3741	239	171
+3742	3	171
+3743	231	171
+3744	46	171
+3745	262	171
+3746	9	171
+3747	63	171
+3748	226	171
+3749	1	171
+3750	96	171
+3751	227	171
+3752	232	171
+3753	164	171
+3754	13	171
+3755	206	171
+3756	116	171
+3757	18	171
+3758	230	171
+3759	273	171
+3760	104	171
+3761	55	171
+3762	97	171
+3763	72	172
+3764	67	172
+3765	145	172
+3766	240	172
+3767	6	172
+3768	63	172
+3769	117	172
+3770	76	172
+3771	4	172
+3772	227	172
+3773	16	172
+3774	164	172
+3775	112	172
+3776	166	172
+3777	106	172
+3778	116	172
+3779	70	172
+3780	168	172
+3781	2	172
+3782	12	172
+3783	104	172
+3784	69	172
+3785	200	173
+3786	139	173
+3787	249	173
+3788	86	173
+3789	39	173
+3790	165	173
+3791	178	173
+3792	87	173
+3793	261	173
+3794	81	173
+3795	268	173
+3796	194	173
+3797	25	173
+3798	31	173
+3799	201	173
+3800	77	173
+3801	118	173
+3802	37	173
+3803	80	173
+3804	114	173
+3805	32	173
+3806	204	173
+3807	72	174
+3808	78	174
+3809	250	174
+3810	274	174
+3811	82	174
+3812	249	174
+3813	221	174
+3814	6	174
+3815	22	174
+3816	178	174
+3817	87	174
+3818	81	174
+3819	112	174
+3820	106	174
+3821	77	174
+3822	168	174
+3823	2	174
+3824	80	174
+3825	146	174
+3826	12	174
+3827	20	174
+3828	204	174
+3829	72	175
+3830	200	175
+3831	139	175
+3832	240	175
+3833	145	175
+3834	39	175
+3835	63	175
+3836	165	175
+3837	4	175
+3838	261	175
+3839	227	175
+3840	164	175
+3841	25	175
+3842	31	175
+3843	166	175
+3844	201	175
+3845	116	175
+3846	70	175
+3847	37	175
+3848	114	175
+3849	104	175
+3850	32	175
+3851	200	176
+3852	46	176
+3853	82	176
+3854	139	176
+3855	234	176
+3856	52	176
+3857	6	176
+3858	165	176
+3859	22	176
+3860	237	176
+3861	96	176
+3862	60	176
+3863	152	176
+3864	31	176
+3865	201	176
+3866	276	176
+3867	114	176
+3868	140	176
+3869	100	176
+3870	233	176
+3871	32	176
+3872	275	176
+3873	277	177
+3874	211	177
+3875	149	177
+3876	59	177
+3877	58	177
+3878	278	177
+3879	63	177
+3880	279	177
+3881	113	177
+3882	15	177
+3883	76	177
+3884	87	177
+3885	164	177
+3886	112	177
+3887	27	177
+3888	36	177
+3889	61	177
+3890	132	177
+3891	12	177
+3892	273	177
+3893	271	177
+3894	205	177
+3895	54	178
+3896	3	178
+3897	14	178
+3898	172	178
+3899	86	178
+3900	39	178
+3901	207	178
+3902	280	178
+3903	282	178
+3904	26	178
+3905	4	178
+3906	124	178
+3907	88	178
+3908	56	178
+3909	16	178
+3910	23	178
+3911	79	178
+3912	148	178
+3913	129	178
+3914	281	178
+3915	104	178
+3916	69	178
+3917	72	179
+3918	78	179
+3919	240	179
+3920	30	179
+3921	145	179
+3922	202	179
+3923	284	179
+3924	283	179
+3925	244	179
+3926	227	179
+3927	232	179
+3928	81	179
+3929	13	179
+3930	166	179
+3931	206	179
+3932	199	179
+3933	61	179
+3934	285	179
+3935	272	179
+3936	192	179
+3937	218	179
+3938	62	179
+3939	289	180
+3940	42	180
+3941	231	180
+3942	67	180
+3943	250	180
+3944	46	180
+3945	34	180
+3946	183	180
+3947	286	180
+3948	260	180
+3949	48	180
+3950	288	180
+3951	167	180
+3952	120	180
+3953	77	180
+3954	70	180
+3955	2	180
+3956	18	180
+3957	195	180
+3958	94	180
+3959	100	180
+3960	287	180
+3961	277	181
+3962	119	181
+3963	149	181
+3964	46	181
+3965	262	181
+3966	52	181
+3967	278	181
+3968	6	181
+3969	63	181
+3970	113	181
+3971	15	181
+3972	87	181
+3973	96	181
+3974	60	181
+3975	290	181
+3976	152	181
+3977	164	181
+3978	112	181
+3979	27	181
+3980	132	181
+3981	140	181
+3982	233	181
+3983	78	182
+3984	211	182
+3985	59	182
+3986	58	182
+3987	30	182
+3988	202	182
+3989	279	182
+3990	83	182
+3991	291	182
+3992	76	182
+3993	283	182
+3994	13	182
+3995	206	182
+3996	108	182
+3997	224	182
+3998	199	182
+3999	272	182
+4000	12	182
+4001	192	182
+4002	62	182
+4003	271	182
+4004	205	182
+4005	72	183
+4006	92	183
+4007	216	183
+4008	172	183
+4009	240	183
+4010	145	183
+4011	207	183
+4012	280	183
+4013	284	183
+4014	105	183
+4015	282	183
+4016	4	183
+4017	227	183
+4018	56	183
+4019	16	183
+4020	232	183
+4021	148	183
+4022	166	183
+4023	129	183
+4024	61	183
+4025	285	183
+4026	104	183
+4027	231	184
+4028	200	184
+4029	82	184
+4030	139	184
+4031	34	184
+4032	183	184
+4033	165	184
+4034	292	184
+4035	31	184
+4036	201	184
+4037	120	184
+4038	77	184
+4039	70	184
+4040	276	184
+4041	2	184
+4042	37	184
+4043	114	184
+4044	94	184
+4045	287	184
+4046	32	184
+4047	204	184
+4048	275	184
+4049	54	185
+4050	3	185
+4051	42	185
+4052	67	185
+4053	250	185
+4054	249	185
+4055	86	185
+4056	39	185
+4057	260	185
+4058	286	185
+4059	26	185
+4060	48	185
+4061	124	185
+4062	88	185
+4063	23	185
+4064	288	185
+4065	167	185
+4066	79	185
+4067	281	185
+4068	18	185
+4069	100	185
+4070	69	185
+4071	149	186
+4072	294	186
+4073	110	186
+4074	91	186
+4075	278	186
+4076	63	186
+4077	113	186
+4078	282	186
+4079	15	186
+4080	4	186
+4081	295	186
+4082	38	186
+4083	56	186
+4084	16	186
+4085	164	186
+4086	112	186
+4087	148	186
+4088	129	186
+4089	27	186
+4090	222	186
+4091	104	186
+4092	293	186
+4093	211	187
+4094	46	187
+4095	274	187
+4096	59	187
+4097	58	187
+4098	52	187
+4099	6	187
+4100	298	187
+4101	279	187
+4102	76	187
+4103	60	187
+4104	296	187
+4105	152	187
+4106	24	187
+4107	49	187
+4108	175	187
+4109	18	187
+4110	12	187
+4111	140	187
+4112	271	187
+4113	233	187
+4114	205	187
+4115	54	188
+4116	72	188
+4117	3	188
+4118	41	188
+4119	145	188
+4120	240	188
+4121	86	188
+4122	252	188
+4123	155	188
+4124	253	188
+4125	299	188
+4126	124	188
+4127	227	188
+4128	88	188
+4129	232	188
+4130	148	188
+4131	166	188
+4132	61	188
+4133	285	188
+4134	281	188
+4135	230	188
+4136	69	188
+4137	200	189
+4138	165	189
+4139	280	189
+4140	28	189
+4141	282	189
+4142	4	189
+4143	295	189
+4144	56	189
+4145	16	189
+4146	31	189
+4147	148	189
+4148	129	189
+4149	79	189
+4150	201	189
+4151	276	189
+4152	37	189
+4153	114	189
+4154	222	189
+4155	104	189
+4156	32	189
+4157	293	189
+4158	275	189
+4159	277	190
+4160	149	190
+4161	231	190
+4162	91	190
+4163	278	190
+4164	34	190
+4165	63	190
+4166	183	190
+4167	113	190
+4168	15	190
+4169	299	190
+4170	38	190
+4171	164	190
+4172	112	190
+4173	27	190
+4174	77	190
+4175	70	190
+4176	175	190
+4177	2	190
+4178	132	190
+4179	94	190
+4180	204	190
+4181	42	191
+4182	78	191
+4183	67	191
+4184	250	191
+4185	30	191
+4186	249	191
+4187	202	191
+4188	291	191
+4189	286	191
+4190	260	191
+4191	48	191
+4192	244	191
+4193	228	191
+4194	297	191
+4195	288	191
+4196	167	191
+4197	13	191
+4198	199	191
+4199	29	191
+4200	272	191
+4201	62	191
+4202	100	191
+4203	186	192
+4204	46	192
+4205	59	192
+4206	58	192
+4207	247	192
+4208	52	192
+4209	6	192
+4210	279	192
+4211	76	192
+4212	96	192
+4213	296	192
+4214	60	192
+4215	152	192
+4216	24	192
+4217	49	192
+4218	166	192
+4219	108	192
+4220	224	192
+4221	140	192
+4222	271	192
+4223	233	192
+4224	205	192
+4225	54	193
+4226	3	193
+4227	200	193
+4228	86	193
+4229	252	193
+4230	165	193
+4231	155	193
+4232	28	193
+4233	261	193
+4234	124	193
+4235	88	193
+4236	23	193
+4237	31	193
+4238	33	193
+4239	201	193
+4240	281	193
+4241	37	193
+4242	114	193
+4243	179	193
+4244	32	193
+4245	69	193
+4246	275	193
+4247	78	194
+4248	216	194
+4249	149	194
+4250	30	194
+4251	263	194
+4252	91	194
+4253	278	194
+4254	202	194
+4255	63	194
+4256	10	194
+4257	291	194
+4258	178	194
+4259	113	194
+4260	87	194
+4261	112	194
+4262	13	194
+4263	206	194
+4264	27	194
+4265	199	194
+4266	29	194
+4267	272	194
+4268	62	194
+4269	42	195
+4270	67	195
+4271	250	195
+4272	264	195
+4273	249	195
+4274	240	195
+4275	145	195
+4276	298	195
+4277	10	195
+4278	284	195
+4279	260	195
+4280	286	195
+4281	48	195
+4282	227	195
+4283	232	195
+4284	81	195
+4285	288	195
+4286	167	195
+4287	166	195
+4288	61	195
+4289	18	195
+4290	80	195
+4291	54	196
+4292	3	196
+4293	46	196
+4294	234	196
+4295	52	196
+4296	86	196
+4297	6	196
+4298	39	196
+4299	155	196
+4300	96	196
+4301	124	196
+4302	60	196
+4303	296	196
+4304	88	196
+4305	152	196
+4306	23	196
+4307	24	196
+4308	254	196
+4309	281	196
+4310	140	196
+4311	233	196
+4312	69	196
+4313	186	197
+4314	231	197
+4315	59	197
+4316	58	197
+4317	121	197
+4318	34	197
+4319	183	197
+4320	279	197
+4321	292	197
+4322	76	197
+4323	299	197
+4324	49	197
+4325	120	197
+4326	224	197
+4327	77	197
+4328	70	197
+4329	2	197
+4330	12	197
+4331	273	197
+4332	94	197
+4333	287	197
+4334	204	197
+4335	72	198
+4336	200	198
+4337	264	198
+4338	306	198
+4339	139	198
+4340	41	198
+4341	145	198
+4342	240	198
+4343	165	198
+4344	28	198
+4345	261	198
+4346	227	198
+4347	81	198
+4348	31	198
+4349	166	198
+4350	61	198
+4351	276	198
+4352	37	198
+4353	230	198
+4354	114	198
+4355	80	198
+4356	32	198
+4357	46	199
+4358	294	199
+4359	234	199
+4360	262	199
+4361	300	199
+4362	52	199
+4363	58	199
+4364	6	199
+4365	63	199
+4366	4	199
+4367	96	199
+4368	213	199
+4369	296	199
+4370	60	199
+4371	56	199
+4372	16	199
+4373	152	199
+4374	148	199
+4375	217	199
+4376	301	199
+4377	177	199
+4378	140	199
+4379	78	200
+4380	216	200
+4381	30	200
+4382	9	200
+4383	34	200
+4384	202	200
+4385	302	200
+4386	183	200
+4387	206	200
+4388	120	200
+4389	199	200
+4390	77	200
+4391	70	200
+4392	29	200
+4393	2	200
+4394	272	200
+4395	245	200
+4396	17	200
+4397	62	200
+4398	94	200
+4399	287	200
+4400	204	200
+4401	72	201
+4402	149	201
+4403	264	201
+4404	145	201
+4405	240	201
+4406	91	201
+4407	278	201
+4408	63	201
+4409	10	201
+4410	113	201
+4411	15	201
+4412	87	201
+4413	227	201
+4414	81	201
+4415	112	201
+4416	166	201
+4417	27	201
+4418	61	201
+4419	285	201
+4420	132	201
+4421	80	201
+4422	230	201
+4423	54	202
+4424	211	202
+4425	315	202
+4426	59	202
+4427	58	202
+4428	86	202
+4429	252	202
+4430	39	202
+4431	286	202
+4432	76	202
+4433	124	202
+4434	88	202
+4435	131	202
+4436	23	202
+4437	79	202
+4438	49	202
+4439	254	202
+4440	77	202
+4441	281	202
+4442	12	202
+4443	69	202
+4444	205	202
+4445	42	203
+4446	67	203
+4447	200	203
+4448	250	203
+4449	139	203
+4450	249	203
+4451	165	203
+4452	117	203
+4453	286	203
+4454	28	203
+4455	303	203
+4456	48	203
+4457	261	203
+4458	31	203
+4459	167	203
+4460	304	203
+4461	201	203
+4462	276	203
+4463	18	203
+4464	37	203
+4465	114	203
+4466	32	203
+4467	78	204
+4468	216	204
+4469	294	204
+4470	30	204
+4471	202	204
+4472	207	204
+4473	244	204
+4474	4	204
+4475	56	204
+4476	16	204
+4477	297	204
+4478	13	204
+4479	148	204
+4480	206	204
+4481	129	204
+4482	199	204
+4483	301	204
+4484	29	204
+4485	177	204
+4486	222	204
+4487	62	204
+4488	104	204
+4489	305	205
+4490	42	205
+4491	67	205
+4492	200	205
+4493	250	205
+4494	249	205
+4495	165	205
+4496	117	205
+4497	286	205
+4498	260	205
+4499	28	205
+4500	163	205
+4501	48	205
+4502	261	205
+4503	167	205
+4504	201	205
+4505	304	205
+4506	265	205
+4507	18	205
+4508	37	205
+4509	32	205
+4510	275	205
+4511	54	206
+4512	3	206
+4513	149	206
+4514	86	206
+4515	91	206
+4516	278	206
+4517	252	206
+4518	63	206
+4519	10	206
+4520	113	206
+4521	26	206
+4522	15	206
+4523	124	206
+4524	88	206
+4525	38	206
+4526	112	206
+4527	23	206
+4528	27	206
+4529	254	206
+4530	281	206
+4531	132	206
+4532	69	206
+4533	78	207
+4534	216	207
+4535	306	207
+4536	46	207
+4537	30	207
+4538	234	207
+4539	262	207
+4540	6	207
+4541	202	207
+4542	244	207
+4543	96	207
+4544	60	207
+4545	290	207
+4546	152	207
+4547	24	207
+4548	206	207
+4549	199	207
+4550	29	207
+4551	130	207
+4552	17	207
+4553	140	207
+4554	62	207
+4555	72	208
+4556	211	208
+4557	59	208
+4558	145	208
+4559	58	208
+4560	240	208
+4561	279	208
+4562	292	208
+4563	76	208
+4564	227	208
+4565	232	208
+4566	81	208
+4567	309	208
+4568	49	208
+4569	166	208
+4570	61	208
+4571	285	208
+4572	80	208
+4573	230	208
+4574	12	208
+4575	205	208
+4576	312	208
+4577	42	209
+4578	67	209
+4579	250	209
+4580	294	209
+4581	298	209
+4582	207	209
+4583	117	209
+4584	286	209
+4585	50	209
+4586	48	209
+4587	4	209
+4588	56	209
+4589	16	209
+4590	307	209
+4591	167	209
+4592	148	209
+4593	129	209
+4594	304	209
+4595	169	209
+4596	301	209
+4597	177	209
+4598	104	209
+4599	54	210
+4600	3	210
+4601	78	210
+4602	216	210
+4603	306	210
+4604	30	210
+4605	86	210
+4606	202	210
+4607	155	210
+4608	26	210
+4609	244	210
+4610	124	210
+4611	88	210
+4612	23	210
+4613	308	210
+4614	206	210
+4615	199	210
+4616	17	210
+4617	20	210
+4618	192	210
+4619	62	210
+4620	69	210
+4621	46	211
+4622	234	211
+4623	52	211
+4624	6	211
+4625	9	211
+4626	34	211
+4627	183	211
+4628	207	211
+4629	83	211
+4630	292	211
+4631	96	211
+4632	60	211
+4633	152	211
+4634	24	211
+4635	238	211
+4636	120	211
+4637	77	211
+4638	70	211
+4639	2	211
+4640	140	211
+4641	94	211
+4642	204	211
+4643	42	212
+4644	211	212
+4645	67	212
+4646	250	212
+4647	59	212
+4648	58	212
+4649	241	212
+4650	279	212
+4651	117	212
+4652	286	212
+4653	113	212
+4654	303	212
+4655	76	212
+4656	48	212
+4657	307	212
+4658	167	212
+4659	49	212
+4660	304	212
+4661	108	212
+4662	18	212
+4663	12	212
+4664	205	212
+4665	149	213
+4666	200	213
+4667	139	213
+4668	91	213
+4669	278	213
+4670	63	213
+4671	10	213
+4672	165	213
+4673	28	213
+4674	178	213
+4675	113	213
+4676	15	213
+4677	87	213
+4678	261	213
+4679	164	213
+4680	31	213
+4681	201	213
+4682	27	213
+4683	276	213
+4684	37	213
+4685	114	213
+4686	32	213
+4687	72	214
+4688	264	214
+4689	145	214
+4690	240	214
+4691	9	214
+4692	34	214
+4693	183	214
+4694	292	214
+4695	227	214
+4696	81	214
+4697	194	214
+4698	238	214
+4699	166	214
+4700	120	214
+4701	77	214
+4702	61	214
+4703	70	214
+4704	285	214
+4705	2	214
+4706	80	214
+4707	94	214
+4708	204	214
+4709	54	215
+4710	3	215
+4711	78	215
+4712	216	215
+4713	306	215
+4714	30	215
+4715	86	215
+4716	202	215
+4717	26	215
+4718	244	215
+4719	124	215
+4720	88	215
+4721	309	215
+4722	23	215
+4723	308	215
+4724	206	215
+4725	199	215
+4726	281	215
+4727	17	215
+4728	192	215
+4729	62	215
+4730	69	215
+4731	149	216
+4732	46	216
+4733	234	216
+4734	52	216
+4735	91	216
+4736	6	216
+4737	278	216
+4738	63	216
+4739	10	216
+4740	113	216
+4741	15	216
+4742	87	216
+4743	96	216
+4744	60	216
+4745	152	216
+4746	112	216
+4747	24	216
+4748	27	216
+4749	132	216
+4750	140	216
+4751	19	216
+4752	97	216
+4753	211	217
+4754	200	217
+4755	274	217
+4756	59	217
+4757	58	217
+4758	6	217
+4759	111	217
+4760	279	217
+4761	165	217
+4762	28	217
+4763	76	217
+4764	299	217
+4765	261	217
+4766	49	217
+4767	201	217
+4768	108	217
+4769	285	217
+4770	276	217
+4771	114	217
+4772	12	217
+4773	273	217
+4774	32	217
+4775	72	218
+4776	42	218
+4777	67	218
+4778	250	218
+4779	310	218
+4780	145	218
+4781	240	218
+4782	117	218
+4783	286	218
+4784	260	218
+4785	48	218
+4786	227	218
+4787	228	218
+4788	75	218
+4789	81	218
+4790	194	218
+4791	167	218
+4792	166	218
+4793	304	218
+4794	61	218
+4795	80	218
+4796	100	218
+4797	54	219
+4798	3	219
+4799	46	219
+4800	234	219
+4801	262	219
+4802	52	219
+4803	86	219
+4804	6	219
+4805	237	219
+4806	26	219
+4807	96	219
+4808	124	219
+4809	60	219
+4810	88	219
+4811	152	219
+4812	309	219
+4813	23	219
+4814	24	219
+4815	308	219
+4816	281	219
+4817	19	219
+4818	69	219
+4819	78	220
+4820	216	220
+4821	149	220
+4822	306	220
+4823	172	220
+4824	30	220
+4825	278	220
+4826	63	220
+4827	173	220
+4828	113	220
+4829	15	220
+4830	164	220
+4831	311	220
+4832	112	220
+4833	206	220
+4834	27	220
+4835	199	220
+4836	29	220
+4837	132	220
+4838	17	220
+4839	272	220
+4840	62	220
+4841	266	221
+4842	231	221
+4843	294	221
+4844	34	221
+4845	183	221
+4846	207	221
+4847	280	221
+4848	50	221
+4849	4	221
+4850	56	221
+4851	16	221
+4852	148	221
+4853	129	221
+4854	120	221
+4855	77	221
+4856	70	221
+4857	2	221
+4858	177	221
+4859	104	221
+4860	94	221
+4861	287	221
+4862	204	221
+4863	200	222
+4864	46	222
+4865	234	222
+4866	262	222
+4867	52	222
+4868	6	222
+4869	165	222
+4870	28	222
+4871	261	222
+4872	96	222
+4873	60	222
+4874	152	222
+4875	24	222
+4876	31	222
+4877	201	222
+4878	93	222
+4879	276	222
+4880	37	222
+4881	114	222
+4882	140	222
+4883	85	222
+4884	32	222
+4885	72	223
+4886	78	223
+4887	216	223
+4888	310	223
+4889	145	223
+4890	30	223
+4891	240	223
+4892	202	223
+4893	291	223
+4894	257	223
+4895	227	223
+4896	81	223
+4897	75	223
+4898	206	223
+4899	166	223
+4900	199	223
+4901	61	223
+4902	29	223
+4903	80	223
+4904	17	223
+4905	62	223
+4906	312	223
+4907	54	224
+4908	72	224
+4909	3	224
+4910	119	224
+4911	274	224
+4912	294	224
+4913	86	224
+4914	207	224
+4915	155	224
+4916	4	224
+4917	124	224
+4918	88	224
+4919	56	224
+4920	16	224
+4921	309	224
+4922	23	224
+4923	308	224
+4924	148	224
+4925	33	224
+4926	281	224
+4927	177	224
+4928	69	224
+4929	42	225
+4930	67	225
+4931	250	225
+4932	109	225
+4933	9	225
+4934	183	225
+4935	117	225
+4936	260	225
+4937	253	225
+4938	292	225
+4939	228	225
+4940	288	225
+4941	167	225
+4942	120	225
+4943	77	225
+4944	2	225
+4945	265	225
+4946	313	225
+4947	245	225
+4948	314	225
+4949	94	225
+4950	204	225
+4951	211	226
+4952	186	226
+4953	200	226
+4954	59	226
+4955	58	226
+4956	279	226
+4957	165	226
+4958	28	226
+4959	76	226
+4960	299	226
+4961	261	226
+4962	150	226
+4963	31	226
+4964	49	226
+4965	201	226
+4966	108	226
+4967	208	226
+4968	114	226
+4969	12	226
+4970	32	226
+4971	205	226
+4972	97	226
+4973	42	227
+4974	149	227
+4975	67	227
+4976	250	227
+4977	91	227
+4978	278	227
+4979	63	227
+4980	117	227
+4981	1	227
+4982	260	227
+4983	113	227
+4984	15	227
+4985	87	227
+4986	164	227
+4987	112	227
+4988	288	227
+4989	167	227
+4990	27	227
+4991	265	227
+4992	313	227
+4993	132	227
+4994	314	227
+4995	72	228
+4996	310	228
+4997	240	228
+4998	145	228
+4999	9	228
+5000	183	228
+5001	253	228
+5002	292	228
+5003	227	228
+5004	81	228
+5005	75	228
+5006	194	228
+5007	238	228
+5008	166	228
+5009	120	228
+5010	77	228
+5011	61	228
+5012	2	228
+5013	80	228
+5014	245	228
+5015	94	228
+5016	204	228
+5017	211	229
+5018	186	229
+5019	90	229
+5020	315	229
+5021	294	229
+5022	59	229
+5023	58	229
+5024	6	229
+5025	279	229
+5026	76	229
+5027	299	229
+5028	4	229
+5029	87	229
+5030	16	229
+5031	99	229
+5032	148	229
+5033	49	229
+5034	217	229
+5035	108	229
+5036	177	229
+5037	12	229
+5038	151	229
+5039	78	230
+5040	216	230
+5041	200	230
+5042	30	230
+5043	202	230
+5044	302	230
+5045	165	230
+5046	291	230
+5047	28	230
+5048	261	230
+5049	31	230
+5050	215	230
+5051	201	230
+5052	21	230
+5053	199	230
+5054	29	230
+5055	37	230
+5056	114	230
+5057	17	230
+5058	32	230
+5059	97	230
+5060	312	230
+5061	54	231
+5062	3	231
+5063	86	231
+5064	9	231
+5065	34	231
+5066	183	231
+5067	253	231
+5068	292	231
+5069	26	231
+5070	124	231
+5071	223	231
+5072	88	231
+5073	309	231
+5074	23	231
+5075	238	231
+5076	120	231
+5077	77	231
+5078	281	231
+5079	245	231
+5080	94	231
+5081	69	231
+5082	204	231
+\.
+
+
+--
+-- Data for Name: scorehistory; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.scorehistory (id, points, playermatch_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public."user" (id, username, password_hash, contact_number, varified, registered_on, last_updated_on) FROM stdin;
+1	user-0	$2b$12$9lRzwvuSerDU1jqFJ4.vTunId8PFamTGIqjeEFy9Jqnm/FWZckiZ2	1234567890	t	2021-05-11 08:06:42.797408	2021-05-11 08:06:42.797409
+2	user-1	$2b$12$1JIwBX5adMsdPFk...md1OxFU7FEG0VExQw/qn.qM2roUQQHbyo9C	1234567891	t	2021-05-11 08:06:42.995008	2021-05-11 08:06:42.995009
+3	user-2	$2b$12$VE3Kb4IzE4qDPlxnYatmDO0iGcjQ5W4FTK2mxgqb12yiy1LQ.TBem	1234567892	t	2021-05-11 08:06:43.191262	2021-05-11 08:06:43.191263
+4	user-3	$2b$12$FxrgvjSzyIqMqaFVTHzReeu8bqt1KhWAwgfnlC3RuB7WNsldaxFJ.	1234567893	t	2021-05-11 08:06:43.38808	2021-05-11 08:06:43.388081
+5	user-4	$2b$12$dtSMGMStxHd2vXainLohzewcPFAJmtkOU8a4GaNZphK9J139HOBFG	1234567894	t	2021-05-11 08:06:43.583869	2021-05-11 08:06:43.58387
+6	user-5	$2b$12$VRJ3jRhJr7VAl6jyPkzr3OP2lrjRmMX0WKGkBzxc9AWUCXtMKLRXS	1234567895	t	2021-05-11 08:06:43.780905	2021-05-11 08:06:43.780906
+7	user-6	$2b$12$2SRjUe8MbYCEKd8G/HpKTOoU2wFmHhEJ8fZMvt.YiesMWZr.znHzu	1234567896	t	2021-05-11 08:06:43.977288	2021-05-11 08:06:43.977289
+8	user-7	$2b$12$iKHCQ/4vJeM9i0MdQOczuu.3nRerDae1xCfE0CDzM3UtYsEZ40XM6	1234567897	t	2021-05-11 08:06:44.17355	2021-05-11 08:06:44.173551
+9	user-8	$2b$12$pMugUctbOlMwK60HR/e/nO9z07VKOCfwxHucCOiurxFJfoKxU/jt6	1234567898	t	2021-05-11 08:06:44.369853	2021-05-11 08:06:44.369853
+10	user-9	$2b$12$6jW2WyRPDwRldbVxW2ZD9en8EELVb8AtPkMg/kFv3jSlsEL.BaNg.	1234567899	t	2021-05-11 08:06:44.567094	2021-05-11 08:06:44.567096
+\.
+
+
+--
+-- Data for Name: userteam; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.userteam (id, user_id, playermatch_id, captain, vice_captain, credit_bal) FROM stdin;
+\.
+
+
+--
+-- Name: day_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.day_id_seq', 231, true);
+
+
+--
+-- Name: livescore_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.livescore_id_seq', 1, false);
+
+
+--
+-- Name: match_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.match_id_seq', 231, true);
+
+
+--
+-- Name: player_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.player_id_seq', 315, true);
+
+
+--
+-- Name: playermatch_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.playermatch_id_seq', 5082, true);
+
+
+--
+-- Name: scorehistory_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.scorehistory_id_seq', 1, false);
+
+
+--
+-- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.user_id_seq', 10, true);
+
+
+--
+-- Name: userteam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.userteam_id_seq', 1, false);
+
+
+--
+-- Name: day day_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.day
+    ADD CONSTRAINT day_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: livescore livescore_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.livescore
+    ADD CONSTRAINT livescore_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: match match_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.match
+    ADD CONSTRAINT match_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: player player_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.player
+    ADD CONSTRAINT player_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: player player_playername_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.player
+    ADD CONSTRAINT player_playername_key UNIQUE (playername);
+
+
+--
+-- Name: playermatch playermatch_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playermatch
+    ADD CONSTRAINT playermatch_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: scorehistory scorehistory_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scorehistory
+    ADD CONSTRAINT scorehistory_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user user_contact_number_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_contact_number_key UNIQUE (contact_number);
+
+
+--
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: userteam userteam_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.userteam
+    ADD CONSTRAINT userteam_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: livescore livescore_playermatch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.livescore
+    ADD CONSTRAINT livescore_playermatch_id_fkey FOREIGN KEY (playermatch_id) REFERENCES public.playermatch(id);
+
+
+--
+-- Name: playermatch playermatch_match_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playermatch
+    ADD CONSTRAINT playermatch_match_id_fkey FOREIGN KEY (match_id) REFERENCES public.match(id);
+
+
+--
+-- Name: playermatch playermatch_player_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.playermatch
+    ADD CONSTRAINT playermatch_player_id_fkey FOREIGN KEY (player_id) REFERENCES public.player(id);
+
+
+--
+-- Name: scorehistory scorehistory_playermatch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scorehistory
+    ADD CONSTRAINT scorehistory_playermatch_id_fkey FOREIGN KEY (playermatch_id) REFERENCES public.playermatch(id);
+
+
+--
+-- Name: userteam userteam_playermatch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.userteam
+    ADD CONSTRAINT userteam_playermatch_id_fkey FOREIGN KEY (playermatch_id) REFERENCES public.playermatch(id);
+
+
+--
+-- Name: userteam userteam_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.userteam
+    ADD CONSTRAINT userteam_user_id_fkey FOREIGN KEY (user_id) REFERENCES public."user"(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
