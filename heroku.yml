@@ -1,4 +1,4 @@
 build:
   docker:
-    web: Dockerfile.frontend
-    worker: Dockerfile.backend
+    web: Dockerfile
+    wroker: Dockerfile.matchupdater
