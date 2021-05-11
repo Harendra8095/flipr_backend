@@ -22,6 +22,7 @@ class DbEngine_config():
         DB_NAME = 'flipr'
     print(DB_NAME)
     DB_URL = f'{DB_DIALECT}://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+    DB_URL = (os.environ.get('DATABASE_URL', DB_URL))
     print(DB_URL)
     # DB_URL = 'postgresql://postgres:postgres@postgres:5432/flipr'
     SQLALCHEMY_DATABASE_URI = DB_URL
