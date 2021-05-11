@@ -16,4 +16,4 @@ RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache
 #RUN chmod +x launch.sh
 ENV FLASK_APP=server
 #CMD ["python", "-u" ,"server.py"]
-CMD ["gunicorn", "app:app"]
+CMD ["gunicorn", "app:server"]
