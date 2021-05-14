@@ -37,7 +37,7 @@ services:
   fliprback:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: Dockerfile
     # network_mode: bridge
     depends_on: 
       - postgres
