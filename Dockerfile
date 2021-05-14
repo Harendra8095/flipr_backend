@@ -11,10 +11,9 @@ LABEL maintainer="Harry"
 RUN apk update && apk add ca-certificates && apk add libpq postgresql-client
 WORKDIR /app
 ADD . /app
-ADD heroku-exec.sh /app/.profile.d
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+ADD ./.profile.d /app/.profile.d
 COPY --from=python-build-env /root/.cache /root/.cache
-RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache
+RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache && rm /bin/sh && ln -s /bin/bash /bin/sh
 #RUN chmod +x launch.sh
 CMD ["python", "-u" ,"server.py"]
 # CMD ["gunicorn", "server:app"]
