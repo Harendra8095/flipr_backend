@@ -13,6 +13,7 @@ WORKDIR /app
 ADD . /app
 COPY --from=python-build-env /root/.cache /root/.cache
 RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 #RUN chmod +x launch.sh
 CMD ["python", "-u" ,"server.py"]
 # CMD ["gunicorn", "server:app"]
