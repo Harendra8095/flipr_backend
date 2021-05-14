@@ -76,4 +76,5 @@ RUN set -eux; \
     redis-server --version
 RUN mkdir /data && chown redis:redis /data
 WORKDIR /data
+ENV REDIS_PORT $PORT
 CMD redis-server --port $PORT
