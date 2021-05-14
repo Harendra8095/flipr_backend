@@ -1,5 +1,5 @@
 build:
   docker:
+    redis: Dockerfile.redis
     web: Dockerfile
     worker: Dockerfile.matchupdater
-    redis: Dockerfile.redis
