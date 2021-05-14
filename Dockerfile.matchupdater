@@ -1,5 +1,5 @@
 FROM python:3.6
-LABEL maintainer="Vishnu"
+LABEL maintainer="Harry"
 RUN apt update && apt install -y ca-certificates && apt install -y libpq-dev postgresql-client
 WORKDIR /app
 ADD . /app

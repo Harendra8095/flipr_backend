@@ -1,5 +1,5 @@
 FROM alpine:3.12
-
+LABEL maintainer="Harry"
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN addgroup -S -g 1000 redis && adduser -S -G redis -u 999 redis
 # alpine already has a gid 999, so we'll use the next id
@@ -13,6 +13,7 @@ RUN apk add --no-cache \
 ENV REDIS_VERSION 6.0.6
 ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-6.0.6.tar.gz
 ENV REDIS_DOWNLOAD_SHA 12ad49b163af5ef39466e8d2f7d212a58172116e5b441eebecb4e6ca22363d94
+ENV REDIS_PORT $PORT
 
 RUN set -eux; \
     \
@@ -75,6 +76,6 @@ RUN set -eux; \
     redis-cli --version; \
     redis-server --version
 RUN mkdir /data && chown redis:redis /data
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 WORKDIR /data
-ENV REDIS_PORT $PORT
 CMD redis-server --port $PORT

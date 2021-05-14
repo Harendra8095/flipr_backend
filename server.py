@@ -18,6 +18,7 @@ SQLSession = create_db_sessionFactory(engine)
 REDIS_HOST = os.environ.get('REDIS_HOST')
 REDIS_PORT = os.environ.get('REDIS_PORT')
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
+print("REDIS_URL: redis://", REDIS_HOST, ":", REDIS_PORT)
 
 def clearlivetable():
     session = SQLSession()
