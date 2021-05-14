@@ -13,7 +13,7 @@ WORKDIR /app
 ADD . /app
 ADD heroku-exec.sh /app/.profile.d
 COPY --from=python-build-env /root/.cache /root/.cache
-RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache && python manage.py restart
+RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache
 #RUN chmod +x launch.sh
 CMD ["python", "-u" ,"server.py"]
 # CMD ["gunicorn", "server:app"]
