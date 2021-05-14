@@ -1,4 +1,9 @@
 build:
   docker:
     web: Dockerfile
-    wroker: Dockerfile.matchupdater
+    worker: Dockerfile.matchupdater
+    redis:
+      image: redis
+      restart: always
+      ports:
+        - 6380:6379

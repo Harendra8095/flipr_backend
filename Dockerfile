@@ -14,7 +14,5 @@ ADD . /app
 COPY --from=python-build-env /root/.cache /root/.cache
 RUN cd /app && pip install -r requirements.txt && rm -rf /root/.cache
 #RUN chmod +x launch.sh
-ENV DATABASE_URL=postgres://ycaffmkrsgyjsm:95e7001c889477e404a8b767df66b68907039b6cb451881501105e3880b64603@ec2-54-90-211-192.compute-1.amazonaws.com:5432/df0lpdam7ipsq1
-ENV SECRET_KEY=UsedInDeployementSoExposingItForTestingPurposeAsSecurityIsNotTheIssueHereLearingIs
 CMD ["python", "-u" ,"server.py"]
 # CMD ["gunicorn", "server:app"]
